@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">VinilosApp</string>
+    <string name="btn_user">Usuario Invitado</string>
+    <string name="btn_user_collector">Colecionista</string>
+
+    <string name="albums">Albumes</string>
+    <string name="performers">Artistas</string>
+    <string name="collectors">Coleccionistas</string>
+
+    <string name="albumTitle">Álbumes</string>
+    <string name="performerTitle">Artistas</string>
+    <string name="collectorTitle">Coleccionistas</string>
 </resources>
