@@ -2,7 +2,7 @@ package com.vinilos.misw4203.grupo6_202412.models.dto
 
 import com.google.gson.annotations.SerializedName
 
-data class AlbumsDto (
+data class AlbumDto (
     @SerializedName("id") var id: Int? = null,
     @SerializedName("name") var name: String? = null,
     @SerializedName("cover") var cover: String? = null,
