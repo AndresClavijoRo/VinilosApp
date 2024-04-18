@@ -31,7 +31,7 @@ fun AlbumScreenDetail(
                 .fillMaxSize()
                 .padding(it)
         ) {
-            Text(text = "Album Detail")
+            Text(text = "Album Detail $idDetail")
         }
     }
 }
