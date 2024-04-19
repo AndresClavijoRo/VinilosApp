@@ -1,7 +1,6 @@
 package com.vinilos.misw4203.grupo6_202412.viewModel
 
 import android.util.Log
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -15,20 +14,21 @@ import kotlinx.coroutines.launch
 import androidx.compose.runtime.State
 
 class PerformerViewModel(private val performerRepository: VinilosRepository): ViewModel() {
-    private val _artistsState = mutableStateOf<List<ArtistDto>>(emptyList())
-    val artistsState: State<List<ArtistDto>> = _artistsState
+    private val _performersState = mutableStateOf<List<ArtistDto>>(emptyList())
+    val performersState: State<List<ArtistDto>> = _performersState
 
     init {
-        getAllArtists()
+        getAllPerformers()
     }
-    private fun getAllArtists() {
+    private fun getAllPerformers() {
         viewModelScope.launch {
             try {
-                val response = performerRepository.getArtist(onResponse = {
-                        performes ->  _artistsState.value = performes
-                },
+                val response = performerRepository.getPerformers(
+                    onResponse = {
+                        performersList ->  _performersState.value = performersList
+                                 },
                     onFailure = {
-
+                        Log.i("Error","Error consumiendo servicio ")
                     })
             } catch (e: Exception) {
                 Log.i("Error","Error consumiendo servicio " + e.message)

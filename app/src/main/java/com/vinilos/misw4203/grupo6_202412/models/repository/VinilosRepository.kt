@@ -15,7 +15,7 @@ class VinilosRepository(private val webService:VinilosService) {
         }
     }
 
-    fun getArtist(onResponse:(resp:ArrayList<ArtistDto>)->Unit, onFailure:(resp:String)->Unit){
+    fun getPerformers(onResponse:(resp:ArrayList<ArtistDto>)->Unit, onFailure:(resp:String)->Unit){
         webService.getArtistEndpoint().getArtistList()
             .enqueue(object: Callback<ArrayList<ArtistDto>> {
                 override fun onResponse(call: Call<ArrayList<ArtistDto>>, response: Response<ArrayList<ArtistDto>>) {

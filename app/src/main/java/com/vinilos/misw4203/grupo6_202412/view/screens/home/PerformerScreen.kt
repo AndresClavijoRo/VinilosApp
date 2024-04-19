@@ -9,10 +9,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.vinilos.misw4203.grupo6_202412.R
-
-
-import android.annotation.SuppressLint
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,30 +16,27 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.ListItem
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil.compose.rememberAsyncImagePainter
 import com.vinilos.misw4203.grupo6_202412.view.uiControls.ImageAsync
 import com.vinilos.misw4203.grupo6_202412.viewModel.PerformerViewModel
 import com.vinilos.misw4203.grupo6_202412.viewModel.PerformerViewModel.Companion.Factory
 
 
-@SuppressLint("UnrememberedMutableState", "CoroutineCreationDuringComposition")
 @Composable
 fun PerformerScreen(
     onClick: (performerId:String) -> Unit) {
-    val artistViewModel: PerformerViewModel = viewModel(factory = Factory)
-    val artists = artistViewModel.artistsState.value
+    val performerViewModel: PerformerViewModel = viewModel(factory = Factory)
+    val performers = performerViewModel.performersState.value
     Column(modifier = Modifier.padding(start = 50.dp)) {
         Text(
             text = stringResource(R.string.performerTitle),
             style = MaterialTheme.typography.displaySmall,
         )
         LazyColumn() {
-            itemsIndexed(items =  artists) { index, artist ->
+            itemsIndexed(items =  performers) { index, artist ->
                 ListItem(
                     modifier = Modifier
                         .fillMaxWidth()
