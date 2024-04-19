@@ -1,38 +1,48 @@
 package com.vinilos.misw4203.grupo6_202412.viewModel
 
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.vinilos.misw4203.grupo6_202412.models.dto.PerformerDto
-import com.vinilos.misw4203.grupo6_202412.models.repository.PerformerRepository
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.vinilos.misw4203.grupo6_202412.VinilosApplication
+import com.vinilos.misw4203.grupo6_202412.models.dto.ArtistDto
+import com.vinilos.misw4203.grupo6_202412.models.repository.VinilosRepository
 import kotlinx.coroutines.launch
+import androidx.compose.runtime.State
 
-class PerformerViewModel(private val performerRepository: PerformerRepository): ViewModel() {
-    val artists: MutableState<List<PerformerDto>> = mutableStateOf(emptyList())
-    fun getAllArtists() {
+class PerformerViewModel(private val performerRepository: VinilosRepository): ViewModel() {
+    private val _artistsState = mutableStateOf<List<ArtistDto>>(emptyList())
+    val artistsState: State<List<ArtistDto>> = _artistsState
+
+    init {
+        getAllArtists()
+    }
+    private fun getAllArtists() {
         viewModelScope.launch {
             try {
-                val response = performerRepository.getAllPerformers()
-                if (response.isNotEmpty()) {
-                    artists.value = response
-                }
+                val response = performerRepository.getArtist(onResponse = {
+                        performes ->  _artistsState.value = performes
+                },
+                    onFailure = {
+
+                    })
             } catch (e: Exception) {
                 Log.i("Error","Error consumiendo servicio " + e.message)
             }
         }
     }
-}
 
-class PerformerViewModelFactory : ViewModelProvider.Factory {
-    @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(PerformerViewModel::class.java)) {
-            return PerformerViewModel(PerformerRepository) as T
+    companion object {
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                val application = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as VinilosApplication)
+                val vinilosRepository = application.vinilosRepository
+                PerformerViewModel(performerRepository = vinilosRepository)
+            }
         }
-        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
