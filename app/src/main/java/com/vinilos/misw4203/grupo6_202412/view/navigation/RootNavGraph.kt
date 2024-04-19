@@ -25,7 +25,8 @@ fun RootNavGraph() {
             HomeScreen(
                 onClickAlbumsDetail = { albumId ->
                     navController.navigate(GraphDetail.ALBUMS_DETAIL.replace("{albumId}", albumId))                },
-                onClickArtistsDetail = { navController.navigate(GraphDetail.PERFORMER_DETAIL) },
+                onClickArtistsDetail = { performerId ->
+                    navController.navigate(GraphDetail.PERFORMER_DETAIL.replace("{performerId}", performerId))  },
                 onClickCollectorsDetail = { navController.navigate(GraphDetail.COLLECTORS_DETAIL) }
             )
         }

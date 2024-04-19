@@ -1,6 +1,6 @@
 package com.vinilos.misw4203.grupo6_202412.view.navigation
 
-import androidx.compose.material3.Text
+
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -24,9 +24,9 @@ fun NavGraphBuilder.detailNavGraph(navController: NavHostController) {
             )
         }
         composable(route = GraphDetail.PERFORMER_DETAIL) { backStackEntry ->
-            val performerId = backStackEntry.arguments?.getString("albumId")
+            val performerId = backStackEntry.arguments?.getString("performerId")
             PerformerScreenDetail(
-                idDetail = performerId ?: "",
+                performerId = performerId ?: "",
                 onClick = {
                     navController.popBackStack()
                 }
@@ -46,6 +46,6 @@ fun NavGraphBuilder.detailNavGraph(navController: NavHostController) {
 
 object GraphDetail {
     const val ALBUMS_DETAIL = "album_detail/{albumId}"
-    const val PERFORMER_DETAIL = "performer_detail/{albumId}"
+    const val PERFORMER_DETAIL = "performer_detail/{performerId}"
     const val COLLECTORS_DETAIL = "collectors_detail/{albumId}"
 }

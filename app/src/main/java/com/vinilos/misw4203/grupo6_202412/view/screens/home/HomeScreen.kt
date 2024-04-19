@@ -9,7 +9,6 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
@@ -32,7 +31,7 @@ import com.vinilos.misw4203.grupo6_202412.view.navigation.currentRoute
 @Composable
 fun HomeScreen(
     onClickAlbumsDetail: (albumId:String) -> Unit,
-    onClickArtistsDetail: () -> Unit,
+    onClickArtistsDetail: (performerId: String) -> Unit,
     onClickCollectorsDetail: () -> Unit
 ){
     val navHomeController = rememberNavController()

@@ -5,7 +5,6 @@ package com.vinilos.misw4203.grupo6_202412.view.navigation
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.composable
@@ -18,7 +17,7 @@ import com.vinilos.misw4203.grupo6_202412.view.screens.home.PerformerScreen
 @Composable
 fun HomeNavigation(
     onClickAlbumsDetail: (albumId: String) -> Unit,
-    onClickArtistsDetail: () -> Unit,
+    onClickArtistsDetail: (performerId: String) -> Unit,
     onClickCollectorsDetail: () -> Unit,
     navController: NavHostController,
     scrollBehavior: TopAppBarScrollBehavior
@@ -40,9 +39,7 @@ fun HomeNavigation(
         }
         composable(route = GraphHome.PERFORMERS) {
             PerformerScreen(
-                onClick = {
-                    onClickArtistsDetail()
-                }
+                onClick = onClickArtistsDetail,
             )
         }
         composable(route = GraphHome.COLLECTORS) {
