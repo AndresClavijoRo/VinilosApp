@@ -10,4 +10,7 @@
     <string name="albumTitle">Álbumes</string>
     <string name="performerTitle">Artistas</string>
     <string name="collectorTitle">Coleccionistas</string>
+    <string name="tracks">" canciones"</string>
+    <string name="cargando">Loading</string>
+    <string name="error_al_cargar">Error Al cargar</string>
 </resources>

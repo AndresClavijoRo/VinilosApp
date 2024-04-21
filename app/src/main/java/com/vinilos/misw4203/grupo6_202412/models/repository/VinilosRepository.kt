@@ -1,6 +1,7 @@
 package com.vinilos.misw4203.grupo6_202412.models.repository
 
 import android.util.Log
+import com.vinilos.misw4203.grupo6_202412.models.dto.AlbumDto
 import com.vinilos.misw4203.grupo6_202412.models.dto.ArtistDto
 import com.vinilos.misw4203.grupo6_202412.models.dto.CollectorDto
 import com.vinilos.misw4203.grupo6_202412.models.service.VinilosService
@@ -13,6 +14,20 @@ class VinilosRepository(private val webService:VinilosService) {
         fun create(webService:VinilosService): VinilosRepository {
             return VinilosRepository(webService)
         }
+    }
+
+    fun getAlbums(onResponse:(resp:ArrayList<AlbumDto>)->Unit, onFailure:(resp:String)->Unit){
+        webService.getAlbumEndpoint().getAlbumList()
+            .enqueue(object: Callback<ArrayList<AlbumDto>> {
+                override fun onResponse(call: Call<ArrayList<AlbumDto>>, response: Response<ArrayList<AlbumDto>>) {
+                    onResponse(response.body()!!)
+                }
+
+                override fun onFailure(call: Call<ArrayList<AlbumDto>>, t: Throwable) {
+                    Log.e("API ERROR", t.message!!, t )
+                    onFailure(t.message!!)
+                }
+            })
     }
 
     fun getPerformers(onResponse:(resp:ArrayList<ArtistDto>)->Unit, onFailure:(resp:String)->Unit){
@@ -42,4 +57,5 @@ class VinilosRepository(private val webService:VinilosService) {
                 }
             })
     }
+
 }

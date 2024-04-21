@@ -17,6 +17,10 @@ class VinilosService(private val baseUrl: String) {
             .build()
     }
 
+    fun getAlbumEndpoint(): IAlbumEndpoint {
+        return api.create(IAlbumEndpoint::class.java)
+    }
+
     fun getArtistEndpoint():IArtistEndpoint {
         return api.create(IArtistEndpoint::class.java)
     }
