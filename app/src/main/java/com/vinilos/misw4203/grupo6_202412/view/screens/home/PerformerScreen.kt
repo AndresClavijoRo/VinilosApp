@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.dp
 import com.vinilos.misw4203.grupo6_202412.R
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -30,7 +31,11 @@ fun PerformerScreen(
     onClick: (performerId:String) -> Unit) {
     val performerViewModel: PerformerViewModel = viewModel(factory = Factory)
     val performers = performerViewModel.performersState.value
-    Column(modifier = Modifier.padding(start = 50.dp)) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(8.dp)
+    ) {
         Text(
             text = stringResource(R.string.performerTitle),
             style = MaterialTheme.typography.displaySmall,
