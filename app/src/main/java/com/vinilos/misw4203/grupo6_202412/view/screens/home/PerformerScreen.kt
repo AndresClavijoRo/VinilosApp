@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.ListItem
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
@@ -24,6 +23,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.vinilos.misw4203.grupo6_202412.view.uiControls.ImageAsync
 import com.vinilos.misw4203.grupo6_202412.viewModel.PerformerViewModel
 import com.vinilos.misw4203.grupo6_202412.viewModel.PerformerViewModel.Companion.Factory
+import androidx.compose.foundation.lazy.items
+import androidx.compose.ui.platform.testTag
 
 
 @Composable
@@ -40,10 +41,10 @@ fun PerformerScreen(
             text = stringResource(R.string.performerTitle),
             style = MaterialTheme.typography.displaySmall,
         )
-        LazyColumn() {
-            itemsIndexed(items =  performers) { index, artist ->
+        LazyColumn( modifier = Modifier.testTag("artistTag")) {
+            items(performers) { artist ->
                 ListItem(
-                    modifier = Modifier
+                    modifier = Modifier.testTag("artistChildTag")
                         .fillMaxWidth()
                         .clickable { onClick("${artist.id}")
                         },
@@ -52,10 +53,10 @@ fun PerformerScreen(
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             ImageAsync(
                                 "${artist.image}",
-                                "",
-                                Modifier.size(90.dp).clip(MaterialTheme.shapes.medium),
+                                "${artist.image}",
+                                Modifier.size(90.dp).clip(MaterialTheme.shapes.medium).testTag("${artist.id}"),
                                 ContentScale.Crop
-                                )
+                            )
                         }
                     }
                 )
