@@ -15,6 +15,7 @@ import com.vinilos.misw4203.grupo6_202412.models.repository.VinilosRepository
 import com.vinilos.misw4203.grupo6_202412.view.screens.home.AlbumScreen
 import com.vinilos.misw4203.grupo6_202412.viewModel.AlbumUiState
 import com.vinilos.misw4203.grupo6_202412.viewModel.AlbumViewModel
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito
@@ -26,6 +27,11 @@ class AlbumScreenTest {
     val mockRepository = Mockito.mock(VinilosRepository::class.java)
     var albumViewModel = AlbumViewModel(albumRepository = mockRepository)
 
+    @Before
+    fun setUp() {
+        Thread.sleep(3000)
+    }
+
     @Test
     fun albumScreenSuccesTest() {
         albumViewModel.albumUiState = AlbumUiState.Success(FakeDataAlbums.albums)
@@ -35,14 +41,13 @@ class AlbumScreenTest {
                 albumViewModel = albumViewModel
             )
         }
-        composeTestRule.onRoot(useUnmergedTree = true).printToLog("AlbumScreenTest"  )
+        composeTestRule.onRoot(useUnmergedTree = true).printToLog("AlbumScreenTest")
         composeTestRule.onNodeWithText("Álbumes").assertExists()
         composeTestRule.onNodeWithText(FakeDataAlbums.albums[0].name).assertExists()
     }
 
     @Test
     fun albumScreenErrorTest() {
-        Thread.sleep(3000)
         albumViewModel.albumUiState = AlbumUiState.Error
 
         var textError = ""
@@ -57,14 +62,13 @@ class AlbumScreenTest {
             )
         }
 
-        composeTestRule.onRoot(useUnmergedTree = true).printToLog("AlbumScreenTest"  )
+        composeTestRule.onRoot(useUnmergedTree = true).printToLog("AlbumScreenTest")
         composeTestRule.onNodeWithText(textError).assertExists()
         composeTestRule.onNode(hasText(textButtonRefresh)).assertIsDisplayed()
     }
 
     @Test
-    fun albumScreenCargandoTest(){
-        Thread.sleep(3000)
+    fun albumScreenCargandoTest() {
         albumViewModel.albumUiState = AlbumUiState.Loading
         composeTestRule.setContent {
             AlbumScreen(
@@ -72,13 +76,12 @@ class AlbumScreenTest {
                 albumViewModel
             )
         }
-        composeTestRule.onRoot(useUnmergedTree = true).printToLog("AlbumScreenTest"  )
+        composeTestRule.onRoot(useUnmergedTree = true).printToLog("AlbumScreenTest")
         composeTestRule.onNodeWithTag("pullRefreshIndicator").assertExists()
     }
 
     @Test
-    fun albumScreenRefreshTest(){
-        Thread.sleep(3000)
+    fun albumScreenRefreshTest() {
         albumViewModel.albumUiState = AlbumUiState.Success(FakeDataAlbums.albums)
         composeTestRule.setContent {
             AlbumScreen(
@@ -94,7 +97,7 @@ class AlbumScreenTest {
     }
 
     @Test
-    fun albumDetailCallTest(){
+    fun albumDetailCallTest() {
         albumViewModel.albumUiState = AlbumUiState.Success(FakeDataAlbums.albums)
         var albumId = ""
         composeTestRule.setContent {
@@ -109,15 +112,18 @@ class AlbumScreenTest {
     }
 
     @Test
-    fun albumScreenSuccesNoData(){
+    fun albumScreenSuccesNoData() {
         albumViewModel.albumUiState = AlbumUiState.Success(emptyList())
+        var textNoData = ""
+
         composeTestRule.setContent {
+            textNoData = stringResource(R.string.no_data)
             AlbumScreen(
                 onClickAlbumsDetail = { },
                 albumViewModel
             )
         }
-        composeTestRule.onRoot(useUnmergedTree = true).printToLog("AlbumScreenTest"  )
-        composeTestRule.onNodeWithText("No hay álbumes").assertExists()
+        composeTestRule.onRoot(useUnmergedTree = true).printToLog("AlbumScreenTest")
+        composeTestRule.onNodeWithText(textNoData).assertExists()
     }
 }

@@ -8,9 +8,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -23,6 +25,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
+import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
@@ -81,7 +84,11 @@ fun AlbumScreen(
                     modifier
                 )
 
-                is AlbumUiState.Error -> ErrorScreen(modifier = modifier.fillMaxSize())
+                is AlbumUiState.Error -> ErrorScreen(
+                    albumViewModel::refreshAlbums,
+                    modifier = modifier.fillMaxSize()
+                )
+
                 AlbumUiState.Loading -> Unit
             }
 
@@ -111,21 +118,29 @@ fun AlbumGridScreen(
             style = MaterialTheme.typography.displaySmall,
             modifier = Modifier.padding(8.dp)
         )
-        LazyVerticalGrid(
-            columns = GridCells.Adaptive(150.dp),
-            modifier = modifier,
-            contentPadding = contentPadding,
-        ) {
-            items(items = albums, key = { album -> album.id }) { album ->
-                AlbumCard(
-                    album,
-                    onClickAlbumsDetail = onClickAlbumsDetail,
-                    modifier = Modifier
-                        .padding(vertical = 8.dp, horizontal = 8.dp)
-                        .fillMaxWidth()
-                )
+        if (albums.isEmpty()) {
+            Text(
+                text = stringResource(R.string.no_data),
+                modifier = Modifier.padding(8.dp)
+            )
+        } else {
+            LazyVerticalGrid(
+                columns = GridCells.Adaptive(150.dp),
+                modifier = modifier,
+                contentPadding = contentPadding,
+            ) {
+                items(items = albums, key = { album -> album.id }) { album ->
+                    AlbumCard(
+                        album,
+                        onClickAlbumsDetail = onClickAlbumsDetail,
+                        modifier = Modifier
+                            .padding(vertical = 8.dp, horizontal = 8.dp)
+                            .fillMaxWidth()
+                    )
+                }
             }
         }
+
     }
 }
 
@@ -186,16 +201,24 @@ fun LoadingScreen(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun ErrorScreen(modifier: Modifier = Modifier) {
+fun ErrorScreen(
+    onClickRefresh: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
+        horizontalAlignment = Alignment.CenterHorizontally,
+
+        ) {
         Image(
             painter = painterResource(id = R.drawable.ic_connection_error), contentDescription = ""
         )
         Text(text = stringResource(R.string.error_al_cargar), modifier = Modifier.padding(16.dp))
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(onClick = onClickRefresh) {
+            Text(stringResource(R.string.retry))
+        }
     }
 }
 
