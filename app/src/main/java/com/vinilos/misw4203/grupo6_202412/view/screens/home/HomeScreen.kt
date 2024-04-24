@@ -32,7 +32,7 @@ import com.vinilos.misw4203.grupo6_202412.view.navigation.currentRoute
 fun HomeScreen(
     onClickAlbumsDetail: (albumId:String) -> Unit,
     onClickArtistsDetail: (performerId: String) -> Unit,
-    onClickCollectorsDetail: () -> Unit
+    onClickCollectorsDetail: (collectorId: String) -> Unit
 ){
     val navHomeController = rememberNavController()
     val currentRoute = currentRoute(navHomeController)

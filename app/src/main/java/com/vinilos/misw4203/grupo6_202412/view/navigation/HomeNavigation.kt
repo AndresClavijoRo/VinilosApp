@@ -18,7 +18,7 @@ import com.vinilos.misw4203.grupo6_202412.view.screens.home.PerformerScreen
 fun HomeNavigation(
     onClickAlbumsDetail: (albumId: String) -> Unit,
     onClickArtistsDetail: (performerId: String) -> Unit,
-    onClickCollectorsDetail: () -> Unit,
+    onClickCollectorsDetail: (collectorId: String) -> Unit,
     navController: NavHostController,
     scrollBehavior: TopAppBarScrollBehavior
 ) {
@@ -44,9 +44,8 @@ fun HomeNavigation(
         }
         composable(route = GraphHome.COLLECTORS) {
             CollectorScreen(
-                onClick = {
-                    onClickCollectorsDetail()
-                }
+                onClick = onClickCollectorsDetail,
+
             )
         }
     }
