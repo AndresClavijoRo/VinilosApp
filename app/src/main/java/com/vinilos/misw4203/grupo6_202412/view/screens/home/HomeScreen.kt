@@ -64,8 +64,7 @@ fun HomeScreen(
                 onClickAlbumsDetail,
                 onClickArtistsDetail,
                 onClickCollectorsDetail,
-                navController = navHomeController,
-                scrollBehavior = scrollBehavior
+                navController = navHomeController
             )
         }
     }

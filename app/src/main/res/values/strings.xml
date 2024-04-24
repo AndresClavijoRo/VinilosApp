@@ -13,4 +13,6 @@
     <string name="tracks">" canciones"</string>
     <string name="cargando">Loading</string>
     <string name="error_al_cargar">Error Al cargar</string>
+    <string name="no_data">Se realizo la consulta, pero no se encontraron datos.</string>
+    <string name="retry">Recargar</string>
 </resources>

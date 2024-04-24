@@ -21,12 +21,11 @@ sealed interface AlbumUiState {
     object Loading : AlbumUiState
 }
 
-class AlbumViewModel(
+open class AlbumViewModel(
     private val albumRepository: VinilosRepository
 ): ViewModel(){
 
     var albumUiState: AlbumUiState by mutableStateOf(AlbumUiState.Loading)
-        private set
 
     private var dataLoaded = false
 
