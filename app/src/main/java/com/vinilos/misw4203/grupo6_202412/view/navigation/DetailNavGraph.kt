@@ -33,7 +33,7 @@ fun NavGraphBuilder.detailNavGraph(navController: NavHostController) {
             )
         }
         composable(route = GraphDetail.COLLECTORS_DETAIL) { backStackEntry ->
-            val collectorId = backStackEntry.arguments?.getString("albumId")
+            val collectorId = backStackEntry.arguments?.getString("collectorId")
             CollectorScreenDetail(
                 idDetail = collectorId ?: "",
                 onClick = {
@@ -47,5 +47,5 @@ fun NavGraphBuilder.detailNavGraph(navController: NavHostController) {
 object GraphDetail {
     const val ALBUMS_DETAIL = "album_detail/{albumId}"
     const val PERFORMER_DETAIL = "performer_detail/{performerId}"
-    const val COLLECTORS_DETAIL = "collectors_detail/{albumId}"
+    const val COLLECTORS_DETAIL = "collectors_detail/{collectorId}"
 }
