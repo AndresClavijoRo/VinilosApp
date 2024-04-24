@@ -31,7 +31,7 @@ fun CollectorScreenDetail(
                 .fillMaxSize()
                 .padding(it)
         ) {
-            Text(text = "Collector Detail")
+            Text(text = "Collector Detail $idDetail")
         }
     }
 }

@@ -9,7 +9,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class VinilosRepository(private val webService:VinilosService) {
+open class VinilosRepository(private val webService:VinilosService) {
     companion object Factory {
         fun create(webService:VinilosService): VinilosRepository {
             return VinilosRepository(webService)

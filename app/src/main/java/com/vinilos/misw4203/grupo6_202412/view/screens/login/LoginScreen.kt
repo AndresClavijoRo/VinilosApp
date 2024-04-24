@@ -45,14 +45,14 @@ fun LoginScreen(onClick: () -> Unit) {
                 .padding(innerPadding),
             verticalArrangement = Arrangement.SpaceEvenly,
         ) {
-            loginLogo()
-            loginButtons(onClick)
+            LoginLogo()
+            LoginButtons(onClick)
         }
     }
 }
 
 @Composable
-fun loginLogo() {
+fun LoginLogo() {
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier.fillMaxWidth()
@@ -76,7 +76,7 @@ fun loginLogo() {
 }
 
 @Composable
-fun loginButtons(onClick: () -> Unit) {
+fun LoginButtons(onClick: () -> Unit) {
     Row (
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier.fillMaxWidth()
