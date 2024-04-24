@@ -37,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -52,12 +53,12 @@ import com.vinilos.misw4203.grupo6_202412.viewModel.AlbumViewModel
 @Composable
 fun AlbumScreen(
     onClickAlbumsDetail: (albumId: String) -> Unit,
-    modifier: Modifier = Modifier,
+    albumViewModel: AlbumViewModel = viewModel(factory = AlbumViewModel.Factory),
+    modifier: Modifier = Modifier
 ) {
-    val albumViewModel: AlbumViewModel = viewModel(factory = AlbumViewModel.Factory)
     val albumUiState = albumViewModel.albumUiState;
     val isRefreshing = AlbumUiState.Loading == albumUiState
-    val pullRefreshState = rememberPullRefreshState(isRefreshing, { albumViewModel.refreshAlbums() })
+    val pullRefreshState = rememberPullRefreshState(isRefreshing, albumViewModel::refreshAlbums)
 
     Scaffold(
         floatingActionButton = {
@@ -65,7 +66,7 @@ fun AlbumScreen(
                 Icon(Icons.Default.Add, contentDescription = "Add")
             }
         }
-    ){ innerPadding ->
+    ) { innerPadding ->
         Box(
             modifier = Modifier
                 .pullRefresh(pullRefreshState)
@@ -74,7 +75,12 @@ fun AlbumScreen(
         ) {
             when (albumUiState) {
                 //is AlbumUiState.Loading -> LoadingScreen(modifier = modifier.fillMaxSize())
-                is AlbumUiState.Success -> AlbumGridScreen(albumUiState.albums, onClickAlbumsDetail, modifier)
+                is AlbumUiState.Success -> AlbumGridScreen(
+                    albumUiState.albums,
+                    onClickAlbumsDetail,
+                    modifier
+                )
+
                 is AlbumUiState.Error -> ErrorScreen(modifier = modifier.fillMaxSize())
                 AlbumUiState.Loading -> Unit
             }
@@ -84,7 +90,9 @@ fun AlbumScreen(
                 state = pullRefreshState,
                 backgroundColor = MaterialTheme.colorScheme.background,
                 contentColor = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.align(Alignment.TopCenter),
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .testTag("pullRefreshIndicator"),
             )
         }
     }
@@ -119,13 +127,12 @@ fun AlbumGridScreen(
             }
         }
     }
-
 }
 
 @Composable
 fun AlbumCard(
     album: AlbumDto,
-    onClickAlbumsDetail: (albumId:String) -> Unit,
+    onClickAlbumsDetail: (albumId: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     ElevatedCard(
@@ -168,7 +175,7 @@ fun AlbumCard(
 
 @Composable
 fun LoadingScreen(modifier: Modifier = Modifier) {
-    Box(modifier = modifier, contentAlignment = Alignment.Center){
+    Box(modifier = modifier, contentAlignment = Alignment.Center) {
         CircularProgressIndicator(
             modifier = Modifier.size(64.dp),
             color = MaterialTheme.colorScheme.secondary,

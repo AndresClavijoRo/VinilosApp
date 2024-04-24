@@ -3,7 +3,7 @@ package com.vinilos.misw4203.grupo6_202412.models.service
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class VinilosService(private val baseUrl: String) {
+open class VinilosService(private val baseUrl: String) {
     companion object Factory {
         fun create(baseUrl: String): VinilosService {
             return VinilosService(baseUrl)
