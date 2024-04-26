@@ -20,7 +20,7 @@ import androidx.compose.ui.Modifier
 
 @Composable
 fun PerformerScreenDetail(
-    idDetail: String,
+    performerId: String,
     onClick: () -> Unit
 ) {
     Scaffold(
@@ -31,7 +31,7 @@ fun PerformerScreenDetail(
                 .fillMaxSize()
                 .padding(it)
         ) {
-            Text(text = "Artist Detail")
+            Text(text = "Performer Detail" +"${performerId}")
         }
     }
 }

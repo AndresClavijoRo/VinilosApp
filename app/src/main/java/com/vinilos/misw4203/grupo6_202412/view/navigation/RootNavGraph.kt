@@ -14,7 +14,7 @@ fun RootNavGraph() {
     NavHost(
         navController = navController,
         startDestination = Graph.LOGIN
-    ){
+    ) {
         composable(route = Graph.LOGIN) {
             LoginScreen(
                 onClick = { navController.navigate(Graph.HOME) }
@@ -24,9 +24,24 @@ fun RootNavGraph() {
         composable(route = Graph.HOME) {
             HomeScreen(
                 onClickAlbumsDetail = { albumId ->
-                    navController.navigate(GraphDetail.ALBUMS_DETAIL.replace("{albumId}", albumId))                },
-                onClickArtistsDetail = { navController.navigate(GraphDetail.PERFORMER_DETAIL) },
-                onClickCollectorsDetail = { navController.navigate(GraphDetail.COLLECTORS_DETAIL) }
+                    navController.navigate(GraphDetail.ALBUMS_DETAIL.replace("{albumId}", albumId))
+                },
+                onClickArtistsDetail = { performerId ->
+                    navController.navigate(
+                        GraphDetail.PERFORMER_DETAIL.replace(
+                            "{performerId}",
+                            performerId
+                        )
+                    )
+                },
+                onClickCollectorsDetail = { collectorId ->
+                    navController.navigate(
+                        GraphDetail.COLLECTORS_DETAIL.replace(
+                            "{collectorId}",
+                            collectorId
+                        )
+                    )
+                }
             )
         }
 

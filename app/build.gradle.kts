@@ -74,5 +74,8 @@ dependencies {
     implementation(libs.androidx.material.icons.extended)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.coil.compose)
+    implementation (libs.androidx.material)
+    debugImplementation (libs.ui.test.manifest)
 
+    androidTestImplementation("org.mockito:mockito-android:5.11.0")
 }

@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">VinilosApp</string>
     <string name="btn_user">Usuario Invitado</string>
-    <string name="btn_user_collector">Colecionista</string>
+    <string name="btn_user_collector">Coleccionista</string>
 
     <string name="albums">Albumes</string>
     <string name="performers">Artistas</string>
@@ -10,4 +10,9 @@
     <string name="albumTitle">Álbumes</string>
     <string name="performerTitle">Artistas</string>
     <string name="collectorTitle">Coleccionistas</string>
+    <string name="tracks">" canciones"</string>
+    <string name="cargando">Loading</string>
+    <string name="error_al_cargar">Error Al cargar</string>
+    <string name="no_data">Se realizo la consulta, pero no se encontraron datos.</string>
+    <string name="retry">Recargar</string>
 </resources>

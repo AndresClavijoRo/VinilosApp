@@ -1,11 +1,12 @@
 package com.vinilos.misw4203.grupo6_202412.models.repository
 
+
 import com.vinilos.misw4203.grupo6_202412.models.dto.AlbumDto
 import com.vinilos.misw4203.grupo6_202412.models.dto.ArtistDto
 import com.vinilos.misw4203.grupo6_202412.models.dto.CollectorDto
 import com.vinilos.misw4203.grupo6_202412.models.service.VinilosService
 
-class VinilosRepository(private val webService:VinilosService) {
+open class VinilosRepository(private val webService:VinilosService) {
     companion object Factory {
         fun create(webService:VinilosService): VinilosRepository {
             return VinilosRepository(webService)
@@ -23,4 +24,5 @@ class VinilosRepository(private val webService:VinilosService) {
     fun getCollectors(onResponse:(resp:ArrayList<CollectorDto>)->Unit, onFailure:(resp:String)->Unit){
         webService.getCollectors(onResponse, onFailure)
     }
+
 }
