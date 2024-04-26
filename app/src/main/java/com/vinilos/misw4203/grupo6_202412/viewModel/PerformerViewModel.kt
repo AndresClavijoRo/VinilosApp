@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 import androidx.compose.runtime.State
 
 class PerformerViewModel(private val performerRepository: VinilosRepository): ViewModel() {
-    private val _performersState = mutableStateOf<List<ArtistDto>>(emptyList())
+    val _performersState = mutableStateOf<List<ArtistDto>>(emptyList())
     val performersState: State<List<ArtistDto>> = _performersState
 
     init {
