@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -44,7 +45,8 @@ fun CollectorListItem(
     ListItem(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onCollectorClick("${collector.id}") },
+            .clickable { onCollectorClick("${collector.id}") }
+            .testTag("collectorListItem"),
         headlineContent = {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Column {
@@ -57,7 +59,7 @@ fun CollectorListItem(
             ImageAsync(
                 "https://ui-avatars.com/api/?name=${collector.name}&size=256&background=random&rounded=true&color=fff",
                 collector.name ?: "Default name",
-                Modifier.size(40.dp).clip(MaterialTheme.shapes.medium),
+                Modifier.size(50.dp).clip(MaterialTheme.shapes.medium),
                 ContentScale.Crop
             )
         }
@@ -65,9 +67,9 @@ fun CollectorListItem(
 }
 @Composable
 fun CollectorScreen(
-    onClick: (collectorId:String) -> Unit
+    onClick: (collectorId:String) -> Unit,
+    collectorViewModel: CollectorViewModel = viewModel(factory = CollectorViewModel.Factory)
 ) {
-    val collectorViewModel: CollectorViewModel = viewModel(factory = CollectorViewModel.Factory)
     val collectors = collectorViewModel.collectorsState.value
     Column(
         modifier = Modifier

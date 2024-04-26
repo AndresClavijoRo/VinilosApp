@@ -1,4 +1,4 @@
-package com.vinilos.misw4203.grupo6_202412.albumTest.fake_data
+package com.vinilos.misw4203.grupo6_202412.fake_data
 
 import com.vinilos.misw4203.grupo6_202412.models.dto.AlbumDto
 import com.vinilos.misw4203.grupo6_202412.models.dto.TraksDto

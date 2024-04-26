@@ -12,8 +12,10 @@ import com.vinilos.misw4203.grupo6_202412.models.dto.CollectorDto
 import com.vinilos.misw4203.grupo6_202412.models.repository.VinilosRepository
 import kotlinx.coroutines.launch
 
-class CollectorViewModel(private val performerRepository: VinilosRepository): ViewModel() {
+class CollectorViewModel(private val vinilosRepository: VinilosRepository): ViewModel() {
     private val _collectorsState = mutableStateOf<List<CollectorDto>>(emptyList())
+    val isLoading = mutableStateOf(false)
+    val errorText = mutableStateOf<String?>(null)
     val collectorsState = _collectorsState
 
     init {
@@ -23,7 +25,7 @@ class CollectorViewModel(private val performerRepository: VinilosRepository): Vi
     private fun getAllCollectors() {
         viewModelScope.launch {
             try {
-                val response = performerRepository.getCollectors(
+                val response = vinilosRepository.getCollectors(
                     onResponse = {
                         collectorsList ->  _collectorsState.value = collectorsList
                     },
@@ -40,7 +42,7 @@ class CollectorViewModel(private val performerRepository: VinilosRepository): Vi
             initializer {
                 val application = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as VinilosApplication)
                 val vinilosRepository = application.vinilosRepository
-                CollectorViewModel(performerRepository = vinilosRepository)
+                CollectorViewModel(vinilosRepository = vinilosRepository)
             }
         }
     }
