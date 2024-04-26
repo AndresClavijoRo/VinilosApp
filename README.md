@@ -41,10 +41,10 @@ una vez instalado ve a **Run > Run 'app'** y la aplicación se instalará y ejec
 
 ## Inicializar App en dispositivo físico desde el APK
 
-1. Si usas un dispositivo físico conecta el dispositivo y habilita la transferencia de archivos,
-2. una vez pases el archivo al dispositivo desconecta lo y desde el dispositivo ejecuta el archivo en donde lo guardaste.
+1. Si usas un dispositivo físico conecta el dispositivo y habilita la transferencia de archivos.
+2. Una vez pases el archivo al dispositivo desconectalo y desde el dispositivo ejecuta el archivo en donde lo guardaste.
 3. El dispositivo te pedirá autorización para instalar la app.
-4. la app se ejecutará automáticamente.
+4. La app se ejecutará automáticamente.
 
 ## Ejecutar las pruebas
 
