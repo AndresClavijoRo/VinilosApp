@@ -22,20 +22,18 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.vinilos.misw4203.grupo6_202412.view.uiControls.ImageAsync
 import com.vinilos.misw4203.grupo6_202412.viewModel.PerformerViewModel
-import com.vinilos.misw4203.grupo6_202412.viewModel.PerformerViewModel.Companion.Factory
 import androidx.compose.foundation.lazy.items
 import androidx.compose.ui.platform.testTag
 
-
 @Composable
 fun PerformerScreen(
-    onClick: (performerId:String) -> Unit) {
-    val performerViewModel: PerformerViewModel = viewModel(factory = Factory)
+    onClick: (performerId:String) -> Unit,
+    performerViewModel: PerformerViewModel = viewModel(factory = PerformerViewModel.Factory)) {
     val performers = performerViewModel.performersState.value
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(8.dp)
+            .padding(8.dp).testTag("PerformerTitle")
     ) {
         Text(
             text = stringResource(R.string.performerTitle),
@@ -44,7 +42,7 @@ fun PerformerScreen(
         LazyColumn( modifier = Modifier.testTag("artistTag")) {
             items(performers) { artist ->
                 ListItem(
-                    modifier = Modifier.testTag("artistChildTag")
+                    modifier = Modifier
                         .fillMaxWidth()
                         .clickable { onClick("${artist.id}")
                         },
@@ -54,7 +52,7 @@ fun PerformerScreen(
                             ImageAsync(
                                 "${artist.image}",
                                 "${artist.image}",
-                                Modifier.size(90.dp).clip(MaterialTheme.shapes.medium).testTag("${artist.id}"),
+                                Modifier.size(90.dp).clip(MaterialTheme.shapes.medium),
                                 ContentScale.Crop
                             )
                         }
