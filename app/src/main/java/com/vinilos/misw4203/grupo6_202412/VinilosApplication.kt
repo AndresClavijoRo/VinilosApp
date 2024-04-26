@@ -8,6 +8,6 @@ class VinilosApplication: Application() {
 
     private val BASE_URL_API_SERVICE: String = "https://vinyls-grupo-6-back-1a983feb9f59.herokuapp.com/"
 
-    val vinilosService by lazy { VinilosService.create(BASE_URL_API_SERVICE) }
+    val vinilosService by lazy { VinilosService.getInstance(BASE_URL_API_SERVICE) }
     val vinilosRepository by lazy { VinilosRepository.create(vinilosService) }
 }

@@ -5,69 +5,89 @@ import com.google.gson.GsonBuilder
 import com.vinilos.misw4203.grupo6_202412.models.dto.AlbumDto
 import com.vinilos.misw4203.grupo6_202412.models.dto.ArtistDto
 import com.vinilos.misw4203.grupo6_202412.models.dto.CollectorDto
-import com.vinilos.misw4203.grupo6_202412.models.service.IAlbumEndpoint
-import com.vinilos.misw4203.grupo6_202412.models.service.IArtistEndpoint
-import com.vinilos.misw4203.grupo6_202412.models.service.ICollectorEndpoint
 import com.vinilos.misw4203.grupo6_202412.models.service.VinilosService
+import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 /**
  * Example local unit test, which will execute on the development machine (host).
  *
  * See [testing documentation](http://d.android.com/tools/testing).
  */
+
 class VinilosServiceUnitTest {
 
-    private lateinit var server: MockWebServer
-    private lateinit var gson: Gson
-    private lateinit var albumApi: IAlbumEndpoint
-    private lateinit var artistApi: IArtistEndpoint
-    private lateinit var collectorApi: ICollectorEndpoint
+    private val gson: Gson = GsonBuilder().create()
+    private val server: MockWebServer = MockWebServer()
+    private lateinit var vinilosServiceAdapter: VinilosService
 
     @Before
-    fun beforeEach() {
-        server = MockWebServer()
-        gson = GsonBuilder().create()
-        albumApi = VinilosService(server.url("/").toString()).getAlbumEndpoint()
-        artistApi = VinilosService(server.url("/").toString()).getArtistEndpoint()
-        collectorApi = VinilosService(server.url("/").toString()).getCollectorEndpoint()
+    fun setUp() {
+        vinilosServiceAdapter = VinilosService(server.url("/").toString())
     }
 
     @After
-    fun afterEach() {
+    fun teardown() = runTest{
         server.shutdown()
     }
 
     @Test
-    fun test_GetAlbumList(){
-        val dto: ArrayList<AlbumDto> = arrayListOf(AlbumDto(id = 1, name = "Album 1" ))
+    fun test_GetAlbumList()= runTest {
+        val dto: ArrayList<AlbumDto> = arrayListOf(AlbumDto(id = 1, name = "Album 1"))
         val json = gson.toJson(dto)
+
         server.enqueue(MockResponse().setBody(json))
-        val response = albumApi.getAlbumList().execute()
-        assertEquals(dto, response.body())
+        val response: ArrayList<AlbumDto> = getAlbumsSuspend()
+        assertEquals(dto, response)
     }
 
     @Test
-    fun test_GetArtistList(){
+    fun test_GetArtistList() = runTest {
         val dto: ArrayList<ArtistDto> = arrayListOf(ArtistDto())
         val json = gson.toJson(dto)
+
         server.enqueue(MockResponse().setBody(json))
-        val response = artistApi.getArtistList().execute()
-        assertEquals(dto, response.body())
+        val response: ArrayList<ArtistDto> = getPerformersSuspend()
+        assertEquals(dto, response)
     }
 
     @Test
-    fun test_GetCollectorList(){
+    fun test_GetCollectorList() = runTest {
         val dto: ArrayList<CollectorDto> = arrayListOf(CollectorDto())
         val json = gson.toJson(dto)
+
         server.enqueue(MockResponse().setBody(json))
-        val response = collectorApi.getCollectorsList().execute()
-        assertEquals(dto, response.body())
+        val response: ArrayList<CollectorDto> = getCollectorsSuspend()
+        assertEquals(dto, response)
     }
 
+    private suspend fun getAlbumsSuspend(): ArrayList<AlbumDto> = suspendCoroutine { continuation ->
+        vinilosServiceAdapter.getAlbums({
+            continuation.resume(it)
+        }, {
+            continuation.resumeWithException(RuntimeException("Error occurred: $it"))
+        })
+    }
+    private suspend fun getPerformersSuspend(): ArrayList<ArtistDto> = suspendCoroutine { continuation ->
+        vinilosServiceAdapter.getPerformers({
+            continuation.resume(it)
+        }, {
+            continuation.resumeWithException(RuntimeException("Error occurred: $it"))
+        })
+    }
+    private suspend fun getCollectorsSuspend(): ArrayList<CollectorDto> = suspendCoroutine { continuation ->
+        vinilosServiceAdapter.getCollectors({
+            continuation.resume(it)
+        }, {
+            continuation.resumeWithException(RuntimeException("Error occurred: $it"))
+        })
+    }
 }
