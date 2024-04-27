@@ -11,4 +11,6 @@ data class AlbumDto (
     @SerializedName("genre") var genre: String? = null,
     @SerializedName("recordLabel") var recordLabel: String? = null,
     @SerializedName("tracks") var tracks: ArrayList<TraksDto> = arrayListOf(),
+    @SerializedName("performers") var performers: ArrayList<ArtistDto> = arrayListOf(),
+    @SerializedName("comments") var comments: ArrayList<CommentDto> = arrayListOf()
 )

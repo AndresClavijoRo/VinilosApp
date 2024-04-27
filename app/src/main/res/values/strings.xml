@@ -15,4 +15,6 @@
     <string name="error_al_cargar">Error Al cargar</string>
     <string name="no_data">Se realizo la consulta, pero no se encontraron datos.</string>
     <string name="retry">Recargar</string>
+    <string name="show_more">... Mostrar mas</string>
+    <string name="show_less">" Mostrar Menos"</string>
 </resources>

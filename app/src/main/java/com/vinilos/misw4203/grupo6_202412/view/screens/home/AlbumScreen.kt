@@ -181,7 +181,7 @@ fun AlbumCard(
                     style = MaterialTheme.typography.bodyMedium,
                 )
                 Text(
-                    text = album.tracks.size.toString() + stringResource(R.string.tracks),
+                    text = album.tracks?.size.toString() + stringResource(R.string.tracks),
                 )
             }
         }
