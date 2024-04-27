@@ -2,20 +2,22 @@
 
 package com.vinilos.misw4203.grupo6_202412.view.screens.detail
 
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Album
@@ -33,15 +35,19 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.vinilos.misw4203.grupo6_202412.R
 import com.vinilos.misw4203.grupo6_202412.models.dto.AlbumDto
 import com.vinilos.misw4203.grupo6_202412.models.dto.ArtistDto
 import com.vinilos.misw4203.grupo6_202412.models.dto.CommentDto
@@ -56,28 +62,31 @@ import java.util.Locale
 @Composable
 fun AlbumScreenDetail(
     idDetail: String,
-    onClick: () -> Unit
+    volver: () -> Unit,
+    comentarAlbum: (id: String) -> Unit
 ) {
     val albumDto = AlbumDetail.albumDto
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     Scaffold(
-        topBar = { TopBarAlbumDetail(onClick) },
+        topBar = { TopBarAlbumDetail(scrollBehavior, volver) },
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(it)
-
+                .verticalScroll(rememberScrollState())
         ) {
-            AlbumDetailContent(albumDto)
+            AlbumDetailContent(comentarAlbum, albumDto)
         }
     }
 }
 
 @Composable
-fun TopBarAlbumDetail(onClick: () -> Unit) {
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
+fun TopBarAlbumDetail(
+    scrollBehavior: TopAppBarScrollBehavior,
+    onClick: () -> Unit
+) {
     TopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -88,7 +97,7 @@ fun TopBarAlbumDetail(onClick: () -> Unit) {
             IconButton(onClick = onClick) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Localized description"
+                    contentDescription = stringResource(R.string.back)
                 )
             }
         },
@@ -97,14 +106,17 @@ fun TopBarAlbumDetail(onClick: () -> Unit) {
 }
 
 @Composable
-fun AlbumDetailContent(albumDto: AlbumDto) {
+fun AlbumDetailContent(
+    comentarAlbum: (id: String) -> Unit,
+    albumDto: AlbumDto
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
         Spacer(modifier = Modifier.padding(8.dp))
-        AlbumCover(albumDto)
+        AlbumCover(albumDto, comentarAlbum)
         Spacer(modifier = Modifier.padding(8.dp))
         AlbumInfo(albumDto)
         Spacer(modifier = Modifier.padding(8.dp))
@@ -118,12 +130,13 @@ fun AlbumDetailContent(albumDto: AlbumDto) {
 }
 
 @Composable
-fun AlbumCover(albumDto: AlbumDto) {
+fun AlbumCover(
+    albumDto: AlbumDto,
+    comentarAlbum: (id: String) -> Unit
+) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(20.dp),
         modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(0.22f),
     ) {
         ImageAsync(
             url = albumDto.cover ?: "",
@@ -133,18 +146,18 @@ fun AlbumCover(albumDto: AlbumDto) {
                 .clip(RoundedCornerShape(20.dp)),
         )
         Column(
-            verticalArrangement = Arrangement.Center,
-            modifier = Modifier.fillMaxSize()
+            verticalArrangement = Arrangement.Center
         ) {
+            Spacer(modifier = Modifier.padding(2.dp))
             Text(text = albumDto.name, style = MaterialTheme.typography.titleLarge)
             Spacer(modifier = Modifier.padding(2.dp))
             Text(
-                text = "${albumDto.tracks.size} Canciones",
+                text = "${albumDto.tracks.size} ${stringResource(R.string.tracks)}",
                 style = MaterialTheme.typography.bodyLarge
             )
             Spacer(modifier = Modifier.padding(8.dp))
-            Button(onClick = { /*TODO*/ }) {
-                Text(text = "Comentar álbum")
+            Button(onClick = { comentarAlbum(albumDto.id.toString()) }) {
+                Text(text = stringResource(R.string.btn_album_comment))
             }
             Spacer(modifier = Modifier.padding(8.dp))
         }
@@ -167,14 +180,28 @@ fun AlbumInfo(albumDto: AlbumDto) {
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(
-                text = "Publicado $formattedDate",
-                style = MaterialTheme.typography.bodyMedium
-            )
+            Row {
+                Text(
+                    text = stringResource(R.string.publish),
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = " $formattedDate",
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
             Text(text = albumDto.recordLabel ?: "", style = MaterialTheme.typography.bodyMedium)
         }
         Spacer(modifier = Modifier.padding(4.dp))
-        Text(text = "Genero ${albumDto.genre ?: ""}", style = MaterialTheme.typography.bodyMedium)
+        Row {
+            Text(
+                text = stringResource(R.string.genre),
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.Bold
+            )
+            Text(text = albumDto.genre ?: "", style = MaterialTheme.typography.bodyMedium)
+        }
         Spacer(modifier = Modifier.padding(4.dp))
         ExpandableText(
             fontSize = 14.sp,
@@ -187,7 +214,10 @@ fun AlbumInfo(albumDto: AlbumDto) {
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun Performers(performers: List<ArtistDto>) {
-    Text(text = "Artistas", style = MaterialTheme.typography.titleMedium)
+    Text(
+        text = stringResource(id = R.string.performerTitle),
+        style = MaterialTheme.typography.titleMedium
+    )
     FlowRow(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         modifier = Modifier.fillMaxWidth()
@@ -225,9 +255,29 @@ fun PerformerChip(performer: ArtistDto) {
 
 @Composable
 fun Tracks(tracks: List<TraksDto>) {
-    Text(text = "Canciones", style = MaterialTheme.typography.titleMedium)
-    tracks.forEach { track ->
-        ChipTrack(track)
+    Text(text = stringResource(id = R.string.tracks), style = MaterialTheme.typography.titleMedium)
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .horizontalScroll(rememberScrollState()),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        tracks.windowed(size = 2, step = 2, partialWindows = true).forEach { trackPair ->
+            if (trackPair.size == 2) {
+                val track1 = trackPair[0]
+                val track2 = trackPair[1]
+                Column {
+                    ChipTrack(track1)
+                    ChipTrack(track2)
+                }
+            } else {
+                val track1 = trackPair[0]
+                Column {
+                    ChipTrack(track1)
+                }
+            }
+        }
     }
 }
 
@@ -256,7 +306,10 @@ fun ChipTrack(track: TraksDto) {
 
 @Composable
 fun Comments(comments: List<CommentDto>) {
-    Text(text = "Comentarios", style = MaterialTheme.typography.titleMedium)
+    Text(
+        text = stringResource(id = R.string.comments),
+        style = MaterialTheme.typography.titleMedium
+    )
     Spacer(modifier = Modifier.padding(4.dp))
     comments.forEach { comment ->
         CommentChip(comment)
@@ -295,7 +348,7 @@ fun RatingComment(rating: Int) {
                 imageVector = Icons.Rounded.Star,
                 contentDescription = null,
                 modifier = Modifier.size(30.dp),
-                tint =  if (i >= rating) StarDisable else StarEnable
+                tint = if (i >= rating) StarDisable else StarEnable
             )
         }
     }
@@ -311,6 +364,36 @@ object AlbumDetail {
         genre = "Salsa",
         recordLabel = "Elektra",
         tracks = arrayListOf(
+            TraksDto(
+                id = 100,
+                name = "Buscando América",
+                duration = "00:04:00",
+            ),
+            TraksDto(
+                id = 101,
+                name = "Poeta del pueblo",
+                duration = "00:04:00"
+            ),
+            TraksDto(
+                id = 100,
+                name = "Buscando América",
+                duration = "00:04:00",
+            ),
+            TraksDto(
+                id = 101,
+                name = "Poeta del pueblo",
+                duration = "00:04:00"
+            ),
+            TraksDto(
+                id = 100,
+                name = "Buscando América",
+                duration = "00:04:00",
+            ),
+            TraksDto(
+                id = 101,
+                name = "Poeta del pueblo",
+                duration = "00:04:00"
+            ),
             TraksDto(
                 id = 100,
                 name = "Buscando América",
@@ -374,5 +457,5 @@ fun formatDateString(inputDate: String, inputFormat: String, outputFormat: Strin
 @Preview()
 @Composable
 fun AlbumScreenDetailPreview() {
-    AlbumScreenDetail("100", {})
+    AlbumScreenDetail("100", {}, {})
 }
