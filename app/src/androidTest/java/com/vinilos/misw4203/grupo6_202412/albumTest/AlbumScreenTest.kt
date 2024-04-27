@@ -10,7 +10,7 @@ import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.printToLog
 import com.vinilos.misw4203.grupo6_202412.R
-import com.vinilos.misw4203.grupo6_202412.albumTest.fake_data.FakeDataAlbums
+import com.vinilos.misw4203.grupo6_202412.fake_data.FakeDataAlbums
 import com.vinilos.misw4203.grupo6_202412.models.repository.VinilosRepository
 import com.vinilos.misw4203.grupo6_202412.view.screens.home.AlbumScreen
 import com.vinilos.misw4203.grupo6_202412.viewModel.AlbumUiState
