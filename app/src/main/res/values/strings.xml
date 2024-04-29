@@ -10,6 +10,7 @@
     <string name="albumTitle">Álbumes</string>
     <string name="performerTitle">Artistas</string>
     <string name="collectorTitle">Coleccionistas</string>
+    <string name="tracksTitle">"Canciones"</string>
     <string name="tracks">" canciones"</string>
     <string name="comments">"Comentarios"</string>
     <string name="cargando">Loading</string>

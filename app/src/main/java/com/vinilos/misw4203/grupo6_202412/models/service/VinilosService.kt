@@ -46,6 +46,15 @@ open class VinilosService(private val baseUrl: String) {
             .enqueue(responseCallback<ArrayList<AlbumDto>>(onResponse, onFailure))
     }
 
+    fun getAlbumById(
+        id: Int,
+        onResponse: (resp: AlbumDto) -> Unit,
+        onFailure: (resp: String) -> Unit
+    ) {
+        getAlbumEndpoint.getAlbumById(id)
+            .enqueue(responseCallback<AlbumDto>(onResponse, onFailure))
+    }
+
     fun getPerformers(
         onResponse: (resp: ArrayList<ArtistDto>) -> Unit,
         onFailure: (resp: String) -> Unit

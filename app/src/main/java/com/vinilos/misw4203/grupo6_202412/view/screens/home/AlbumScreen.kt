@@ -2,19 +2,14 @@
 
 package com.vinilos.misw4203.grupo6_202412.view.screens.home
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -25,9 +20,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -49,6 +42,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.vinilos.misw4203.grupo6_202412.R
 import com.vinilos.misw4203.grupo6_202412.models.dto.AlbumDto
+import com.vinilos.misw4203.grupo6_202412.view.uiControls.ErrorScreen
 import com.vinilos.misw4203.grupo6_202412.viewModel.AlbumUiState
 import com.vinilos.misw4203.grupo6_202412.viewModel.AlbumViewModel
 
@@ -56,10 +50,10 @@ import com.vinilos.misw4203.grupo6_202412.viewModel.AlbumViewModel
 @Composable
 fun AlbumScreen(
     onClickAlbumsDetail: (albumId: String) -> Unit,
+    modifier: Modifier = Modifier,
     albumViewModel: AlbumViewModel = viewModel(factory = AlbumViewModel.Factory),
-    modifier: Modifier = Modifier
 ) {
-    val albumUiState = albumViewModel.albumUiState;
+    val albumUiState = albumViewModel.albumUiState
     val isRefreshing = AlbumUiState.Loading == albumUiState
     val pullRefreshState = rememberPullRefreshState(isRefreshing, albumViewModel::refreshAlbums)
 
@@ -156,7 +150,7 @@ fun AlbumCard(
         }),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
-        Column() {
+        Column {
             AsyncImage(
                 model = ImageRequest.Builder(context = LocalContext.current)
                     .data(album.cover)
@@ -181,43 +175,9 @@ fun AlbumCard(
                     style = MaterialTheme.typography.bodyMedium,
                 )
                 Text(
-                    text = album.tracks?.size.toString() + stringResource(R.string.tracks),
+                    text = album.tracks.size.toString() + stringResource(R.string.tracks),
                 )
             }
-        }
-    }
-}
-
-@Composable
-fun LoadingScreen(modifier: Modifier = Modifier) {
-    Box(modifier = modifier, contentAlignment = Alignment.Center) {
-        CircularProgressIndicator(
-            modifier = Modifier.size(64.dp),
-            color = MaterialTheme.colorScheme.secondary,
-            trackColor = MaterialTheme.colorScheme.surfaceVariant,
-            strokeWidth = 8.dp
-        )
-    }
-}
-
-@Composable
-fun ErrorScreen(
-    onClickRefresh: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
-
-        ) {
-        Image(
-            painter = painterResource(id = R.drawable.ic_connection_error), contentDescription = ""
-        )
-        Text(text = stringResource(R.string.error_al_cargar), modifier = Modifier.padding(16.dp))
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = onClickRefresh) {
-            Text(stringResource(R.string.retry))
         }
     }
 }

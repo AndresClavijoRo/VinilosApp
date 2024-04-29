@@ -1,9 +1,10 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 
 package com.vinilos.misw4203.grupo6_202412.view.screens.detail
 
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -18,10 +19,14 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Album
 import androidx.compose.material.icons.rounded.Star
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -38,15 +43,19 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.vinilos.misw4203.grupo6_202412.R
 import com.vinilos.misw4203.grupo6_202412.models.dto.AlbumDto
 import com.vinilos.misw4203.grupo6_202412.models.dto.ArtistDto
@@ -54,31 +63,71 @@ import com.vinilos.misw4203.grupo6_202412.models.dto.CommentDto
 import com.vinilos.misw4203.grupo6_202412.models.dto.TraksDto
 import com.vinilos.misw4203.grupo6_202412.ui.theme.StarDisable
 import com.vinilos.misw4203.grupo6_202412.ui.theme.StarEnable
+import com.vinilos.misw4203.grupo6_202412.view.uiControls.ErrorScreen
 import com.vinilos.misw4203.grupo6_202412.view.uiControls.ExpandableText
 import com.vinilos.misw4203.grupo6_202412.view.uiControls.ImageAsync
+import com.vinilos.misw4203.grupo6_202412.viewModel.AlbumDetailUiState
+import com.vinilos.misw4203.grupo6_202412.viewModel.AlbumDetailViewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 @Composable
 fun AlbumScreenDetail(
     idDetail: String,
-    volver: () -> Unit,
-    comentarAlbum: (id: String) -> Unit
+    back: () -> Unit,
+    commentAlbum: (id: String) -> Unit,
+    modifier: Modifier = Modifier,
+    albumDetailViewModel: AlbumDetailViewModel = viewModel(factory = AlbumDetailViewModel.Factory),
 ) {
-    val albumDto = AlbumDetail.albumDto
+    val albumDetailUiState = albumDetailViewModel.albumDetailUiState
+
+    LaunchedEffect(key1 = idDetail) {
+        albumDetailViewModel.getAllAlbumById(idDetail.toInt())
+    }
+
+    val isRefreshing = albumDetailUiState == AlbumDetailUiState.Loading
+    val pullRefreshState = rememberPullRefreshState(isRefreshing, {
+        albumDetailViewModel.getAllAlbumById(idDetail.toInt())
+    })
+
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     Scaffold(
-        topBar = { TopBarAlbumDetail(scrollBehavior, volver) },
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        topBar = { TopBarAlbumDetail(scrollBehavior, back) },
+        modifier = Modifier
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
+            .fillMaxSize(),
     ) {
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
+                .pullRefresh(pullRefreshState)
                 .padding(it)
-                .verticalScroll(rememberScrollState())
         ) {
-            AlbumDetailContent(comentarAlbum, albumDto)
+            when (albumDetailUiState) {
+                AlbumDetailUiState.Loading -> {}
+                AlbumDetailUiState.Error -> {
+                        ErrorScreen(
+                            modifier = modifier.fillMaxSize(),
+                            onClickRefresh = { albumDetailViewModel.getAllAlbumById(idDetail.toInt()) },
+                        )
+                }
+                is AlbumDetailUiState.Success -> AlbumDetailContent(
+                    commentAlbum,
+                    albumDetailUiState.album
+                )
+            }
+
+            PullRefreshIndicator(
+                refreshing = isRefreshing,
+                state = pullRefreshState,
+                backgroundColor = MaterialTheme.colorScheme.background,
+                contentColor = MaterialTheme.colorScheme.primary,
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .testTag("pullRefreshIndicator"),
+            )
         }
+
     }
 }
 
@@ -114,6 +163,7 @@ fun AlbumDetailContent(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
+            .verticalScroll(rememberScrollState())
     ) {
         Spacer(modifier = Modifier.padding(8.dp))
         AlbumCover(albumDto, comentarAlbum)
@@ -152,7 +202,7 @@ fun AlbumCover(
             Text(text = albumDto.name, style = MaterialTheme.typography.titleLarge)
             Spacer(modifier = Modifier.padding(2.dp))
             Text(
-                text = "${albumDto.tracks.size} ${stringResource(R.string.tracks)}",
+                text = "${albumDto.tracks.size} ${stringResource(R.string.tracksTitle)}",
                 style = MaterialTheme.typography.bodyLarge
             )
             Spacer(modifier = Modifier.padding(8.dp))
@@ -354,94 +404,6 @@ fun RatingComment(rating: Int) {
     }
 }
 
-object AlbumDetail {
-    val albumDto = AlbumDto(
-        id = 100,
-        name = "Buscando América",
-        cover = "https://cdn.shopify.com/s/files/1/0275/3095/products/image_4931268b-7acf-4702-9c55-b2b3a03ed999_1024x1024.jpg",
-        releaseDate = "1984-08-01T00:00:00.000Z",
-        description = "Buscando América es el primer álbum de la banda de Rubén Blades y Seis del Solar lanzado en 1984. La producción, bajo el sello Elektra, fusiona diferentes ritmos musicales tales como la salsa, reggae, rock, y el jazz latino. El disco fue grabado en Eurosound Studios en Nueva York entre mayo y agosto de 1983.",
-        genre = "Salsa",
-        recordLabel = "Elektra",
-        tracks = arrayListOf(
-            TraksDto(
-                id = 100,
-                name = "Buscando América",
-                duration = "00:04:00",
-            ),
-            TraksDto(
-                id = 101,
-                name = "Poeta del pueblo",
-                duration = "00:04:00"
-            ),
-            TraksDto(
-                id = 100,
-                name = "Buscando América",
-                duration = "00:04:00",
-            ),
-            TraksDto(
-                id = 101,
-                name = "Poeta del pueblo",
-                duration = "00:04:00"
-            ),
-            TraksDto(
-                id = 100,
-                name = "Buscando América",
-                duration = "00:04:00",
-            ),
-            TraksDto(
-                id = 101,
-                name = "Poeta del pueblo",
-                duration = "00:04:00"
-            ),
-            TraksDto(
-                id = 100,
-                name = "Buscando América",
-                duration = "00:04:00",
-            ),
-            TraksDto(
-                id = 101,
-                name = "Poeta del pueblo",
-                duration = "00:04:00"
-            )
-        ),
-        performers = arrayListOf(
-            ArtistDto(
-                id = 100,
-                name = "Rubén Blades",
-                image = "https://i.pinimg.com/564x/aa/5f/ed/aa5fed7fac61cc8f41d1e79db917a7cd.jpg",
-                description = "Rubén Blades Bellido de Luna (Ciudad de Panamá, 16 de julio de 1948) es un cantante, compositor, músico, actor, abogado, político y activista panameño, figura prominente de la música latina y la salsa. Ha ganado nueve premios Grammy y cinco premios Grammy Latino.",
-                birthDate = "1948-07-16T00:00:00.000Z"
-            ),
-            ArtistDto(
-                id = 100,
-                name = "Queen",
-                image = "https://pm1.narvii.com/6724/a8b29909071e9d08517b40c748b6689649372852v2_hq.jpg",
-                description = "Queen es una banda británica de rock formada en 1970 en Londres por el cantante Freddie Mercury, el guitarrista Brian May, el baterista Roger Taylor y el bajista John Deacon. Si bien el grupo ha presentado bajas de dos de sus miembros (Mercury, fallecido en 1991, y Deacon, retirado en 1997), los integrantes restantes, May y Taylor, continúan trabajando bajo el nombre Queen, por lo que la banda aún se considera activa.",
-                birthDate = "1948-07-16T00:00:00.000Z"
-            ),
-            ArtistDto(
-                id = 100,
-                name = "Rubén Blades",
-                image = "https://i.pinimg.com/564x/aa/5f/ed/aa5fed7fac61cc8f41d1e79db917a7cd.jpg",
-                description = "Rubén Blades Bellido de Luna (Ciudad de Panamá, 16 de julio de 1948) es un cantante, compositor, músico, actor, abogado, político y activista panameño, figura prominente de la música latina y la salsa. Ha ganado nueve premios Grammy y cinco premios Grammy Latino.",
-                birthDate = "1970-01-01T00:00:00.000Z"
-            )
-        ),
-        comments = arrayListOf(
-            CommentDto(
-                id = 100,
-                description = "The most relevant album of Ruben Blades",
-                rating = 4,
-            ),
-            CommentDto(
-                id = 100,
-                description = "lorem  ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
-                rating = 3,
-            )
-        )
-    )
-}
 
 fun formatDateString(inputDate: String, inputFormat: String, outputFormat: String): String {
     val originalFormat = SimpleDateFormat(inputFormat, Locale.US)
@@ -453,9 +415,11 @@ fun formatDateString(inputDate: String, inputFormat: String, outputFormat: Strin
     return formattedDate ?: ""
 }
 
-//preview AlbumScreenDetail
-@Preview()
+@Preview(showBackground = true)
 @Composable
-fun AlbumScreenDetailPreview() {
-    AlbumScreenDetail("100", {}, {})
+fun PreviewAlbumDetailScreen() {
+    AlbumScreenDetail(
+        idDetail = "1",
+        back = {},
+        commentAlbum = {})
 }

@@ -18,10 +18,10 @@ fun NavGraphBuilder.detailNavGraph(navController: NavHostController) {
             val albumId = backStackEntry.arguments?.getString("albumId")
             AlbumScreenDetail(
                 idDetail = albumId ?: "",
-                volver = {
+                back = {
                     navController.popBackStack()
                 },
-                comentarAlbum = {
+                commentAlbum = {
                     // TODO: Implementar funcionalidad de comentar album
                 }
             )
