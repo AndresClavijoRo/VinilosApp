@@ -43,12 +43,12 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -74,17 +74,15 @@ import java.util.Locale
 @Composable
 fun AlbumScreenDetail(
     idDetail: String,
-    back: () -> Unit,
-    commentAlbum: (id: String) -> Unit,
+    onClickBack: () -> Unit,
+    onClickCommentAlbum: (id: String) -> Unit,
     modifier: Modifier = Modifier,
-    albumDetailViewModel: AlbumDetailViewModel = viewModel(factory = AlbumDetailViewModel.Factory),
+    albumDetailViewModel: AlbumDetailViewModel = viewModel<AlbumDetailViewModel>(
+        factory = AlbumDetailViewModel.Factory(idDetail.toInt()),
+        key = idDetail,
+    ),
 ) {
     val albumDetailUiState = albumDetailViewModel.albumDetailUiState
-
-    LaunchedEffect(key1 = idDetail) {
-        albumDetailViewModel.getAllAlbumById(idDetail.toInt())
-    }
-
     val isRefreshing = albumDetailUiState == AlbumDetailUiState.Loading
     val pullRefreshState = rememberPullRefreshState(isRefreshing, {
         albumDetailViewModel.getAllAlbumById(idDetail.toInt())
@@ -92,7 +90,7 @@ fun AlbumScreenDetail(
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     Scaffold(
-        topBar = { TopBarAlbumDetail(scrollBehavior, back) },
+        topBar = { TopBarAlbumDetail(scrollBehavior, onClickBack) },
         modifier = Modifier
             .nestedScroll(scrollBehavior.nestedScrollConnection)
             .fillMaxSize(),
@@ -104,17 +102,17 @@ fun AlbumScreenDetail(
                 .padding(it)
         ) {
             when (albumDetailUiState) {
-                AlbumDetailUiState.Loading -> {}
-                AlbumDetailUiState.Error -> {
+                is AlbumDetailUiState.Success -> AlbumDetailContent(
+                    onClickCommentAlbum,
+                    albumDetailUiState.album
+                )
+                is AlbumDetailUiState.Error -> {
                         ErrorScreen(
                             modifier = modifier.fillMaxSize(),
                             onClickRefresh = { albumDetailViewModel.getAllAlbumById(idDetail.toInt()) },
                         )
                 }
-                is AlbumDetailUiState.Success -> AlbumDetailContent(
-                    commentAlbum,
-                    albumDetailUiState.album
-                )
+                is AlbumDetailUiState.Loading -> Unit
             }
 
             PullRefreshIndicator(
@@ -193,7 +191,9 @@ fun AlbumCover(
             contentDescription = albumDto.name,
             modifier = Modifier
                 .width(140.dp)
+                .size(140.dp)
                 .clip(RoundedCornerShape(20.dp)),
+             contentScale = ContentScale.Crop
         )
         Column(
             verticalArrangement = Arrangement.Center
@@ -305,7 +305,7 @@ fun PerformerChip(performer: ArtistDto) {
 
 @Composable
 fun Tracks(tracks: List<TraksDto>) {
-    Text(text = stringResource(id = R.string.tracks), style = MaterialTheme.typography.titleMedium)
+    Text(text = stringResource(id = R.string.tracksTitle), style = MaterialTheme.typography.titleMedium)
 
     Row(
         modifier = Modifier
@@ -420,6 +420,6 @@ fun formatDateString(inputDate: String, inputFormat: String, outputFormat: Strin
 fun PreviewAlbumDetailScreen() {
     AlbumScreenDetail(
         idDetail = "1",
-        back = {},
-        commentAlbum = {})
+        onClickBack = {},
+        onClickCommentAlbum = {})
 }
