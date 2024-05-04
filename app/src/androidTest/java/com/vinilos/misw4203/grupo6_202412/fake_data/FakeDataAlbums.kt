@@ -1,6 +1,8 @@
 package com.vinilos.misw4203.grupo6_202412.fake_data
 
 import com.vinilos.misw4203.grupo6_202412.models.dto.AlbumDto
+import com.vinilos.misw4203.grupo6_202412.models.dto.ArtistDto
+import com.vinilos.misw4203.grupo6_202412.models.dto.CommentDto
 import com.vinilos.misw4203.grupo6_202412.models.dto.TraksDto
 
 object FakeDataAlbums {
@@ -13,7 +15,9 @@ object FakeDataAlbums {
             description = "Buscando América es el primer álbum de la banda de Rubén Blades y Seis del Solar lanzado en 1984. La producción, bajo el sello Elektra, fusiona diferentes ritmos musicales tales como la salsa, reggae, rock, y el jazz latino. El disco fue grabado en Eurosound Studios en Nueva York entre mayo y agosto de 1983.",
             genre = "Salsa",
             recordLabel = "Elektra",
-            tracks = tracks
+            tracks = tracks,
+            performers = performers,
+            comments = comments
         ),
         AlbumDto(
             id = 101,
@@ -33,9 +37,10 @@ object FakeDataAlbums {
             description = "primer album",
             genre = "Salsa",
             recordLabel = "Elektra",
-            tracks =  arrayListOf()
+            tracks = arrayListOf()
         ),
-    )
+
+        )
 }
 
 
@@ -49,5 +54,23 @@ private val tracks = arrayListOf(
         id = 101,
         name = "Poeta del pueblo",
         duration = "00:04:00"
+    )
+)
+
+private val performers = arrayListOf(
+    ArtistDto(
+        id = 100,
+        name = "Rubén Blades",
+        image = "https://i.pinimg.com/564x/aa/5f/ed/aa5fed7fac61cc8f41d1e79db917a7cd.jpg",
+        description = "Rubén Blades Bellido de Luna (Ciudad de Panamá, 16 de julio de 1948) es un cantante, compositor, músico, actor, abogado, político y activista panameño, figura prominente de la música latina y la salsa. Ha ganado nueve premios Grammy y cinco premios Grammy Latino.",
+        birthDate = "1948-07-16T00:00:00.000Z"
+    )
+)
+
+private val comments = arrayListOf(
+    CommentDto(
+        id = 100,
+        description = "The most relevant album of Ruben Blades",
+        rating = 4,
     )
 )
