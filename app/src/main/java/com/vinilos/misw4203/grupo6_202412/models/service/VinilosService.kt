@@ -63,6 +63,15 @@ open class VinilosService(private val baseUrl: String) {
             .enqueue(responseCallback<ArrayList<ArtistDto>>(onResponse, onFailure))
     }
 
+    fun getPerformerById(
+        onResponse: (resp: ArtistDto) -> Unit,
+        onFailure: (resp: String) -> Unit,
+        musicianId: Int
+    ) {
+        getArtistEndpoint.getPerformerById(musicianId)
+            .enqueue(responseCallback<ArtistDto>(onResponse, onFailure))
+    }
+
     fun getCollectors(
         onResponse: (resp: ArrayList<CollectorDto>) -> Unit,
         onFailure: (resp: String) -> Unit

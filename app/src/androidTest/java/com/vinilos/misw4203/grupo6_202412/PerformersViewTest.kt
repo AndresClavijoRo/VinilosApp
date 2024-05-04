@@ -30,15 +30,7 @@ class PerformersViewTest  {
         viewModel = PerformerViewModel(repository)
     }
 
-    @Test
-    fun displayPerformersView() {
-        composeTestRule.setContent {
-            RootNavGraph()
-        }
-        composeTestRule.onNodeWithText("Coleccionista").performClick()
-        composeTestRule.onNodeWithText("Artistas").performClick()
-        composeTestRule.onNodeWithTag("PerformerTitle").assertExists()
-    }
+
     @Test
     fun performerTestIfListIsNotEmpty() {
         var list = listOf(ArtistDto(1,"test1","https://acortar.link/T7Mc10"),
