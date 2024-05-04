@@ -33,8 +33,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.vinilos.misw4203.grupo6_202412.models.dto.AlbumDto
 import com.vinilos.misw4203.grupo6_202412.view.uiControls.ImageAsync
-import com.vinilos.misw4203.grupo6_202412.viewModel.PerformerViewModel
 import com.vinilos.misw4203.grupo6_202412.models.dto.ArtistDto
+import com.vinilos.misw4203.grupo6_202412.viewModel.PerformerDetailViewModel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -42,10 +42,10 @@ import java.time.format.DateTimeFormatter
 fun PerformerScreenDetail(
     performerId: String,
     onClick: () -> Unit,
-    performerViewModel: PerformerViewModel = viewModel(factory = PerformerViewModel.Factory)) {
+    performerDetailViewModel: PerformerDetailViewModel = viewModel(factory = PerformerDetailViewModel.Factory)) {
 
-    performerViewModel.getPerformerDetail(performerId.toInt())
-    val performerDetail = performerViewModel.performerDetailState
+    performerDetailViewModel.getPerformerById(performerId.toInt())
+    val performerDetail = performerDetailViewModel.performerDetailState
     if (performerDetail== null) {
         Text(text = "Cargando datos...")
     } else {
