@@ -50,6 +50,7 @@ import com.vinilos.misw4203.grupo6_202412.viewModel.AlbumViewModel
 @Composable
 fun AlbumScreen(
     onClickAlbumsDetail: (albumId: String) -> Unit,
+    onClickCreateAlbum: () -> Unit,
     modifier: Modifier = Modifier,
     albumViewModel: AlbumViewModel = viewModel(factory = AlbumViewModel.Factory),
 ) {
@@ -59,7 +60,7 @@ fun AlbumScreen(
 
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(onClick = { /*TODO*/ }) {
+            FloatingActionButton(onClick = { onClickCreateAlbum() }) {
                 Icon(Icons.Default.Add, contentDescription = "Add")
             }
         }
