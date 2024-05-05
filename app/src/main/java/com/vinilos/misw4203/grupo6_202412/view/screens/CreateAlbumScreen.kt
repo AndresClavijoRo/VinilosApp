@@ -1,6 +1,8 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.vinilos.misw4203.grupo6_202412.view.screens
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -34,46 +36,50 @@ fun CreateAlbumForm(back: () -> Unit) {
     var recordLabel by rememberSaveable { mutableStateOf("") }
     var description by rememberSaveable { mutableStateOf("") }
 
-    Scaffold(topBar = { TopBar(back, {}) }) {
+    Scaffold(topBar = { TopBar(back, { Log.d("CreateAlbum", "si llegó") }) }) {
         Column(
-            modifier = Modifier.padding(it).fillMaxWidth(),
+            modifier = Modifier
+                .padding(it)
+                .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             OutlinedTextField(
                 value = name,
-                onValueChange = {name = it},
+                onValueChange = { name = it },
                 label = { Text("Name") },
             )
 
             OutlinedTextField(
                 value = cover,
-                onValueChange = {cover = it},
+                onValueChange = { cover = it },
                 label = { Text("Cover") },
+                supportingText = { Text("Max 100 characters") }
             )
 
             OutlinedTextField(
                 value = releaseDate,
-                onValueChange = {releaseDate = it},
+                onValueChange = { releaseDate = it },
                 label = { Text("Release Date") },
+                supportingText = { Text("yyyy-MM-dd") }
             )
 
             OutlinedTextField(
                 value = genre,
-                onValueChange = {genre = it},
+                onValueChange = { genre = it },
                 label = { Text("Genre") },
             )
 
             OutlinedTextField(
                 value = recordLabel,
-                onValueChange = {recordLabel = it},
+                onValueChange = { recordLabel = it },
                 label = { Text("Record Label") },
             )
 
             OutlinedTextField(
                 value = description,
-                onValueChange = {description = it},
+                onValueChange = { description = it },
                 label = { Text("Description") },
-                supportingText = {Text("Max 500 characters")}
+                supportingText = { Text("Max 500 characters") }
             )
 
         }
@@ -90,7 +96,7 @@ fun TopBar(back: () -> Unit, save: () -> Unit) {
         )
     },
         navigationIcon = {
-            IconButton(onClick = { back() }) {
+            IconButton(onClick = back) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = "back"
@@ -98,7 +104,7 @@ fun TopBar(back: () -> Unit, save: () -> Unit) {
             }
         },
         actions = {
-            TextButton(onClick = { save() }) {
+            TextButton(onClick = save) {
                 Text(text = "Save")
             }
         }
@@ -106,10 +112,8 @@ fun TopBar(back: () -> Unit, save: () -> Unit) {
 }
 
 
-
 @Composable
 @Preview(showBackground = true)
-fun VistaPrevia(){
+fun VistaPrevia() {
     CreateAlbumForm({})
-
 }
