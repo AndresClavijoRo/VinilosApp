@@ -69,6 +69,16 @@ class VinilosServiceUnitTest {
         assertEquals(dto, response)
     }
 
+    @Test
+    fun test_CreateAlbum() = runTest {
+        val request = AlbumDto(id = 1, name = "Album 1")
+        val json = gson.toJson(request)
+
+        server.enqueue(MockResponse().setBody(json))
+        val response: AlbumDto = createAlbumSuspend(request)
+        assertEquals(request, response)
+    }
+
     private suspend fun getAlbumsSuspend(): ArrayList<AlbumDto> = suspendCoroutine { continuation ->
         vinilosServiceAdapter.getAlbums({
             continuation.resume(it)
@@ -90,4 +100,13 @@ class VinilosServiceUnitTest {
             continuation.resumeWithException(RuntimeException("Error occurred: $it"))
         })
     }
+
+    private suspend fun createAlbumSuspend(request: AlbumDto): AlbumDto =
+        suspendCoroutine { continuation ->
+            vinilosServiceAdapter.createAlbums(request, {
+                continuation.resume(it)
+            }, {
+                continuation.resumeWithException(RuntimeException("Error occurred: $it"))
+            })
+        }
 }
