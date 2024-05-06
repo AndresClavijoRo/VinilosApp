@@ -66,10 +66,9 @@ import com.vinilos.misw4203.grupo6_202412.ui.theme.StarEnable
 import com.vinilos.misw4203.grupo6_202412.view.uiControls.ErrorScreen
 import com.vinilos.misw4203.grupo6_202412.view.uiControls.ExpandableText
 import com.vinilos.misw4203.grupo6_202412.view.uiControls.ImageAsync
+import com.vinilos.misw4203.grupo6_202412.view.utils.formatDateString
 import com.vinilos.misw4203.grupo6_202412.viewModel.AlbumDetailUiState
 import com.vinilos.misw4203.grupo6_202412.viewModel.AlbumDetailViewModel
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 @Composable
 fun AlbumScreenDetail(
@@ -136,7 +135,7 @@ fun TopBarAlbumDetail(
 ) {
     TopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            containerColor = MaterialTheme.colorScheme.secondaryContainer,
             titleContentColor = MaterialTheme.colorScheme.primary,
         ),
         title = {},
@@ -256,7 +255,9 @@ fun AlbumInfo(albumDto: AlbumDto) {
         ExpandableText(
             fontSize = 14.sp,
             text = albumDto.description ?: "",
-            modifier = Modifier.padding(3.dp)
+            modifier = Modifier
+                .padding(3.dp)
+                .testTag("albumDescription")
         )
     }
 }
@@ -392,11 +393,11 @@ fun CommentChip(comment: CommentDto) {
 
 @Composable
 fun RatingComment(rating: Int) {
-    Row {
+    Row(modifier = Modifier.testTag("ratingComment") )  {
         for (i in 1..5) {
             Icon(
                 imageVector = Icons.Rounded.Star,
-                contentDescription = null,
+                contentDescription =  if (i >= rating) "" else stringResource(R.string.estrella_comment_ok),
                 modifier = Modifier.size(30.dp),
                 tint = if (i >= rating) StarDisable else StarEnable
             )
@@ -405,15 +406,6 @@ fun RatingComment(rating: Int) {
 }
 
 
-fun formatDateString(inputDate: String, inputFormat: String, outputFormat: String): String {
-    val originalFormat = SimpleDateFormat(inputFormat, Locale.US)
-    val targetFormat = SimpleDateFormat(outputFormat, Locale.US)
-
-    val date = originalFormat.parse(inputDate)
-    val formattedDate = date?.let { targetFormat.format(it) }
-
-    return formattedDate ?: ""
-}
 
 @Preview(showBackground = true)
 @Composable

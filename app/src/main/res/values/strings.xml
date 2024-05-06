@@ -23,4 +23,5 @@
     <string name="publish">Publicado</string>
     <string name="back">Volver</string>
     <string name="btn_album_comment">Comentar álbum</string>
+    <string name="estrella_comment_ok">Star point</string>
 </resources>
