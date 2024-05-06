@@ -1,7 +1,6 @@
 [versions]
 agp = "8.3.2"
 coilCompose = "2.6.0"
-hiltNavigationCompose = "1.2.0"
 kotlin = "1.9.0"
 coreKtx = "1.12.0"
 junit = "4.13.2"
@@ -15,14 +14,12 @@ materialIconsExtended = "1.6.5"
 navigationCompose = "2.7.7"
 retrofit = "2.11.0"
 mockwebserver = "4.12.0"
-uiTestJunit4 = "1.6.6"
 uiTestManifest = "1.6.6"
-rules = "1.5.0"
 kotlinxCoroutinesTest = "1.8.0"
+mockitoAndroid = "5.11.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
-androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 androidx-material = { module = "androidx.compose.material:material", version.ref = "material" }
 androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
@@ -43,10 +40,9 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
 mockwebserver = { group = "com.squareup.okhttp3", name = "mockwebserver", version.ref = "mockwebserver" }
-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "uiTestJunit4" }
 ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "uiTestManifest" }
-androidx-rules = { group = "androidx.test", name = "rules", version.ref = "rules" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
+mockito-android = { group = "org.mockito", name = "mockito-android", version.ref = "mockitoAndroid" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
