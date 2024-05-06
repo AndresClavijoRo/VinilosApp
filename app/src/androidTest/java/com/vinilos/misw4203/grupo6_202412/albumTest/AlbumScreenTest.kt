@@ -38,6 +38,7 @@ class AlbumScreenTest {
         composeTestRule.setContent {
             AlbumScreen(
                 onClickAlbumsDetail = { },
+                onClickCreateAlbum = { },
                 albumViewModel = albumViewModel,
             )
         }
@@ -58,6 +59,7 @@ class AlbumScreenTest {
 
             AlbumScreen(
                 onClickAlbumsDetail = { },
+                onClickCreateAlbum = { },
                 albumViewModel =albumViewModel
             )
         }
@@ -73,6 +75,7 @@ class AlbumScreenTest {
         composeTestRule.setContent {
             AlbumScreen(
                 onClickAlbumsDetail = { },
+                onClickCreateAlbum = { },
                 albumViewModel = albumViewModel
             )
         }
@@ -86,6 +89,7 @@ class AlbumScreenTest {
         composeTestRule.setContent {
             AlbumScreen(
                 onClickAlbumsDetail = { },
+                onClickCreateAlbum = { },
                 albumViewModel = albumViewModel
             )
         }
@@ -103,6 +107,7 @@ class AlbumScreenTest {
         composeTestRule.setContent {
             AlbumScreen(
                 onClickAlbumsDetail = { albumId = it },
+                onClickCreateAlbum = { },
                 albumViewModel = albumViewModel
             )
         }
@@ -120,6 +125,7 @@ class AlbumScreenTest {
             textNoData = stringResource(R.string.no_data)
             AlbumScreen(
                 onClickAlbumsDetail = { },
+                onClickCreateAlbum = { },
                 albumViewModel = albumViewModel
             )
         }

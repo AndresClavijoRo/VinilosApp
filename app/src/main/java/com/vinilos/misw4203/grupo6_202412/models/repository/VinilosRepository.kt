@@ -21,8 +21,20 @@ open class VinilosRepository(private val webService:VinilosService) {
         webService.getAlbumById(id, onResponse, onFailure)
     }
 
+    fun createAlbums(
+        request: AlbumDto,
+        onResponse: (resp: AlbumDto) -> Unit,
+        onFailure: (resp: String) -> Unit
+    ) {
+        webService.createAlbums(request, onResponse, onFailure)
+    }
+
     fun getPerformers(onResponse:(resp:ArrayList<ArtistDto>)->Unit, onFailure:(resp:String)->Unit){
         webService.getPerformers(onResponse, onFailure)
+    }
+
+    fun getPerformerById(onResponse:(resp:ArtistDto)->Unit, onFailure:(resp:String)->Unit, musicianId: Int){
+        webService.getPerformerById(onResponse, onFailure, musicianId)
     }
 
     fun getCollectors(onResponse:(resp:ArrayList<CollectorDto>)->Unit, onFailure:(resp:String)->Unit){

@@ -18,6 +18,7 @@ fun HomeNavigation(
     onClickAlbumsDetail: (albumId: String) -> Unit,
     onClickArtistsDetail: (performerId: String) -> Unit,
     onClickCollectorsDetail: (collectorId: String) -> Unit,
+    onClickCreateAlbum: () -> Unit,
     navController: NavHostController,
 ) {
     NavHost(
@@ -33,6 +34,7 @@ fun HomeNavigation(
         ) {
             AlbumScreen(
                 onClickAlbumsDetail = onClickAlbumsDetail,
+                onClickCreateAlbum = onClickCreateAlbum
             )
         }
         composable(route = GraphHome.PERFORMERS) {

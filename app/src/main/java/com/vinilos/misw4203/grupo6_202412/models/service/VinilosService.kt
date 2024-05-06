@@ -46,6 +46,15 @@ open class VinilosService(private val baseUrl: String) {
             .enqueue(responseCallback<ArrayList<AlbumDto>>(onResponse, onFailure))
     }
 
+    fun createAlbums(
+        request: AlbumDto,
+        onResponse: (resp: AlbumDto) -> Unit,
+        onFailure: (resp: String) -> Unit
+    ) {
+        getAlbumEndpoint.createAlbum(request)
+            .enqueue(responseCallback<AlbumDto>(onResponse, onFailure))
+    }
+
     fun getAlbumById(
         id: Int,
         onResponse: (resp: AlbumDto) -> Unit,
@@ -61,6 +70,15 @@ open class VinilosService(private val baseUrl: String) {
     ) {
         getArtistEndpoint.getArtistList()
             .enqueue(responseCallback<ArrayList<ArtistDto>>(onResponse, onFailure))
+    }
+
+    fun getPerformerById(
+        onResponse: (resp: ArtistDto) -> Unit,
+        onFailure: (resp: String) -> Unit,
+        musicianId: Int
+    ) {
+        getArtistEndpoint.getPerformerById(musicianId)
+            .enqueue(responseCallback<ArtistDto>(onResponse, onFailure))
     }
 
     fun getCollectors(
