@@ -397,15 +397,13 @@ fun RatingComment(rating: Int) {
         for (i in 1..5) {
             Icon(
                 imageVector = Icons.Rounded.Star,
-                contentDescription =  if (i >= rating) "" else stringResource(R.string.estrella_comment_ok),
+                contentDescription =  if (i > rating) "" else stringResource(R.string.estrella_comment_ok),
                 modifier = Modifier.size(30.dp),
-                tint = if (i >= rating) StarDisable else StarEnable
+                tint = if (i > rating) StarDisable else StarEnable
             )
         }
     }
 }
-
-
 
 @Preview(showBackground = true)
 @Composable
