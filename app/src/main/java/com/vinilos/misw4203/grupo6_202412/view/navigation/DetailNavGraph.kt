@@ -7,7 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.vinilos.misw4203.grupo6_202412.view.screens.detail.AlbumScreenDetail
 import com.vinilos.misw4203.grupo6_202412.view.screens.detail.CollectorScreenDetail
-import com.vinilos.misw4203.grupo6_202412.view.screens.detail.PerformerScreenDetail
+import com.vinilos.misw4203.grupo6_202412.view.screens.detail.PerformerDetailScreen
 
 fun NavGraphBuilder.detailNavGraph(navController: NavHostController) {
     navigation(
@@ -28,7 +28,7 @@ fun NavGraphBuilder.detailNavGraph(navController: NavHostController) {
         }
         composable(route = GraphDetail.PERFORMER_DETAIL) { backStackEntry ->
             val performerId = backStackEntry.arguments?.getString("performerId")
-            PerformerScreenDetail(
+            PerformerDetailScreen(
                 performerId = performerId ?: "",
                 onClick = {
                     navController.popBackStack()
