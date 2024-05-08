@@ -29,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.vinilos.misw4203.grupo6_202412.models.dto.AlbumDto
@@ -39,7 +40,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun PerformerScreenDetail(
+fun PerformerDetailScreen(
     performerId: String,
     onClick: () -> Unit,
     performerDetailViewModel: PerformerDetailViewModel = viewModel(factory = PerformerDetailViewModel.Factory)) {
@@ -60,7 +61,8 @@ fun PerformerScreenDetail(
             ) {
                 Text(
                     text = "${performerDetail?.name}",
-                    modifier = Modifier.padding(bottom = 20.dp, start = 8.dp, top = 30.dp).fillMaxWidth(),
+                    modifier = Modifier.padding(bottom = 20.dp, start = 8.dp, top = 30.dp).fillMaxWidth().
+                    testTag("PerformerDetailTitle"),
                     style = MaterialTheme.typography.titleLarge
                 )
                 PerformerDetail(performerDetail)
@@ -71,10 +73,7 @@ fun PerformerScreenDetail(
 
 @Composable
 fun PerformerDetail(performerDetail: ArtistDto?){
-    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX")
-    val parsedDate = LocalDate.parse(performerDetail?.birthDate.toString(), formatter)
-    val outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-    val formattedDate = outputFormatter.format(parsedDate)
+    val formattedDate = parseCustomDate(performerDetail?.birthDate)
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -93,12 +92,12 @@ fun PerformerDetail(performerDetail: ArtistDto?){
         Text(
             text = "Fecha Nacimiento  $formattedDate",
             style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(bottom = 10.dp, top = 10.dp)
+            modifier = Modifier.padding(bottom = 10.dp, top = 10.dp).testTag("birthDateTag"),
         )
         Text(
             text = "${performerDetail?.description}",
             style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(bottom = 10.dp)
+            modifier = Modifier.padding(bottom = 10.dp).testTag("descriptionTag")
         )
         Text(
             text = "Albums",
@@ -109,10 +108,21 @@ fun PerformerDetail(performerDetail: ArtistDto?){
     }
 }
 
+private fun parseCustomDate(birthDate: String?): String{
+    if(birthDate == null){
+   return "No Data"
+    } else {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX")
+        val parsedDate = LocalDate.parse(birthDate.toString(), formatter)
+        val outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        return outputFormatter.format(parsedDate)
+    }
+}
+
 @Composable
 fun AlbumsPerformer(albums: ArrayList<AlbumDto>){
     Column() {
-        LazyColumn( modifier = Modifier) {
+        LazyColumn( modifier = Modifier.testTag("albumChildTag")) {
             items(albums) { album ->
                 ListItem(
                     headlineContent = {  Text("${album.name}")},
