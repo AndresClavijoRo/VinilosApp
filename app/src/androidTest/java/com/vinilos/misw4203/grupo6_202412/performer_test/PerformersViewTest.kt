@@ -1,4 +1,4 @@
-package com.vinilos.misw4203.grupo6_202412
+package com.vinilos.misw4203.grupo6_202412.performer_test
 
 import androidx.compose.ui.test.assertContentDescriptionEquals
 import androidx.compose.ui.test.junit4.createComposeRule
