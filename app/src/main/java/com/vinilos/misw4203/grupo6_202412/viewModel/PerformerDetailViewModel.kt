@@ -26,7 +26,6 @@ class PerformerDetailViewModel(private val performerRepository: VinilosRepositor
         viewModelScope.launch {
             withContext(dispatcherIO) {
                 try {
-                    Thread.sleep(10000);
                     performerRepository.getPerformerById(
                         onResponse = {
                                 performerDetail ->  performerDetailState = performerDetail
