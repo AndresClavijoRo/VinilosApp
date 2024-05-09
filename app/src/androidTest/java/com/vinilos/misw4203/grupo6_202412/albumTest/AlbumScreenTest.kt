@@ -94,7 +94,7 @@ class AlbumScreenTest {
             )
         }
         composeTestRule.onNodeWithText(FakeDataAlbums.albums[0].name).assertExists()
-        albumViewModel.refreshAlbums()
+        albumViewModel.getAllAlbums()
         Thread.sleep(1000)
         albumViewModel.albumUiState = AlbumUiState.Success(FakeDataAlbums.albums)
         composeTestRule.onNodeWithText(FakeDataAlbums.albums[0].name).assertExists()
