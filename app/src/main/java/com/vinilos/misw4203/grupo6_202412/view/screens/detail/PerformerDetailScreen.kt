@@ -109,13 +109,13 @@ fun PerformerDetail(performerDetail: ArtistDto?){
 }
 
 private fun parseCustomDate(birthDate: String?): String{
-    if(birthDate == null){
-   return "No Data"
+    return if(birthDate == null){
+      "No Data"
     } else {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX")
         val parsedDate = LocalDate.parse(birthDate.toString(), formatter)
         val outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        return outputFormatter.format(parsedDate)
+        outputFormatter.format(parsedDate)
     }
 }
 
