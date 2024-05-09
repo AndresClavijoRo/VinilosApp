@@ -20,17 +20,20 @@ class PerformerViewModel(private val performerRepository: VinilosRepository,
                          private val dispatcherIO: CoroutineDispatcher = Dispatchers.IO): ViewModel() {
     val _performersState = mutableStateOf<List<ArtistDto>>(emptyList())
     val performersState: State<List<ArtistDto>> = _performersState
+    var isLoading: Boolean = true;
+    var isError: Boolean = false;
 
     init {
         getAllPerformers()
     }
-    private fun getAllPerformers() {
+    fun getAllPerformers() {
         viewModelScope.launch {
             withContext(dispatcherIO) {
                 try {
                     performerRepository.getPerformers(
                         onResponse = {
                                 performersList ->  _performersState.value = performersList
+                            isLoading = false;
                         },
                         onFailure = {
                             Log.i("Error","Error consumiendo servicio ")
