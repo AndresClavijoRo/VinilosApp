@@ -3,6 +3,7 @@ package com.vinilos.misw4203.grupo6_202412
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.vinilos.misw4203.grupo6_202412.models.dto.AlbumDto
+import com.vinilos.misw4203.grupo6_202412.models.dto.AlbumRequest
 import com.vinilos.misw4203.grupo6_202412.models.dto.ArtistDto
 import com.vinilos.misw4203.grupo6_202412.models.dto.CollectorDto
 import com.vinilos.misw4203.grupo6_202412.models.service.VinilosService
@@ -71,12 +72,19 @@ class VinilosServiceUnitTest {
 
     @Test
     fun test_CreateAlbum() = runTest {
-        val request = AlbumDto(id = 1, name = "Album 1")
+        val request = AlbumRequest(
+            "Album 1",
+            "https://i.pinimg.com/736x/b5/42/19/b542192ace72c4a2c0db11b10aaaba6a.jpg",
+            "2024-05-10",
+            "Classical",
+            "EMI",
+            "La mamá de los pollitos"
+        )
         val json = gson.toJson(request)
 
         server.enqueue(MockResponse().setBody(json))
         val response: AlbumDto = createAlbumSuspend(request)
-        assertEquals(request, response)
+        assertEquals(request.name, response.name)
     }
 
     private suspend fun getAlbumsSuspend(): ArrayList<AlbumDto> = suspendCoroutine { continuation ->
@@ -101,7 +109,7 @@ class VinilosServiceUnitTest {
         })
     }
 
-    private suspend fun createAlbumSuspend(request: AlbumDto): AlbumDto =
+    private suspend fun createAlbumSuspend(request: AlbumRequest): AlbumDto =
         suspendCoroutine { continuation ->
             vinilosServiceAdapter.createAlbums(request, {
                 continuation.resume(it)
