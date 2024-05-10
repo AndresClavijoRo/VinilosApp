@@ -221,7 +221,7 @@ fun AlbumsSection(albumsState: CollectorAlbumsUiState) {
             }
 
             is CollectorAlbumsUiState.Loading -> {
-                CircularProgressIndicator(modifier = Modifier.padding(8.dp))
+                CircularProgressIndicator(modifier = Modifier.padding(8.dp).testTag("loadingAlbums"))
             }
         }
     }
@@ -248,7 +248,7 @@ fun CollectorDetailContent(collector: CollectorDto, albumsState: CollectorAlbums
             .verticalScroll(rememberScrollState())
     ) {
         Text(
-            text = (collector.name ?: "Default name") + collector.id.toString(),
+            text = (collector.name ?: "Default name"),
             style = MaterialTheme.typography.displaySmall,
         )
         Spacer(modifier = Modifier.padding(8.dp))
