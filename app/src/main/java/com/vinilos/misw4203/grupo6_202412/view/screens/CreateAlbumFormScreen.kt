@@ -48,7 +48,7 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun CreateAlbumForm(
+fun CreateAlbumFormScreen(
     back: () -> Unit,
     viewModel: CreateAlbumViewModel = viewModel(factory = CreateAlbumViewModel.Factory)
 ) {
@@ -56,7 +56,7 @@ fun CreateAlbumForm(
     Scaffold(topBar = {
         TopBar(
             back,
-            save = { viewModel.saveAlbum()/*; back()*/ }
+            save = { viewModel.saveAlbum(); if (viewModel.isNewAlbumSaved.value) back() }
         )
     }) {
         Column(
@@ -193,7 +193,9 @@ private fun AlbumGenre(
         onExpandedChange = { expanded.value = it; },
     ){
         OutlinedTextField(
-            modifier = Modifier.fillMaxWidth().menuAnchor(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .menuAnchor(),
             value = optionSelected.value,
             onValueChange = { optionSelected.value = it; checkIsValid() },
             readOnly = true,
@@ -394,5 +396,5 @@ private fun manageLength(input: String, size: Int) = if (input.length > size) in
 @Composable
 @Preview(showBackground = true)
 fun VistaPrevia() {
-    CreateAlbumForm({})
+    CreateAlbumFormScreen({})
 }

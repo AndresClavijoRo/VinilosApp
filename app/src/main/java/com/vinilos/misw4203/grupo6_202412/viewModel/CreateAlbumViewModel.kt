@@ -16,7 +16,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
 
-class CreateAlbumViewModel(private val albumRepository: VinilosRepository, private val dispatcher: CoroutineDispatcher = Dispatchers.IO): ViewModel() {
+class CreateAlbumViewModel(
+    private val albumRepository: VinilosRepository,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+) : ViewModel() {
 
     private val coverRegex = """https://(www.)?([^\r\n\t\f\v ><;,]+).(jpeg|jpg|gif|png)$""".toRegex(
         setOf(
@@ -42,6 +45,7 @@ class CreateAlbumViewModel(private val albumRepository: VinilosRepository, priva
     val description = mutableStateOf("")
     val isInvalidDescription = mutableStateOf(false)
 
+    val isNewAlbumSaved = mutableStateOf(false)
 
     fun isInvalidAlbumName(){
         isInvalidName.value = !(name.value.any())
@@ -90,21 +94,27 @@ class CreateAlbumViewModel(private val albumRepository: VinilosRepository, priva
 
 
     fun saveAlbum() {
-        if (!checkAllInputs()) return
+        if (!checkAllInputs()){
+            isNewAlbumSaved.value = false
+            return
+        }
+
         Log.d("CreateAlbum", "si llegó")
         viewModelScope.launch {
             withContext(dispatcher) {
                 try {
                     albumRepository.createAlbums(buildRequest())
+                    isNewAlbumSaved.value = true
                 } catch (e: Exception) {
                     Log.i("Error", "Error consumiendo servicio " + e.message)
+                    isNewAlbumSaved.value = false
                 }
             }
         }
     }
 
 
-    private fun checkAllInputs(): Boolean {
+   private fun checkAllInputs(): Boolean {
         isInvalidAlbumName()
         isInvalidAlbumCover()
         isInvalidAlbumGenre()

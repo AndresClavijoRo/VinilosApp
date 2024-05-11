@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.vinilos.misw4203.grupo6_202412.view.screens.CreateAlbumForm
+import com.vinilos.misw4203.grupo6_202412.view.screens.CreateAlbumFormScreen
 import com.vinilos.misw4203.grupo6_202412.view.screens.home.HomeScreen
 import com.vinilos.misw4203.grupo6_202412.view.screens.login.LoginScreen
 
@@ -53,7 +53,7 @@ fun RootNavGraph() {
         }
 
         composable(route = Graph.CREATE_ALBUM) {
-            CreateAlbumForm(back = {
+            CreateAlbumFormScreen(back = {
                 Log.d("CreateAlbum", "De regreso a la ventana principal")
                 navController.popBackStack()
             })
