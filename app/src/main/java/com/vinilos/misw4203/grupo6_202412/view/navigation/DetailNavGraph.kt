@@ -39,7 +39,7 @@ fun NavGraphBuilder.detailNavGraph(navController: NavHostController) {
             val collectorId = backStackEntry.arguments?.getString("collectorId")
             CollectorScreenDetail(
                 idDetail = collectorId ?: "",
-                onClick = {
+                onClickBack = {
                     navController.popBackStack()
                 }
             )

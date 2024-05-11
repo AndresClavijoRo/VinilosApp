@@ -8,6 +8,6 @@ data class CollectorDto (
     @SerializedName("telephone") var telephone: String? = null,
     @SerializedName("email") var email: String? = null,
     @SerializedName("comments") var comments: ArrayList<CommentDto> = arrayListOf(),
-    @SerializedName("favoritePerformers") var favoritePerformers: ArrayList<FavoritePerformerDto> = arrayListOf(),
+    @SerializedName("favoritePerformers") var favoritePerformers: ArrayList<ArtistDto> = arrayListOf(),
     @SerializedName("collectorAlbums") var collectorAlbums: ArrayList<CollectorAlbumDto> = arrayListOf()
 )

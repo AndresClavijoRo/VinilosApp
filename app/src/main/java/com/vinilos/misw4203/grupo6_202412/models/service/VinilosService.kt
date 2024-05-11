@@ -2,6 +2,7 @@ package com.vinilos.misw4203.grupo6_202412.models.service
 
 import com.vinilos.misw4203.grupo6_202412.models.dto.AlbumDto
 import com.vinilos.misw4203.grupo6_202412.models.dto.ArtistDto
+import com.vinilos.misw4203.grupo6_202412.models.dto.CollectorAlbumDetailDto
 import com.vinilos.misw4203.grupo6_202412.models.dto.CollectorDto
 import retrofit2.Call
 import retrofit2.Callback
@@ -87,6 +88,29 @@ open class VinilosService(private val baseUrl: String) {
     ) {
         getCollectorEndpoint.getCollectorsList()
             .enqueue(responseCallback<ArrayList<CollectorDto>>(onResponse, onFailure))
+    }
+
+    fun getCollectorById(
+        id: Int,
+        onResponse: (resp: CollectorDto) -> Unit,
+        onFailure: (resp: String) -> Unit
+    ) {
+        getCollectorEndpoint.getCollectorById(id)
+            .enqueue(responseCallback<CollectorDto>(onResponse, onFailure))
+    }
+
+    fun getCollectorAlbums(
+        id: Int,
+        onResponse: (resp: ArrayList<CollectorAlbumDetailDto>) -> Unit,
+        onFailure: (resp: String) -> Unit
+    ) {
+       getCollectorEndpoint.getCollectorAlbumsById(id)
+            .enqueue(
+                responseCallback(
+                    onResponse,
+                    onFailure,
+                )
+            )
     }
 
     private fun <T> responseCallback(
