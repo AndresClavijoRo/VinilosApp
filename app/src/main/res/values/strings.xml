@@ -24,4 +24,12 @@
     <string name="back">Volver</string>
     <string name="btn_album_comment">Comentar álbum</string>
     <string name="estrella_comment_ok">Star point</string>
+    <string name="collectorPhone">Teléfono</string>
+    <string name="collectorEmail">Email</string>
+    <string name="colonSeparator">": "</string>
+    <string name="collectorNoAlbums">"El coleccionista no tiene albumes favoritos."</string>
+    <string name="errorLoadingAlbums">Problema cargando los albumes</string>
+    <string name="collectorNoFavoriteArtists">El Coleccionista no tiene artistas favoritos.</string>
+    <string name="noCollectors">No hay coleccionistas</string>
+
 </resources>

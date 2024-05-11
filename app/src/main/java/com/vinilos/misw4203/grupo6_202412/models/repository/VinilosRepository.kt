@@ -2,9 +2,14 @@ package com.vinilos.misw4203.grupo6_202412.models.repository
 
 
 import com.vinilos.misw4203.grupo6_202412.models.dto.AlbumDto
+import com.vinilos.misw4203.grupo6_202412.models.dto.AlbumRequest
 import com.vinilos.misw4203.grupo6_202412.models.dto.ArtistDto
+import com.vinilos.misw4203.grupo6_202412.models.dto.CollectorAlbumDetailDto
 import com.vinilos.misw4203.grupo6_202412.models.dto.CollectorDto
 import com.vinilos.misw4203.grupo6_202412.models.service.VinilosService
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 open class VinilosRepository(private val webService:VinilosService) {
     companion object Factory {
@@ -21,12 +26,10 @@ open class VinilosRepository(private val webService:VinilosService) {
         webService.getAlbumById(id, onResponse, onFailure)
     }
 
-    fun createAlbums(
-        request: AlbumDto,
-        onResponse: (resp: AlbumDto) -> Unit,
-        onFailure: (resp: String) -> Unit
-    ) {
-        webService.createAlbums(request, onResponse, onFailure)
+    suspend fun createAlbums(request: AlbumRequest): AlbumDto = suspendCoroutine { cont ->
+        webService.createAlbums(request,
+            { cont.resume(it) },
+            { cont.resumeWithException(Exception(it)) })
     }
 
     fun getPerformers(onResponse:(resp:ArrayList<ArtistDto>)->Unit, onFailure:(resp:String)->Unit){
@@ -39,6 +42,13 @@ open class VinilosRepository(private val webService:VinilosService) {
 
     fun getCollectors(onResponse:(resp:ArrayList<CollectorDto>)->Unit, onFailure:(resp:String)->Unit){
         webService.getCollectors(onResponse, onFailure)
+    }
+    fun getCollectorbyId(id:Int, onResponse:(resp:CollectorDto)->Unit, onFailure:(resp:String)->Unit) {
+        return webService.getCollectorById(id, onResponse, onFailure)
+    }
+
+    fun getCollectorAlbums(id:Int, onResponse:(resp:ArrayList<CollectorAlbumDetailDto>)->Unit, onFailure:(resp:String)->Unit) {
+        return webService.getCollectorAlbums(id, onResponse, onFailure)
     }
 
 
