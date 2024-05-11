@@ -12,6 +12,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.vinilos.misw4203.grupo6_202412.VinilosApplication
 import com.vinilos.misw4203.grupo6_202412.models.dto.AlbumDto
 import com.vinilos.misw4203.grupo6_202412.models.repository.VinilosRepository
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -19,12 +20,13 @@ import kotlinx.coroutines.withContext
 
 sealed interface AlbumUiState {
     data class Success(val albums: List<AlbumDto>) : AlbumUiState
-    object Error : AlbumUiState
-    object Loading : AlbumUiState
+    data object Error : AlbumUiState
+    data object Loading : AlbumUiState
 }
 
 open class AlbumViewModel(
-    private val albumRepository: VinilosRepository
+    private val albumRepository: VinilosRepository,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
 
     var albumUiState: AlbumUiState by mutableStateOf(AlbumUiState.Loading)
@@ -36,7 +38,7 @@ open class AlbumViewModel(
     fun getAllAlbums() {
         albumUiState = AlbumUiState.Loading
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
+            withContext(dispatcher) {
                 try {
                     albumRepository.getAlbums(
                         onResponse = { albumList ->
