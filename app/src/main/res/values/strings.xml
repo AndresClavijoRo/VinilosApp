@@ -31,5 +31,6 @@
     <string name="errorLoadingAlbums">Problema cargando los albumes</string>
     <string name="collectorNoFavoriteArtists">El Coleccionista no tiene artistas favoritos.</string>
     <string name="noCollectors">No hay coleccionistas</string>
+    <string name="no_albums_found">No Albums Found</string>
 
 </resources>

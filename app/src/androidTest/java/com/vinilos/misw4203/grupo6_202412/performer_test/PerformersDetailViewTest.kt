@@ -1,10 +1,13 @@
 package com.vinilos.misw4203.grupo6_202412.performer_test
 
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onChildren
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
 
+import com.vinilos.misw4203.grupo6_202412.R
 import com.vinilos.misw4203.grupo6_202412.models.dto.AlbumDto
 import com.vinilos.misw4203.grupo6_202412.models.dto.ArtistDto
 import com.vinilos.misw4203.grupo6_202412.models.repository.VinilosRepository
@@ -58,13 +61,15 @@ class PerformersDetailViewTest {
     fun detailIfAlbumsIstEmpty() {
         var performer =  ArtistDto(1,"DetailEmpty","https://acortar.link/T7Mc10");
         performer.albums = arrayListOf()
+
+        lateinit var notFoundMessage: String
         viewModel.performerDetailState = performer
         composeTestRule.setContent {
+            notFoundMessage = stringResource(R.string.no_albums_found)
             PerformerDetailScreen(performerId = performer.id.toString(), onClick = { }, viewModel)
         }
 
-        val albumsList = composeTestRule.onNodeWithTag("albumChildTag").onChildren().fetchSemanticsNodes().size
-        Assert.assertTrue("Performer does not have Album", albumsList == 0)
+        composeTestRule.onNodeWithText(notFoundMessage).assertExists()
     }
 
     @Test
