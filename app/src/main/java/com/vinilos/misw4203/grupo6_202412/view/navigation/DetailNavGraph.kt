@@ -5,6 +5,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.vinilos.misw4203.grupo6_202412.view.screens.CommentAlbumForm
+import com.vinilos.misw4203.grupo6_202412.view.screens.CreateAlbumForm
 import com.vinilos.misw4203.grupo6_202412.view.screens.detail.AlbumScreenDetail
 import com.vinilos.misw4203.grupo6_202412.view.screens.detail.CollectorScreenDetail
 import com.vinilos.misw4203.grupo6_202412.view.screens.detail.PerformerDetailScreen
@@ -22,7 +24,7 @@ fun NavGraphBuilder.detailNavGraph(navController: NavHostController) {
                     navController.popBackStack()
                 },
                 onClickCommentAlbum = {
-                    // TODO: Implementar funcionalidad de comentar album
+                    navController.navigate(GraphDetail.COMMENT_ALBUM)
                 }
             )
         }
@@ -44,6 +46,15 @@ fun NavGraphBuilder.detailNavGraph(navController: NavHostController) {
                 }
             )
         }
+
+        composable(route = GraphDetail.COMMENT_ALBUM) { backStackEntry ->
+            val albumId = backStackEntry.arguments?.getString("albumId")
+            CommentAlbumForm(
+                idDetail = albumId ?: "",
+                onClickBack = {
+                navController.popBackStack()
+            })
+        }
     }
 }
 
@@ -51,4 +62,5 @@ object GraphDetail {
     const val ALBUMS_DETAIL = "album_detail/{albumId}"
     const val PERFORMER_DETAIL = "performer_detail/{performerId}"
     const val COLLECTORS_DETAIL = "collectors_detail/{collectorId}"
+    const val COMMENT_ALBUM = "comment_album/{albumId}"
 }

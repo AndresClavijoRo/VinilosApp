@@ -30,5 +30,7 @@
     <string name="collectorNoAlbums">"El coleccionista no tiene albumes favoritos."</string>
     <string name="errorLoadingAlbums">Problema cargando los albumes</string>
     <string name="collectorNoFavoriteArtists">El Coleccionista no tiene artistas favoritos.</string>
-
+    <string name="collector">Coleccionista</string>
+    <string name="selectionValidator">Debe seleccionar un elemento de la lista</string>
+    <string name="comment">Comentario</string>
 </resources>

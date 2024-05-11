@@ -45,7 +45,6 @@ fun HomeNavigation(
         composable(route = GraphHome.COLLECTORS) {
             CollectorScreen(
                 onClick = onClickCollectorsDetail,
-
             )
         }
     }
