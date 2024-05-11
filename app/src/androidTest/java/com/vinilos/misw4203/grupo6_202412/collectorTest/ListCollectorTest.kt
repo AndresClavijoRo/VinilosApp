@@ -22,6 +22,8 @@ class ListCollectorTest {
 
     fun initWithCollectors(collectors: List<CollectorDto>, onClick: (String) -> Unit = {}) {
         collectorViewModel.collectorsState.value = collectors
+        collectorViewModel.isLoading.value = false
+        collectorViewModel.errorText.value = null
         composeTestRule.setContent {
             CollectorScreen(
                 onClick = onClick,

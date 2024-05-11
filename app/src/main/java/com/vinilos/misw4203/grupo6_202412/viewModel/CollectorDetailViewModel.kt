@@ -30,6 +30,7 @@ sealed class CollectorAlbumsUiState {
         CollectorAlbumsUiState()
 }
 
+val ERROR_MESSAGE = "Error consumiendo servicio "
 
 class CollectorDetailViewModel(
     private val vinilosRepository: VinilosRepository,
@@ -48,7 +49,6 @@ class CollectorDetailViewModel(
             getCollector()
             getAlbums()
         }
-
     }
 
 
@@ -61,11 +61,10 @@ class CollectorDetailViewModel(
                 collectorUiState = CollectorUiState.Error(it)
             })
         } catch (e: Exception) {
-            val message = "Error consumiendo servicio " + e.message
+            val message = ERROR_MESSAGE + e.message
             Log.i("Error", message)
             collectorUiState = CollectorUiState.Error(message)
         }
-
     }
 
     private fun getAlbums() {
@@ -80,9 +79,10 @@ class CollectorDetailViewModel(
                 collectoralbumsUiState = CollectorAlbumsUiState.Error(it)
             })
         } catch (e: Exception) {
-            Log.i("Error", "Error consumiendo servicio " + e.message)
+            val error = ERROR_MESSAGE + e.message
+            Log.i("Error", error)
             collectoralbumsUiState =
-                CollectorAlbumsUiState.Error("Error consumiendo servicio " + e.message)
+                CollectorAlbumsUiState.Error(error)
         }
     }
 
