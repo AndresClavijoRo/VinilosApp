@@ -1,6 +1,7 @@
 package com.vinilos.misw4203.grupo6_202412.models.service
 
 import com.vinilos.misw4203.grupo6_202412.models.dto.AlbumDto
+import com.vinilos.misw4203.grupo6_202412.models.dto.AlbumRequest
 import com.vinilos.misw4203.grupo6_202412.models.dto.ArtistDto
 import com.vinilos.misw4203.grupo6_202412.models.dto.CollectorAlbumDetailDto
 import com.vinilos.misw4203.grupo6_202412.models.dto.CollectorDto
@@ -48,7 +49,7 @@ open class VinilosService(private val baseUrl: String) {
     }
 
     fun createAlbums(
-        request: AlbumDto,
+        request: AlbumRequest,
         onResponse: (resp: AlbumDto) -> Unit,
         onFailure: (resp: String) -> Unit
     ) {
