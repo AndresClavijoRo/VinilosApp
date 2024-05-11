@@ -80,6 +80,7 @@ class VinilosServiceUnitTest {
             "EMI",
             "La mamá de los pollitos"
         )
+
         val json = gson.toJson(request)
 
         server.enqueue(MockResponse().setBody(json))
@@ -108,7 +109,6 @@ class VinilosServiceUnitTest {
             continuation.resumeWithException(RuntimeException("Error occurred: $it"))
         })
     }
-
     private suspend fun createAlbumSuspend(request: AlbumRequest): AlbumDto =
         suspendCoroutine { continuation ->
             vinilosServiceAdapter.createAlbums(request, {

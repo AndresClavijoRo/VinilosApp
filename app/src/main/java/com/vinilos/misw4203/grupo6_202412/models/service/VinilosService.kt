@@ -3,6 +3,7 @@ package com.vinilos.misw4203.grupo6_202412.models.service
 import com.vinilos.misw4203.grupo6_202412.models.dto.AlbumDto
 import com.vinilos.misw4203.grupo6_202412.models.dto.AlbumRequest
 import com.vinilos.misw4203.grupo6_202412.models.dto.ArtistDto
+import com.vinilos.misw4203.grupo6_202412.models.dto.CollectorAlbumDetailDto
 import com.vinilos.misw4203.grupo6_202412.models.dto.CollectorDto
 import retrofit2.Call
 import retrofit2.Callback
@@ -73,12 +74,44 @@ open class VinilosService(private val baseUrl: String) {
             .enqueue(responseCallback<ArrayList<ArtistDto>>(onResponse, onFailure))
     }
 
+    fun getPerformerById(
+        onResponse: (resp: ArtistDto) -> Unit,
+        onFailure: (resp: String) -> Unit,
+        musicianId: Int
+    ) {
+        getArtistEndpoint.getPerformerById(musicianId)
+            .enqueue(responseCallback<ArtistDto>(onResponse, onFailure))
+    }
+
     fun getCollectors(
         onResponse: (resp: ArrayList<CollectorDto>) -> Unit,
         onFailure: (resp: String) -> Unit
     ) {
         getCollectorEndpoint.getCollectorsList()
             .enqueue(responseCallback<ArrayList<CollectorDto>>(onResponse, onFailure))
+    }
+
+    fun getCollectorById(
+        id: Int,
+        onResponse: (resp: CollectorDto) -> Unit,
+        onFailure: (resp: String) -> Unit
+    ) {
+        getCollectorEndpoint.getCollectorById(id)
+            .enqueue(responseCallback<CollectorDto>(onResponse, onFailure))
+    }
+
+    fun getCollectorAlbums(
+        id: Int,
+        onResponse: (resp: ArrayList<CollectorAlbumDetailDto>) -> Unit,
+        onFailure: (resp: String) -> Unit
+    ) {
+       getCollectorEndpoint.getCollectorAlbumsById(id)
+            .enqueue(
+                responseCallback(
+                    onResponse,
+                    onFailure,
+                )
+            )
     }
 
     private fun <T> responseCallback(

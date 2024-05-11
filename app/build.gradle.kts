@@ -7,6 +7,10 @@ android {
     namespace = "com.vinilos.misw4203.grupo6_202412"
     compileSdk = 34
 
+    buildFeatures {
+        buildConfig = true
+    }
+
     defaultConfig {
         applicationId = "com.vinilos.misw4203.grupo6_202412"
         minSdk = 26
@@ -22,11 +26,15 @@ android {
 
     buildTypes {
         release {
+            buildConfigField("String","BASE_URL_API_SERVICE", "\"https://vinyls-grupo-6-back-1a983feb9f59.herokuapp.com/\"")
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+        debug{
+            buildConfigField("String","BASE_URL_API_SERVICE", "\"https://vinyls-grupo-6-back-1a983feb9f59.herokuapp.com/\"")
         }
     }
     compileOptions {

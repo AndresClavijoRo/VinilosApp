@@ -17,4 +17,5 @@ interface IAlbumEndpoint {
 
     @POST("albums")
     fun createAlbum(@Body request: AlbumRequest): Call<AlbumDto>;
+
 }

@@ -6,8 +6,6 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,7 +14,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
@@ -58,7 +55,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.vinilos.misw4203.grupo6_202412.R
 import com.vinilos.misw4203.grupo6_202412.models.dto.AlbumDto
-import com.vinilos.misw4203.grupo6_202412.models.dto.ArtistDto
 import com.vinilos.misw4203.grupo6_202412.models.dto.CommentDto
 import com.vinilos.misw4203.grupo6_202412.models.dto.TraksDto
 import com.vinilos.misw4203.grupo6_202412.ui.theme.StarDisable
@@ -66,10 +62,10 @@ import com.vinilos.misw4203.grupo6_202412.ui.theme.StarEnable
 import com.vinilos.misw4203.grupo6_202412.view.uiControls.ErrorScreen
 import com.vinilos.misw4203.grupo6_202412.view.uiControls.ExpandableText
 import com.vinilos.misw4203.grupo6_202412.view.uiControls.ImageAsync
+import com.vinilos.misw4203.grupo6_202412.view.utils.formatDateString
+import com.vinilos.misw4203.grupo6_202412.view.uiControls.PerformersChips
 import com.vinilos.misw4203.grupo6_202412.viewModel.AlbumDetailUiState
 import com.vinilos.misw4203.grupo6_202412.viewModel.AlbumDetailViewModel
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 @Composable
 fun AlbumScreenDetail(
@@ -136,7 +132,7 @@ fun TopBarAlbumDetail(
 ) {
     TopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            containerColor = MaterialTheme.colorScheme.secondaryContainer,
             titleContentColor = MaterialTheme.colorScheme.primary,
         ),
         title = {},
@@ -168,7 +164,7 @@ fun AlbumDetailContent(
         Spacer(modifier = Modifier.padding(8.dp))
         AlbumInfo(albumDto)
         Spacer(modifier = Modifier.padding(8.dp))
-        Performers(albumDto.performers)
+        PerformersChips(albumDto.performers)
         Spacer(modifier = Modifier.padding(8.dp))
         Tracks(albumDto.tracks)
         Spacer(modifier = Modifier.padding(8.dp))
@@ -256,52 +252,17 @@ fun AlbumInfo(albumDto: AlbumDto) {
         ExpandableText(
             fontSize = 14.sp,
             text = albumDto.description ?: "",
-            modifier = Modifier.padding(3.dp)
+            modifier = Modifier
+                .padding(3.dp)
+                .testTag("albumDescription")
         )
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
-fun Performers(performers: List<ArtistDto>) {
-    Text(
-        text = stringResource(id = R.string.performerTitle),
-        style = MaterialTheme.typography.titleMedium
-    )
-    FlowRow(
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        performers.forEach { performer ->
-            PerformerChip(performer)
-        }
-    }
-}
 
 
-@Composable
-fun PerformerChip(performer: ArtistDto) {
-    ElevatedAssistChip(
-        onClick = { },
-        label = { Text(text = performer.name ?: "") },
-        leadingIcon = {
-            ImageAsync(
-                url = performer.image ?: "",
-                contentDescription = performer.name ?: "",
-                modifier = Modifier
-                    .width(18.0.dp)
-                    .size(AssistChipDefaults.IconSize)
-                    .clip(CircleShape)
-            )
-        },
 
-        shape = RoundedCornerShape(50.dp),
-        border = AssistChipDefaults.assistChipBorder(
-            borderColor = Color.Black,
-            disabledBorderColor = Color.Gray
-        ),
-    )
-}
+
 
 @Composable
 fun Tracks(tracks: List<TraksDto>) {
@@ -392,27 +353,16 @@ fun CommentChip(comment: CommentDto) {
 
 @Composable
 fun RatingComment(rating: Int) {
-    Row {
+    Row(modifier = Modifier.testTag("ratingComment") )  {
         for (i in 1..5) {
             Icon(
                 imageVector = Icons.Rounded.Star,
-                contentDescription = null,
+                contentDescription =  if (i > rating) "" else stringResource(R.string.estrella_comment_ok),
                 modifier = Modifier.size(30.dp),
-                tint = if (i >= rating) StarDisable else StarEnable
+                tint = if (i > rating) StarDisable else StarEnable
             )
         }
     }
-}
-
-
-fun formatDateString(inputDate: String, inputFormat: String, outputFormat: String): String {
-    val originalFormat = SimpleDateFormat(inputFormat, Locale.US)
-    val targetFormat = SimpleDateFormat(outputFormat, Locale.US)
-
-    val date = originalFormat.parse(inputDate)
-    val formattedDate = date?.let { targetFormat.format(it) }
-
-    return formattedDate ?: ""
 }
 
 @Preview(showBackground = true)
