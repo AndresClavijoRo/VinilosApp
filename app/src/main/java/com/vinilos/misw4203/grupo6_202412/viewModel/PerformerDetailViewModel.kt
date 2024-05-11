@@ -21,6 +21,7 @@ class PerformerDetailViewModel(private val performerRepository: VinilosRepositor
                                private val dispatcherIO: CoroutineDispatcher =
                                    Dispatchers.IO): ViewModel() {
     var performerDetailState by mutableStateOf<ArtistDto?>(null)
+    var isLoading: Boolean = true;
 
     fun getPerformerById(musicianId: Int) {
         viewModelScope.launch {
@@ -29,6 +30,7 @@ class PerformerDetailViewModel(private val performerRepository: VinilosRepositor
                     performerRepository.getPerformerById(
                         onResponse = {
                                 performerDetail ->  performerDetailState = performerDetail
+                            isLoading = false;
                         },
                         onFailure = {
                             Log.i("Error","Error consumiendo servicio ")

@@ -1,6 +1,8 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 package com.vinilos.misw4203.grupo6_202412.view.screens.detail
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -14,6 +16,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -122,26 +125,45 @@ private fun parseCustomDate(birthDate: String?): String{
 @Composable
 fun AlbumsPerformer(albums: ArrayList<AlbumDto>){
     Column() {
-        LazyColumn( modifier = Modifier.testTag("albumChildTag")) {
-            items(albums) { album ->
-                ListItem(
-                    headlineContent = {  Text("${album.name}")},
-                    leadingContent = {
-                        Row( modifier = Modifier
+        if(albums.isEmpty()){
+            NoDataFound()
+        } else {
+            LazyColumn( modifier = Modifier.testTag("albumChildTag")) {
+                items(albums) { album ->
+                    ListItem(
+                        headlineContent = {  Text("${album.name}")},
+                        leadingContent = {
+                            Row( modifier = Modifier
                             ) {
-                            ImageAsync(
-                                "${album.cover}",
-                                "${album.recordLabel}",
-                                Modifier.
-                                size(100.dp)
-                                    .clip(RoundedCornerShape(8.dp)),
-                                ContentScale.Crop
-                            )
+                                ImageAsync(
+                                    "${album.cover}",
+                                    "${album.recordLabel}",
+                                    Modifier.
+                                    size(100.dp)
+                                        .clip(RoundedCornerShape(8.dp)),
+                                    ContentScale.Crop
+                                )
+                            }
                         }
-                    }
-                )
+                    )
+                }
             }
         }
+    }
+}
+
+
+@Composable
+fun NoDataFound(){
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "No Albums Found",
+            style = MaterialTheme.typography.headlineSmall,
+        )
     }
 }
 
