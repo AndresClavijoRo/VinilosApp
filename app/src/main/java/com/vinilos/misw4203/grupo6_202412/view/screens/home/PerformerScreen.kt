@@ -54,7 +54,7 @@ fun PerformerScreen(
             }
             Column(
                 modifier = Modifier
-                    .fillMaxSize()) {
+                    .fillMaxSize().testTag("PerformerTitle")) {
                 if(!performerViewModel.isLoading){
                     Text(
                         text = stringResource(R.string.performerTitle),

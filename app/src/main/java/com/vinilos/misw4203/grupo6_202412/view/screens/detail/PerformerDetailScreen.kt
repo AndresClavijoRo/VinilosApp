@@ -50,26 +50,21 @@ fun PerformerDetailScreen(
 
     performerDetailViewModel.getPerformerById(performerId.toInt())
     val performerDetail = performerDetailViewModel.performerDetailState
-    if (performerDetail== null) {
-        Text(text = "Cargando datos...")
-    } else {
-
-        Scaffold(
-            topBar = { TopBarPerformerDetail(onClick) }
-        ){
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(it)
-            ) {
-                Text(
-                    text = "${performerDetail?.name}",
-                    modifier = Modifier.padding(bottom = 20.dp, start = 8.dp, top = 30.dp).fillMaxWidth().
-                    testTag("PerformerDetailTitle"),
-                    style = MaterialTheme.typography.titleLarge
-                )
-                PerformerDetail(performerDetail)
-            }
+    Scaffold(
+        topBar = { TopBarPerformerDetail(onClick) }
+    ){
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(it)
+        ) {
+            Text(
+                text = "${performerDetail?.name}",
+                modifier = Modifier.padding(bottom = 20.dp, start = 8.dp, top = 30.dp).fillMaxWidth().
+                testTag("PerformerDetailTitle"),
+                style = MaterialTheme.typography.titleLarge
+            )
+            PerformerDetail(performerDetail)
         }
     }
 }

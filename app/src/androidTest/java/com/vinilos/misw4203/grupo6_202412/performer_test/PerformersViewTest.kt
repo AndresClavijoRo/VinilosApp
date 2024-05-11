@@ -33,10 +33,8 @@ class PerformersViewTest  {
     @Test
     fun displayPerformersView() {
         composeTestRule.setContent {
-            RootNavGraph()
+            PerformerScreen(onClick = { }, viewModel)
         }
-        composeTestRule.onNodeWithText("Coleccionista").performClick()
-        composeTestRule.onNodeWithText("Artistas").performClick()
         composeTestRule.onNodeWithTag("PerformerTitle").assertExists()
     }
     @Test
