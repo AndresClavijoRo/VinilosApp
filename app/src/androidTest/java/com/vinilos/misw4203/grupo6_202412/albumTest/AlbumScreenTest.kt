@@ -24,8 +24,8 @@ class AlbumScreenTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    val mockRepository = Mockito.mock(VinilosRepository::class.java)
-    var albumViewModel = AlbumViewModel(albumRepository = mockRepository)
+    private val mockRepository = Mockito.mock(VinilosRepository::class.java)
+    private var albumViewModel = AlbumViewModel(albumRepository = mockRepository)
 
     @Before
     fun setUp() {
@@ -38,7 +38,8 @@ class AlbumScreenTest {
         composeTestRule.setContent {
             AlbumScreen(
                 onClickAlbumsDetail = { },
-                albumViewModel = albumViewModel
+                onClickCreateAlbum = { },
+                albumViewModel = albumViewModel,
             )
         }
         composeTestRule.onRoot(useUnmergedTree = true).printToLog("AlbumScreenTest")
@@ -58,7 +59,8 @@ class AlbumScreenTest {
 
             AlbumScreen(
                 onClickAlbumsDetail = { },
-                albumViewModel
+                onClickCreateAlbum = { },
+                albumViewModel =albumViewModel
             )
         }
 
@@ -73,7 +75,8 @@ class AlbumScreenTest {
         composeTestRule.setContent {
             AlbumScreen(
                 onClickAlbumsDetail = { },
-                albumViewModel
+                onClickCreateAlbum = { },
+                albumViewModel = albumViewModel
             )
         }
         composeTestRule.onRoot(useUnmergedTree = true).printToLog("AlbumScreenTest")
@@ -86,11 +89,12 @@ class AlbumScreenTest {
         composeTestRule.setContent {
             AlbumScreen(
                 onClickAlbumsDetail = { },
-                albumViewModel
+                onClickCreateAlbum = { },
+                albumViewModel = albumViewModel
             )
         }
         composeTestRule.onNodeWithText(FakeDataAlbums.albums[0].name).assertExists()
-        albumViewModel.refreshAlbums()
+        albumViewModel.getAllAlbums()
         Thread.sleep(1000)
         albumViewModel.albumUiState = AlbumUiState.Success(FakeDataAlbums.albums)
         composeTestRule.onNodeWithText(FakeDataAlbums.albums[0].name).assertExists()
@@ -103,12 +107,13 @@ class AlbumScreenTest {
         composeTestRule.setContent {
             AlbumScreen(
                 onClickAlbumsDetail = { albumId = it },
-                albumViewModel
+                onClickCreateAlbum = { },
+                albumViewModel = albumViewModel
             )
         }
         composeTestRule.onNodeWithText(FakeDataAlbums.albums[0].name).assertExists()
         composeTestRule.onNodeWithText(FakeDataAlbums.albums[0].name).performClick()
-        assert(albumId == FakeDataAlbums.albums[0].id.toString());
+        assert(albumId == FakeDataAlbums.albums[0].id.toString())
     }
 
     @Test
@@ -120,7 +125,8 @@ class AlbumScreenTest {
             textNoData = stringResource(R.string.no_data)
             AlbumScreen(
                 onClickAlbumsDetail = { },
-                albumViewModel
+                onClickCreateAlbum = { },
+                albumViewModel = albumViewModel
             )
         }
         composeTestRule.onRoot(useUnmergedTree = true).printToLog("AlbumScreenTest")

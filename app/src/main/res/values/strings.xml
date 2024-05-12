@@ -10,9 +10,27 @@
     <string name="albumTitle">Álbumes</string>
     <string name="performerTitle">Artistas</string>
     <string name="collectorTitle">Coleccionistas</string>
+    <string name="tracksTitle">"Canciones"</string>
     <string name="tracks">" canciones"</string>
+    <string name="comments">"Comentarios"</string>
     <string name="cargando">Loading</string>
     <string name="error_al_cargar">Error Al cargar</string>
     <string name="no_data">Se realizo la consulta, pero no se encontraron datos.</string>
     <string name="retry">Recargar</string>
+    <string name="show_more">... Mostrar mas</string>
+    <string name="show_less">" Mostrar Menos"</string>
+    <string name="genre">"Genero "</string>
+    <string name="publish">Publicado</string>
+    <string name="back">Volver</string>
+    <string name="btn_album_comment">Comentar álbum</string>
+    <string name="estrella_comment_ok">Star point</string>
+    <string name="collectorPhone">Teléfono</string>
+    <string name="collectorEmail">Email</string>
+    <string name="colonSeparator">": "</string>
+    <string name="collectorNoAlbums">"El coleccionista no tiene albumes favoritos."</string>
+    <string name="errorLoadingAlbums">Problema cargando los albumes</string>
+    <string name="collectorNoFavoriteArtists">El Coleccionista no tiene artistas favoritos.</string>
+    <string name="noCollectors">No hay coleccionistas</string>
+    <string name="no_albums_found">No Albums Found</string>
+
 </resources>

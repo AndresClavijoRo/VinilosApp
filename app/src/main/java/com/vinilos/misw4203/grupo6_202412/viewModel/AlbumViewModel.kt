@@ -12,63 +12,57 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.vinilos.misw4203.grupo6_202412.VinilosApplication
 import com.vinilos.misw4203.grupo6_202412.models.dto.AlbumDto
 import com.vinilos.misw4203.grupo6_202412.models.repository.VinilosRepository
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 sealed interface AlbumUiState {
     data class Success(val albums: List<AlbumDto>) : AlbumUiState
-    object Error : AlbumUiState
-    object Loading : AlbumUiState
+    data object Error : AlbumUiState
+    data object Loading : AlbumUiState
 }
 
 open class AlbumViewModel(
-    private val albumRepository: VinilosRepository
-): ViewModel(){
+    private val albumRepository: VinilosRepository,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+) : ViewModel() {
 
     var albumUiState: AlbumUiState by mutableStateOf(AlbumUiState.Loading)
-
-    private var dataLoaded = false
 
     init {
         getAllAlbums()
     }
-    private fun getAllAlbums() {
-        if (dataLoaded) {
-            return
-        }
 
+    fun getAllAlbums() {
+        albumUiState = AlbumUiState.Loading
         viewModelScope.launch {
-            try {
-               albumRepository.getAlbums(
-                    onResponse = {
-                            albumList -> albumUiState = AlbumUiState.Success(albumList)
-                    },
-                    onFailure = {
-                        Log.i("Error","Error consumiendo servicio ")
-                        albumUiState = AlbumUiState.Error
-                    })
-            } catch (e: Exception) {
-                Log.i("Error","Error consumiendo servicio " + e.message)
-                albumUiState = AlbumUiState.Error
+            withContext(dispatcher) {
+                try {
+                    albumRepository.getAlbums(
+                        onResponse = { albumList ->
+                            albumUiState = AlbumUiState.Success(albumList)
+                        },
+                        onFailure = {
+                            Log.i("Error", "Error consumiendo servicio ")
+                            albumUiState = AlbumUiState.Error
+                        })
+                } catch (e: Exception) {
+                    Log.i("Error", "Error consumiendo servicio " + e.message)
+                    albumUiState = AlbumUiState.Error
+                }
             }
         }
     }
 
-    fun refreshAlbums() {
-        albumUiState = AlbumUiState.Loading
-        dataLoaded = false
-        getAllAlbums()
-    }
-
     companion object {
-        private var instance: AlbumViewModel? = null
-
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val application = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as VinilosApplication)
+                val application =
+                    (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as VinilosApplication)
                 val vinilosRepository = application.vinilosRepository
                 AlbumViewModel(albumRepository = vinilosRepository)
-                instance ?: AlbumViewModel(albumRepository = vinilosRepository).also { instance = it }
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.vinilos.misw4203.grupo6_202412.fake_data
 
+import com.vinilos.misw4203.grupo6_202412.models.dto.ArtistDto
 import com.vinilos.misw4203.grupo6_202412.models.dto.CollectorAlbumDto
 import com.vinilos.misw4203.grupo6_202412.models.dto.CollectorDto
 import com.vinilos.misw4203.grupo6_202412.models.dto.CommentDto
@@ -13,7 +14,7 @@ object FakeDataCollectors {
             telephone = "+11231231234",
             email = "juan@test.com",
             comments = arrayListOf<CommentDto>(),
-            favoritePerformers = arrayListOf<FavoritePerformerDto>(),
+            favoritePerformers = arrayListOf<ArtistDto>(),
             collectorAlbums = arrayListOf<CollectorAlbumDto>()
         ),
         CollectorDto(
@@ -22,7 +23,7 @@ object FakeDataCollectors {
             telephone = "+11231231235",
             email = "maria@test.com",
             comments = arrayListOf<CommentDto>(),
-            favoritePerformers = arrayListOf<FavoritePerformerDto>(),
+            favoritePerformers = arrayListOf<ArtistDto>(),
             collectorAlbums = arrayListOf<CollectorAlbumDto>()
         ),
         CollectorDto(
@@ -31,7 +32,7 @@ object FakeDataCollectors {
             telephone = "+11231231236",
             email = "pedro@test.com",
             comments = arrayListOf<CommentDto>(),
-            favoritePerformers = arrayListOf<FavoritePerformerDto>(),
+            favoritePerformers = arrayListOf<ArtistDto>(),
             collectorAlbums = arrayListOf<CollectorAlbumDto>()
         ),
         CollectorDto(
@@ -40,7 +41,7 @@ object FakeDataCollectors {
             telephone = "+11231231237",
             email = "ana@test.com",
             comments = arrayListOf<CommentDto>(),
-            favoritePerformers = arrayListOf<FavoritePerformerDto>(),
+            favoritePerformers = arrayListOf<ArtistDto>(),
             collectorAlbums = arrayListOf<CollectorAlbumDto>()
         ),
         CollectorDto(
@@ -49,7 +50,7 @@ object FakeDataCollectors {
             telephone = "+11231231238",
             email = "carlos@test.com",
             comments = arrayListOf<CommentDto>(),
-            favoritePerformers = arrayListOf<FavoritePerformerDto>(),
+            favoritePerformers = arrayListOf<ArtistDto>(),
             collectorAlbums = arrayListOf<CollectorAlbumDto>()
         )
     )
