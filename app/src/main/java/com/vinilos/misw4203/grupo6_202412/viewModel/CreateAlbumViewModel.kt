@@ -18,7 +18,8 @@ import java.time.LocalDate
 
 class CreateAlbumViewModel(
     private val albumRepository: VinilosRepository,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val dispatcherIO: CoroutineDispatcher = Dispatchers.IO,
+    private val dispatcherMain: CoroutineDispatcher = Dispatchers.Main
 ) : ViewModel() {
 
     private val coverRegex = """https://(www.)?([^\r\n\t\f\v ><;,]+).(jpeg|jpg|gif|png)$""".toRegex(
@@ -92,16 +93,14 @@ class CreateAlbumViewModel(
         }
     }
 
-
-    fun saveAlbum() {
+    fun saveAlbum(onComplete: () -> Unit) {
         if (!checkAllInputs()){
             isNewAlbumSaved.value = false
             return
         }
 
-        Log.d("CreateAlbum", "si llegó")
         viewModelScope.launch {
-            withContext(dispatcher) {
+            withContext(dispatcherIO) {
                 try {
                     albumRepository.createAlbums(buildRequest())
                     isNewAlbumSaved.value = true
@@ -109,10 +108,12 @@ class CreateAlbumViewModel(
                     Log.i("Error", "Error consumiendo servicio " + e.message)
                     isNewAlbumSaved.value = false
                 }
+                withContext(dispatcherMain) {
+                    onComplete()
+                }
             }
         }
     }
-
 
    private fun checkAllInputs(): Boolean {
         isInvalidAlbumName()

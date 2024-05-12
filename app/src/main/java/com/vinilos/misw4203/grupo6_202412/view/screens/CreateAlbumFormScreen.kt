@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.CalendarMonth
@@ -56,13 +58,18 @@ fun CreateAlbumFormScreen(
     Scaffold(topBar = {
         TopBar(
             back,
-            save = { viewModel.saveAlbum(); if (viewModel.isNewAlbumSaved.value) back() }
+            save = {
+                viewModel.saveAlbum {
+                    if(viewModel.isNewAlbumSaved.value) back()
+                }
+            }
         )
     }) {
         Column(
             modifier = Modifier
                 .padding(it)
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
