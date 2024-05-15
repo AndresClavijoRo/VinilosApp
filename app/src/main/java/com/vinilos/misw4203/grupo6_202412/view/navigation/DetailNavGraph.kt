@@ -23,7 +23,7 @@ fun NavGraphBuilder.detailNavGraph(navController: NavHostController) {
                     navController.popBackStack()
                 },
                 onClickCommentAlbum = {
-                    navController.navigate(GraphDetail.COMMENT_ALBUM)
+                    navController.navigate(GraphDetail.COMMENT_ALBUM.replace("{albumId}", it))
                 }
             )
         }

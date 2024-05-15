@@ -32,10 +32,6 @@ open class AlbumDetailViewModel(
 
     var albumDetailUiState: AlbumDetailUiState by mutableStateOf(AlbumDetailUiState.Loading)
 
-    init {
-        getAllAlbumById(idDetail)
-    }
-
     fun getAllAlbumById(id: Int) {
         albumDetailUiState = AlbumDetailUiState.Loading
         viewModelScope.launch {

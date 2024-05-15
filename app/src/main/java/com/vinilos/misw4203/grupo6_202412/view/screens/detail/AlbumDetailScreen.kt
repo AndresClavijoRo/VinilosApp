@@ -40,6 +40,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -78,6 +79,9 @@ fun AlbumScreenDetail(
         key = idDetail,
     ),
 ) {
+    LaunchedEffect(idDetail) {
+        albumDetailViewModel.getAllAlbumById(idDetail.toInt())
+    }
     val albumDetailUiState = albumDetailViewModel.albumDetailUiState
     val isRefreshing = albumDetailUiState == AlbumDetailUiState.Loading
     val pullRefreshState = rememberPullRefreshState(isRefreshing, {
