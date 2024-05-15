@@ -39,6 +39,7 @@ class PerformerViewModel(private val performerRepository: VinilosRepository,
                             Log.i("Error","Error consumiendo servicio ")
                         })
                 } catch (e: Exception) {
+                    isError = true
                     Log.i("Error","Error consumiendo servicio " + e.message)
                 }
             }

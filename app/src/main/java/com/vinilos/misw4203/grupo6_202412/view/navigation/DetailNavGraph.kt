@@ -6,7 +6,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.vinilos.misw4203.grupo6_202412.view.screens.CommentAlbumForm
-import com.vinilos.misw4203.grupo6_202412.view.screens.CreateAlbumForm
 import com.vinilos.misw4203.grupo6_202412.view.screens.detail.AlbumScreenDetail
 import com.vinilos.misw4203.grupo6_202412.view.screens.detail.CollectorScreenDetail
 import com.vinilos.misw4203.grupo6_202412.view.screens.detail.PerformerDetailScreen

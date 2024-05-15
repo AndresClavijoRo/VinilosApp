@@ -98,10 +98,8 @@ fun BottomBar(
     currentRoute: String,
     screensHome: List<BottomScreens>
 ) {
-    BottomAppBar(
-
-    ) {
-        NavigationBar() {
+    BottomAppBar {
+        NavigationBar {
             screensHome.forEach { screen ->
                 val isSelected = screen.route == currentRoute
                 NavigationBarItem(

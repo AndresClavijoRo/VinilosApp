@@ -1,6 +1,8 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 package com.vinilos.misw4203.grupo6_202412.view.screens.detail
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -14,6 +16,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -30,8 +33,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.vinilos.misw4203.grupo6_202412.R
 import com.vinilos.misw4203.grupo6_202412.models.dto.AlbumDto
 import com.vinilos.misw4203.grupo6_202412.view.uiControls.ImageAsync
 import com.vinilos.misw4203.grupo6_202412.models.dto.ArtistDto
@@ -47,26 +52,23 @@ fun PerformerDetailScreen(
 
     performerDetailViewModel.getPerformerById(performerId.toInt())
     val performerDetail = performerDetailViewModel.performerDetailState
-    if (performerDetail== null) {
-        Text(text = "Cargando datos...")
-    } else {
-
-        Scaffold(
-            topBar = { TopBarPerformerDetail(onClick) }
-        ){
-            Column(
+    Scaffold(
+        topBar = { TopBarPerformerDetail(onClick) }
+    ){
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(it)
+        ) {
+            Text(
+                text = "${performerDetail?.name}",
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(it)
-            ) {
-                Text(
-                    text = "${performerDetail?.name}",
-                    modifier = Modifier.padding(bottom = 20.dp, start = 8.dp, top = 30.dp).fillMaxWidth().
-                    testTag("PerformerDetailTitle"),
-                    style = MaterialTheme.typography.titleLarge
-                )
-                PerformerDetail(performerDetail)
-            }
+                    .padding(bottom = 20.dp, start = 8.dp, top = 30.dp)
+                    .fillMaxWidth()
+                    .testTag("PerformerDetailTitle"),
+                style = MaterialTheme.typography.titleLarge
+            )
+            PerformerDetail(performerDetail)
         }
     }
 }
@@ -85,19 +87,24 @@ fun PerformerDetail(performerDetail: ArtistDto?){
             "${performerDetail?.id}",
             Modifier
                 .align(Alignment.CenterHorizontally)
-                .aspectRatio(1f).padding(PaddingValues(horizontal = 40.dp, vertical = 10.dp))
+                .aspectRatio(1f)
+                .padding(PaddingValues(horizontal = 40.dp, vertical = 10.dp))
                 .clip(RoundedCornerShape(15.dp)),
             ContentScale.Crop
         )
         Text(
             text = "Fecha Nacimiento  $formattedDate",
             style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(bottom = 10.dp, top = 10.dp).testTag("birthDateTag"),
+            modifier = Modifier
+                .padding(bottom = 10.dp, top = 10.dp)
+                .testTag("birthDateTag"),
         )
         Text(
             text = "${performerDetail?.description}",
             style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(bottom = 10.dp).testTag("descriptionTag")
+            modifier = Modifier
+                .padding(bottom = 10.dp)
+                .testTag("descriptionTag")
         )
         Text(
             text = "Albums",
@@ -109,39 +116,58 @@ fun PerformerDetail(performerDetail: ArtistDto?){
 }
 
 private fun parseCustomDate(birthDate: String?): String{
-    if(birthDate == null){
-   return "No Data"
+    return if(birthDate == null){
+      "No Data"
     } else {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX")
         val parsedDate = LocalDate.parse(birthDate.toString(), formatter)
         val outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        return outputFormatter.format(parsedDate)
+        outputFormatter.format(parsedDate)
     }
 }
 
 @Composable
 fun AlbumsPerformer(albums: ArrayList<AlbumDto>){
     Column() {
-        LazyColumn( modifier = Modifier.testTag("albumChildTag")) {
-            items(albums) { album ->
-                ListItem(
-                    headlineContent = {  Text("${album.name}")},
-                    leadingContent = {
-                        Row( modifier = Modifier
+        if(albums.isEmpty()){
+            NoDataFound()
+        } else {
+            LazyColumn( modifier = Modifier.testTag("albumChildTag")) {
+                items(albums) { album ->
+                    ListItem(
+                        headlineContent = {  Text("${album.name}")},
+                        leadingContent = {
+                            Row( modifier = Modifier
                             ) {
-                            ImageAsync(
-                                "${album.cover}",
-                                "${album.recordLabel}",
-                                Modifier.
-                                size(100.dp)
-                                    .clip(RoundedCornerShape(8.dp)),
-                                ContentScale.Crop
-                            )
+                                ImageAsync(
+                                    "${album.cover}",
+                                    "${album.recordLabel}",
+                                    Modifier
+                                        .size(100.dp)
+                                        .clip(RoundedCornerShape(8.dp)),
+                                    ContentScale.Crop
+                                )
+                            }
                         }
-                    }
-                )
+                    )
+                }
             }
         }
+    }
+}
+
+
+@Composable
+fun NoDataFound(){
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = stringResource(R.string.no_albums_found),
+            style = MaterialTheme.typography.headlineSmall,
+        )
     }
 }
 

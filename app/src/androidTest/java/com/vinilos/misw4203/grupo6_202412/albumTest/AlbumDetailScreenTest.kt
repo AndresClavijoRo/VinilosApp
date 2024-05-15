@@ -150,7 +150,7 @@ class AlbumDetailScreenTest {
         val ratingStarComments = composeTestRule.onAllNodes(hasTestTag("ratingComment")).onFirst()
         val starPointNodes = ratingStarComments.onChildren().filter(hasContentDescription("Star point")).fetchSemanticsNodes()
         val starPointCount = starPointNodes.size
-        assertEquals(album.comments!![0].rating, starPointCount)
+        assertEquals(album.comments[0].rating, starPointCount)
     }
 
     @Test

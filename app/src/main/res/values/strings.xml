@@ -33,4 +33,7 @@
     <string name="collector">Coleccionista</string>
     <string name="selectionValidator">Debe seleccionar un elemento de la lista</string>
     <string name="comment">Comentario</string>
+    <string name="noCollectors">No hay coleccionistas</string>
+    <string name="no_albums_found">No Albums Found</string>
+
 </resources>
