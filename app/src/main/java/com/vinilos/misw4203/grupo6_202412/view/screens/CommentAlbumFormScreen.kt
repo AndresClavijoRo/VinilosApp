@@ -1,5 +1,4 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
-
 package com.vinilos.misw4203.grupo6_202412.view.screens
 
 import android.util.Log
