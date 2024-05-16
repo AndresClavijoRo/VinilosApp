@@ -36,7 +36,7 @@ class AlbumCommentViewModel(
     }
 
     fun isInvalidComment() {
-        isInvalidComment.value = comment.value.isEmpty() || comment.value.length > 300
+        isInvalidComment.value = !(comment.value.any()) || comment.value.length > 300
     }
 
     private fun checkValidAllInputs(): Boolean {
@@ -48,7 +48,7 @@ class AlbumCommentViewModel(
 
     fun showCollectorSupportText(context: Context):String{
         return when {
-            collector.value == null -> context.getString(
+            isInvalidCollector.value-> context.getString(
                 R.string.selectionValidator)
             else -> ""
         }
@@ -56,9 +56,9 @@ class AlbumCommentViewModel(
 
     fun showCommentSupportText(context: Context):String{
             return when {
-            comment.value.isEmpty() -> context.getString(R.string.inputCommentValidator)
+            !(comment.value.any()) && isInvalidComment.value -> context.getString(R.string.inputCommentValidator)
             comment.value.length > 300 -> context.getString(R.string.commentLengthValidator)
-            else -> context.getString(R.string.inputCommentValidator)
+            else -> ""
         }
     }
 

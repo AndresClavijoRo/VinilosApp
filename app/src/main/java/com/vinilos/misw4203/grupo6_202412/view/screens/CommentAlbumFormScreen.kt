@@ -42,6 +42,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
@@ -91,7 +92,7 @@ fun CommentAlbumForm(
                     maxStars = 5, rating = commentViewModel.rating
                 )
 
-                CommentAlbumForm(
+                CommentAlbumInput(
                     messageSupport = { commentViewModel.showCommentSupportText(LocalContext.current) },
                     checkIsValid = { commentViewModel.isInvalidComment() },
                     comment = commentViewModel.comment,
@@ -193,10 +194,11 @@ private fun filtrarOpciones(
 
 @Composable
 fun StarRatingSelect(
-    maxStars: Int = 5, rating: MutableState<Int>
+    maxStars: Int = 5,
+    rating: MutableState<Int>,
 ) {
     Row(
-        modifier = Modifier.selectableGroup(), verticalAlignment = Alignment.CenterVertically
+        modifier = Modifier.selectableGroup().testTag("StarRatingSelect"), verticalAlignment = Alignment.CenterVertically
     ) {
         for (i in 1..maxStars) {
             val isSelected = i <= rating.value
@@ -212,13 +214,14 @@ fun StarRatingSelect(
                     })
                     .width(50.dp)
                     .height(50.dp)
+                    .testTag("ratingComment")
             )
         }
     }
 }
 
 @Composable
-fun CommentAlbumForm(
+fun CommentAlbumInput(
     messageSupport: @Composable () -> String,
     checkIsValid: () -> Unit,
     comment: MutableState<String>,

@@ -26,10 +26,15 @@ sealed interface AlbumDetailUiState {
 
 open class AlbumDetailViewModel(
     private val albumDetailRepository: VinilosRepository,
+    private val idDetail: Int,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
 
     var albumDetailUiState: AlbumDetailUiState by mutableStateOf(AlbumDetailUiState.Loading)
+
+    init {
+        getAllAlbumById(idDetail)
+    }
 
     fun getAllAlbumById(id: Int) {
         albumDetailUiState = AlbumDetailUiState.Loading
@@ -54,14 +59,15 @@ open class AlbumDetailViewModel(
     }
 
     companion object {
-        val Factory: (Int) -> ViewModelProvider.Factory = {
+        val Factory: (Int) -> ViewModelProvider.Factory = { idDetail ->
             viewModelFactory {
                 initializer {
                     val application =
                         (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as VinilosApplication)
                     val vinilosRepository = application.vinilosRepository
                     AlbumDetailViewModel(
-                        albumDetailRepository = vinilosRepository
+                        albumDetailRepository = vinilosRepository,
+                        idDetail = idDetail
                     )
                 }
             }

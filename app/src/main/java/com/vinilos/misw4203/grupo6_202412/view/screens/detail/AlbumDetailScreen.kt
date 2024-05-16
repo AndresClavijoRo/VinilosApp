@@ -75,12 +75,10 @@ fun AlbumScreenDetail(
     onClickCommentAlbum: (id: String) -> Unit,
     modifier: Modifier = Modifier,
     albumDetailViewModel: AlbumDetailViewModel = viewModel<AlbumDetailViewModel>(
-        factory = AlbumDetailViewModel.Factory(idDetail.toInt())
+        factory = AlbumDetailViewModel.Factory(idDetail.toInt()),
+        key = idDetail,
     ),
 ) {
-    LaunchedEffect(idDetail) {
-        albumDetailViewModel.getAllAlbumById(idDetail.toInt())
-    }
     val albumDetailUiState = albumDetailViewModel.albumDetailUiState
     val isRefreshing = albumDetailUiState == AlbumDetailUiState.Loading
     val pullRefreshState = rememberPullRefreshState(isRefreshing, {
