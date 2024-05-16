@@ -41,7 +41,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextRange
@@ -66,19 +65,13 @@ fun CommentAlbumForm(
     val collectors = collectorViewModel.collectorsState.value
     val options: List<CollectorDto> = collectors
 
-    Scaffold(
-        topBar = {
-            TopBarComment(
-                isLoading = commentViewModel.isLoading,
-                onClickBack = onClickBack,
-                save = {
-                    commentViewModel.saveComment(idDetail.toInt()) {
-                        if (commentViewModel.isCommentSaved.value) onClickBack()
-                    }
-                }
-            )
-        }
-    ) {
+    Scaffold(topBar = {
+        TopBarComment(isLoading = commentViewModel.isLoading, onClickBack = onClickBack, save = {
+            commentViewModel.saveComment(idDetail.toInt()) {
+                if (commentViewModel.isCommentSaved.value) onClickBack()
+            }
+        })
+    }) {
         Box(
             modifier = Modifier.padding(it)
         ) {
@@ -90,14 +83,12 @@ fun CommentAlbumForm(
                     messageSupport = { commentViewModel.showCollectorSupportText(LocalContext.current) },
                     checkIsValid = { commentViewModel.isInvalidCollector() },
                     options = options,
-                    isValidCollector = commentViewModel.isInvalidCollector,
+                    isInvalidCollector = commentViewModel.isInvalidCollector,
                     collector = commentViewModel.collector,
-                    textStateCollector = commentViewModel.textStateCollector
                 )
 
                 StarRatingSelect(
-                    maxStars = 5,
-                    rating = commentViewModel.rating
+                    maxStars = 5, rating = commentViewModel.rating
                 )
 
                 CommentAlbumForm(
@@ -117,15 +108,14 @@ fun CollectorSelect(
     messageSupport: @Composable () -> String,
     checkIsValid: () -> Unit,
     options: List<CollectorDto>,
-    isValidCollector: MutableState<Boolean>,
-    collector: MutableState<CollectorDto?>,
-    textStateCollector: MutableState<TextFieldValue>,
+    isInvalidCollector: MutableState<Boolean>,
+    collector: MutableState<CollectorDto?>
 ) {
 
     var filteredOptions: List<CollectorDto> by remember { mutableStateOf(options) }
     val (allowExpanded, setExpanded) = remember { mutableStateOf(false) }
+    val textStateCollector = remember { mutableStateOf(TextFieldValue("")) }
     val expanded = allowExpanded && filteredOptions.isNotEmpty()
-
     ExposedDropdownMenuBox(
         expanded = expanded,
         onExpandedChange = setExpanded,
@@ -137,15 +127,12 @@ fun CollectorSelect(
                 .fillMaxWidth(),
             value = textStateCollector.value,
             onValueChange = { newValue ->
-                collector.value = null
-                textStateCollector.value = newValue.copy(
-                    text = newValue.text, selection = TextRange(newValue.text.length)
-                )
-                filteredOptions = options.filter { collector ->
-                    collector.name!!.trim()
-                        .contains(textStateCollector.value.text.trim(), ignoreCase = true)
-                }.take(5)
-                setExpanded(true)
+                textStateCollector.value = newValue
+                filteredOptions = filtrarOpciones(options, textStateCollector.value.text)
+                if(isInvalidCollector.value || filteredOptions.isEmpty()){
+                    collector.value = null
+                    setExpanded(true)
+                }
                 checkIsValid()
             },
             singleLine = true,
@@ -158,16 +145,17 @@ fun CollectorSelect(
             supportingText = {
                 Text(messageSupport())
             },
-            isError = isValidCollector.value,
+            isError = isInvalidCollector.value,
             keyboardActions = KeyboardActions(onDone = {
                 if (collector.value == null) {
                     val firstCollector = filteredOptions.firstOrNull()
                     collector.value = firstCollector
-                    textStateCollector.value = TextFieldValue(
-                        firstCollector?.name ?: "",
-                        TextRange(firstCollector?.name?.length ?: 0)
-                    )
+                    textStateCollector.value = TextFieldValue(text = firstCollector?.name!!, TextRange(firstCollector.name!!.length, firstCollector.name!!.length))
+
+                    filteredOptions = filtrarOpciones(options, textStateCollector.value.text)
+
                     checkIsValid()
+                    setExpanded(false)
                 }
             }),
             keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
@@ -183,9 +171,9 @@ fun CollectorSelect(
                         Text(option.name!!, style = MaterialTheme.typography.bodyLarge)
                     },
                     onClick = {
-                        textStateCollector.value =
-                            TextFieldValue(option.name!!, TextRange(option.name!!.length))
+                        textStateCollector.value = TextFieldValue(text = option.name!!, TextRange(option.name!!.length, option.name!!.length))
                         collector.value = option
+                        filteredOptions = filtrarOpciones(options, textStateCollector.value.text)
                         setExpanded(false)
                         checkIsValid()
                     },
@@ -196,14 +184,19 @@ fun CollectorSelect(
     }
 }
 
+
+private fun filtrarOpciones(
+    options: List<CollectorDto>, textStateCollector: String
+) = options.filter { collector ->
+    collector.name!!.trim().contains(textStateCollector.trim(), ignoreCase = true)
+}.take(5)
+
 @Composable
 fun StarRatingSelect(
-    maxStars: Int = 5,
-    rating: MutableState<Int>
+    maxStars: Int = 5, rating: MutableState<Int>
 ) {
     Row(
-        modifier = Modifier.selectableGroup(),
-        verticalAlignment = Alignment.CenterVertically
+        modifier = Modifier.selectableGroup(), verticalAlignment = Alignment.CenterVertically
     ) {
         for (i in 1..maxStars) {
             val isSelected = i <= rating.value
@@ -231,8 +224,7 @@ fun CommentAlbumForm(
     comment: MutableState<String>,
     isInvalidComment: MutableState<Boolean>
 ) {
-    OutlinedTextField(
-        value = comment.value,
+    OutlinedTextField(value = comment.value,
         onValueChange = {
             comment.value = it
             checkIsValid()
@@ -240,8 +232,7 @@ fun CommentAlbumForm(
         label = { Text(stringResource(R.string.comment)) },
         supportingText = {
             Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
+                horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()
             ) {
                 Text(messageSupport())
                 if (!isInvalidComment.value) {
@@ -252,47 +243,37 @@ fun CommentAlbumForm(
         maxLines = 5,
         minLines = 5,
         isError = isInvalidComment.value,
-        modifier = Modifier
-            .fillMaxWidth()
-            .onFocusEvent { if (it.isFocused) checkIsValid() },
+        modifier = Modifier.fillMaxWidth()
     )
 }
 
 
 @Composable
 fun TopBarComment(
-    isLoading: MutableState<Boolean>,
-    onClickBack: () -> Unit,
-    save: () -> Unit
+    isLoading: MutableState<Boolean>, onClickBack: () -> Unit, save: () -> Unit
 ) {
-    TopAppBar(
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.secondaryContainer,
-            titleContentColor = MaterialTheme.colorScheme.primary,
-        ),
-        title = {},
-        navigationIcon = {
-            IconButton(onClick = onClickBack) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = stringResource(R.string.back)
+    TopAppBar(colors = TopAppBarDefaults.topAppBarColors(
+        containerColor = MaterialTheme.colorScheme.secondaryContainer,
+        titleContentColor = MaterialTheme.colorScheme.primary,
+    ), title = {}, navigationIcon = {
+        IconButton(onClick = onClickBack) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = stringResource(R.string.back)
+            )
+        }
+    }, actions = {
+        if (isLoading.value) {
+            Box(modifier = Modifier.padding(end = 16.dp)) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(20.dp), strokeWidth = 2.dp
                 )
             }
-        },
-        actions = {
-            if (isLoading.value) {
-                Box(modifier = Modifier.padding(end = 16.dp)){
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(20.dp),
-                        strokeWidth = 2.dp
-                    )
-                }
 
-            } else {
-                TextButton(onClick = save) {
-                    Text(text = "Save")
-                }
+        } else {
+            TextButton(onClick = save) {
+                Text(text = "Save")
             }
         }
-    )
+    })
 }

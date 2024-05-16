@@ -3,7 +3,6 @@ package com.vinilos.misw4203.grupo6_202412.viewModel
 import android.content.Context
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -28,13 +27,12 @@ class AlbumCommentViewModel(
     val comment = mutableStateOf("")
     val isInvalidComment = mutableStateOf(false)
     val collector = mutableStateOf<CollectorDto?>(null)
-    val textStateCollector = mutableStateOf(TextFieldValue(text = ""))
     val isInvalidCollector = mutableStateOf(false)
     val rating = mutableIntStateOf(1)
     val isLoading = mutableStateOf(false)
 
     fun isInvalidCollector() {
-        isInvalidCollector.value = collector.value == null ||  (collector.value == null && textStateCollector.value.text.isNotEmpty())
+        isInvalidCollector.value = collector.value == null
     }
 
     fun isInvalidComment() {
@@ -50,7 +48,7 @@ class AlbumCommentViewModel(
 
     fun showCollectorSupportText(context: Context):String{
         return when {
-            collector.value == null && textStateCollector.value.text.isNotEmpty() -> context.getString(
+            collector.value == null -> context.getString(
                 R.string.selectionValidator)
             else -> ""
         }

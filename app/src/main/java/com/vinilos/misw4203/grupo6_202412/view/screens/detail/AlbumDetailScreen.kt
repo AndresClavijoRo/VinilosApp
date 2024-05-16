@@ -75,8 +75,7 @@ fun AlbumScreenDetail(
     onClickCommentAlbum: (id: String) -> Unit,
     modifier: Modifier = Modifier,
     albumDetailViewModel: AlbumDetailViewModel = viewModel<AlbumDetailViewModel>(
-        factory = AlbumDetailViewModel.Factory(idDetail.toInt()),
-        key = idDetail,
+        factory = AlbumDetailViewModel.Factory(idDetail.toInt())
     ),
 ) {
     LaunchedEffect(idDetail) {
