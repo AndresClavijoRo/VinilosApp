@@ -1,11 +1,13 @@
 package com.vinilos.misw4203.grupo6_202412.models.repository
 
 
+import com.vinilos.misw4203.grupo6_202412.models.dto.AlbumCommentRequest
 import com.vinilos.misw4203.grupo6_202412.models.dto.AlbumDto
 import com.vinilos.misw4203.grupo6_202412.models.dto.AlbumRequest
 import com.vinilos.misw4203.grupo6_202412.models.dto.ArtistDto
 import com.vinilos.misw4203.grupo6_202412.models.dto.CollectorAlbumDetailDto
 import com.vinilos.misw4203.grupo6_202412.models.dto.CollectorDto
+import com.vinilos.misw4203.grupo6_202412.models.dto.CommentDto
 import com.vinilos.misw4203.grupo6_202412.models.service.VinilosService
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -51,6 +53,9 @@ open class VinilosRepository(private val webService:VinilosService) {
         return webService.getCollectorAlbums(id, onResponse, onFailure)
     }
 
-
-
+    suspend fun createAlbumComment(albumId: Int, request: AlbumCommentRequest): CommentDto = suspendCoroutine { cont ->
+        webService.createAlbumComment(albumId,request,
+            { cont.resume(it) },
+            { cont.resumeWithException(Exception(it)) })
+    }
 }
