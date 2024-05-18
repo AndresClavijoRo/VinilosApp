@@ -20,7 +20,7 @@ class ListCollectorTest {
     private val mockRepository = Mockito.mock(VinilosRepository::class.java)
     private val collectorViewModel = CollectorViewModel(vinilosRepository = mockRepository)
 
-    fun initWithCollectors(collectors: List<CollectorDto>, onClick: (String) -> Unit = {}) {
+    private fun initWithCollectors(collectors: List<CollectorDto>, onClick: (String) -> Unit = {}) {
         collectorViewModel.collectorsState.value = collectors
         collectorViewModel.isLoading.value = false
         collectorViewModel.errorText.value = null
@@ -32,7 +32,7 @@ class ListCollectorTest {
         }
     }
 
-    fun assertCollectorsDisplayed(collectors: List<CollectorDto>) {
+    private fun assertCollectorsDisplayed(collectors: List<CollectorDto>) {
 
         //        Test collectorListItem list items size
         val collectorListItems = composeTestRule.onAllNodes(hasTestTag("collectorListItem")).fetchSemanticsNodes()
@@ -44,7 +44,6 @@ class ListCollectorTest {
             collector.email?.let { composeTestRule.onNodeWithText(it).assertExists() }
 
         }
-
     }
 
     @Test
@@ -52,7 +51,7 @@ class ListCollectorTest {
         val collectors = FakeDataCollectors.collectors
         this.initWithCollectors(collectors)
         // Shows Collectors title
-        composeTestRule.onNodeWithText("Coleccionistas").assertExists()
+        composeTestRule.onNodeWithText("Lista de Coleccionistas").assertExists()
         // Check if the collectors are displayed
         this.assertCollectorsDisplayed(collectors)
     }
@@ -91,7 +90,7 @@ class ListCollectorTest {
 
     @Test
     fun clickCollectorTest() {
-        var collectorId: String? = null;
+        var collectorId: String? = null
         val onClick = { id: String -> collectorId = id }
         val collectors = FakeDataCollectors.collectors
         this.initWithCollectors(collectors, onClick)

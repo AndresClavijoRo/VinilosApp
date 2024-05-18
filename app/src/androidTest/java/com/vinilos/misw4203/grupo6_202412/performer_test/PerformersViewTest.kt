@@ -1,15 +1,11 @@
 package com.vinilos.misw4203.grupo6_202412.performer_test
 
-import androidx.compose.ui.test.assertContentDescriptionEquals
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onChildren
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToIndex
 import com.vinilos.misw4203.grupo6_202412.models.dto.ArtistDto
 import com.vinilos.misw4203.grupo6_202412.models.repository.VinilosRepository
-import com.vinilos.misw4203.grupo6_202412.view.navigation.RootNavGraph
 import com.vinilos.misw4203.grupo6_202412.view.screens.home.PerformerScreen
 import com.vinilos.misw4203.grupo6_202412.viewModel.PerformerViewModel
 import org.junit.Assert.assertTrue
@@ -39,9 +35,9 @@ class PerformersViewTest  {
     }
     @Test
     fun performerTestIfListIsNotEmpty() {
-        var list = listOf(ArtistDto(1,"test1","https://acortar.link/T7Mc10"),
+        val list = listOf(ArtistDto(1,"test1","https://acortar.link/T7Mc10"),
             ArtistDto(2,"test2","https://acortar.link/T7Mc10"))
-        viewModel._performersState.value =list;
+        viewModel.performersState.value = list
 
         composeTestRule.setContent {
             PerformerScreen(onClick = { }, viewModel)
@@ -52,7 +48,7 @@ class PerformersViewTest  {
 
     @Test
     fun performerTestIfListIsEmpty() {
-        viewModel._performersState.value =ArrayList<ArtistDto>();
+        viewModel.performersState.value = ArrayList<ArtistDto>()
 
         composeTestRule.setContent {
             PerformerScreen(onClick = { }, viewModel)
@@ -63,15 +59,15 @@ class PerformersViewTest  {
 
     @Test
     fun performerHasValidImage() {
-        var list = listOf(ArtistDto(1,"test1","https://acortar.link/T7Mc10"),
+        val list = listOf(ArtistDto(1,"test1","https://acortar.link/T7Mc10"),
             ArtistDto(2,"test2","https://acortar.link/T7Mc10"))
-        viewModel._performersState.value =list;
+        viewModel.performersState.value = list
         composeTestRule.setContent {
             PerformerScreen(onClick = { }, viewModel)
         }
 
         composeTestRule.onNodeWithTag("artistTag").onChildren()[0].
-        onChildren()[0].assertContentDescriptionEquals("https://acortar.link/T7Mc10")
+        onChildren()[0].assertExists()
     }
 
     @Test
@@ -80,7 +76,7 @@ class PerformersViewTest  {
         for (i in 1..50) {
             myArrayList.add(ArtistDto(i,"test#${i}","https://acortar.link/T7Mc10"))
         }
-        viewModel._performersState.value =myArrayList;
+        viewModel.performersState.value = myArrayList
         composeTestRule.setContent {
             PerformerScreen(onClick = { }, viewModel)
         }

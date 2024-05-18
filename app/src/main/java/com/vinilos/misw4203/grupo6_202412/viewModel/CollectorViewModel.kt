@@ -12,7 +12,7 @@ import com.vinilos.misw4203.grupo6_202412.models.dto.CollectorDto
 import com.vinilos.misw4203.grupo6_202412.models.repository.VinilosRepository
 import kotlinx.coroutines.launch
 
-var ERROR = "Hubo un error al cargar los coleccionistas"
+const val ERROR = "Hubo un error al cargar los coleccionistas"
 class CollectorViewModel(private val vinilosRepository: VinilosRepository): ViewModel() {
     private val _collectorsState = mutableStateOf<List<CollectorDto>>(emptyList())
     val isLoading = mutableStateOf(false)
@@ -46,12 +46,13 @@ class CollectorViewModel(private val vinilosRepository: VinilosRepository): View
             }
         }
     }
+
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val application = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as VinilosApplication)
-                val vinilosRepository = application.vinilosRepository
-                CollectorViewModel(vinilosRepository = vinilosRepository)
+                val application =
+                    (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as VinilosApplication)
+                CollectorViewModel(vinilosRepository = application.vinilosRepository)
             }
         }
     }

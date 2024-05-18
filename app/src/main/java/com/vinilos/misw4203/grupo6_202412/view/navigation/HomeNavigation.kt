@@ -1,10 +1,8 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
 package com.vinilos.misw4203.grupo6_202412.view.navigation
 
 
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -45,7 +43,6 @@ fun HomeNavigation(
         composable(route = GraphHome.COLLECTORS) {
             CollectorScreen(
                 onClick = onClickCollectorsDetail,
-
             )
         }
     }

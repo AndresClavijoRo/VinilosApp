@@ -64,10 +64,8 @@ open class AlbumDetailViewModel(
                 initializer {
                     val application =
                         (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as VinilosApplication)
-                    val vinilosRepository = application.vinilosRepository
                     AlbumDetailViewModel(
-                        albumDetailRepository = vinilosRepository,
-                        idDetail = idDetail
+                        albumDetailRepository = application.vinilosRepository, idDetail = idDetail
                     )
                 }
             }

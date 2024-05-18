@@ -1,10 +1,12 @@
 package com.vinilos.misw4203.grupo6_202412.models.service
 
+import com.vinilos.misw4203.grupo6_202412.models.dto.AlbumCommentRequest
 import com.vinilos.misw4203.grupo6_202412.models.dto.AlbumDto
 import com.vinilos.misw4203.grupo6_202412.models.dto.AlbumRequest
 import com.vinilos.misw4203.grupo6_202412.models.dto.ArtistDto
 import com.vinilos.misw4203.grupo6_202412.models.dto.CollectorAlbumDetailDto
 import com.vinilos.misw4203.grupo6_202412.models.dto.CollectorDto
+import com.vinilos.misw4203.grupo6_202412.models.dto.CommentDto
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -55,6 +57,15 @@ open class VinilosService(private val baseUrl: String) {
     ) {
         getAlbumEndpoint.createAlbum(request)
             .enqueue(responseCallback<AlbumDto>(onResponse, onFailure))
+    }
+    fun createAlbumComment(
+        albumId: Int,
+        request: AlbumCommentRequest,
+        onResponse: (resp: CommentDto) -> Unit,
+        onFailure: (resp: String) -> Unit
+    ){
+        getAlbumEndpoint.createAlbumComment(albumId, request)
+            .enqueue(responseCallback<CommentDto>(onResponse, onFailure))
     }
 
     fun getAlbumById(
@@ -113,6 +124,7 @@ open class VinilosService(private val baseUrl: String) {
                 )
             )
     }
+
 
     private fun <T> responseCallback(
         onResponse: (resp: T) -> Unit,

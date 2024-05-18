@@ -29,7 +29,7 @@ class CreateAlbumViewModel(
         )
     )
 
-    val name =  mutableStateOf("")
+    val name = mutableStateOf("")
     val isInvalidName = mutableStateOf(false)
 
     val cover = mutableStateOf("")
@@ -48,30 +48,35 @@ class CreateAlbumViewModel(
 
     val isNewAlbumSaved = mutableStateOf(false)
 
-    fun isInvalidAlbumName(){
+    fun isInvalidAlbumName() {
         isInvalidName.value = !(name.value.any())
     }
+
     fun isInvalidAlbumCover() {
         isInvalidCover.value = !(cover.value.any() && coverRegex.matches(cover.value))
     }
+
     fun isInvalidAlbumGenre() {
         isInvalidGenre.value = !(genre.value.any())
     }
+
     fun isInvalidAlbumRecordLabel() {
         isInvalidRecordLabel.value = !(recordLabel.value.any())
     }
+
     fun isInvalidAlbumDescription() {
         isInvalidDescription.value = !(description.value.any())
     }
 
-    fun showAlbumNameSupportText():String{
+    fun showAlbumNameSupportText(): String {
         return when {
             !isInvalidName.value -> "Max 100 characters"
             !name.value.any() -> "El nombre no debe estar vacio"
             else -> ""
         }
     }
-    fun showAlbumCoverSupportText():String{
+
+    fun showAlbumCoverSupportText(): String {
         return when {
             !isInvalidCover.value -> "Max 100 characters"
             !cover.value.any() -> "El cover no debe estar vacio"
@@ -79,13 +84,15 @@ class CreateAlbumViewModel(
             else -> ""
         }
     }
-    fun showAlbumDropdownSupportText():String{
+
+    fun showAlbumDropdownSupportText(): String {
         return when {
             isInvalidGenre.value -> "Debe seleccionar un elemento"
             else -> ""
         }
     }
-    fun showAlbumDescriptionSupportText():String{
+
+    fun showAlbumDescriptionSupportText(): String {
         return when {
             !isInvalidDescription.value -> "Max 500 characters"
             !description.value.any() -> "La descripcion no debe estar vacia"
@@ -94,7 +101,7 @@ class CreateAlbumViewModel(
     }
 
     fun saveAlbum(onComplete: () -> Unit) {
-        if (!checkAllInputs()){
+        if (!checkAllInputs()) {
             isNewAlbumSaved.value = false
             return
         }
@@ -115,7 +122,7 @@ class CreateAlbumViewModel(
         }
     }
 
-   private fun checkAllInputs(): Boolean {
+    private fun checkAllInputs(): Boolean {
         isInvalidAlbumName()
         isInvalidAlbumCover()
         isInvalidAlbumGenre()
@@ -140,22 +147,22 @@ class CreateAlbumViewModel(
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val application = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as VinilosApplication)
-                val vinilosRepository = application.vinilosRepository
-                CreateAlbumViewModel(albumRepository = vinilosRepository)
+                val application =
+                    (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as VinilosApplication)
+                CreateAlbumViewModel(albumRepository = application.vinilosRepository)
             }
         }
     }
 }
 
-enum class Genre(val value: String){
+enum class Genre(val value: String) {
     CLASSICAL("Classical"),
     SALSA("Salsa"),
     ROCK("Rock"),
     FOLK("Folk")
 }
 
-enum class RecordLabel(val value: String){
+enum class RecordLabel(val value: String) {
     SONY_MUSIC("Sony Music"),
     EMI("EMI"),
     DISCOS_FUENTES("Discos Fuentes"),

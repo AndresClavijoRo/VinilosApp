@@ -129,11 +129,6 @@ fun CollectorInfo(collector: CollectorDto) {
                 fontWeight = FontWeight.Bold
             )
             Text(
-                text = stringResource(R.string.colonSeparator),
-                style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.Bold
-            )
-            Text(
                 text = collector.telephone ?: "Default phone",
                 style = MaterialTheme.typography.bodyMedium
             )
@@ -142,11 +137,6 @@ fun CollectorInfo(collector: CollectorDto) {
         Row {
             Text(
                 text = stringResource(R.string.collectorEmail),
-                style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.Bold
-            )
-            Text(
-                text = stringResource(R.string.colonSeparator),
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Bold
             )
@@ -184,7 +174,7 @@ fun AlbumsList(albums: List<AlbumDto>) {
                         ) {
                             ImageAsync(
                                 "${album.cover}",
-                                "${album.recordLabel}",
+                                "",
                                 Modifier
                                     .size(100.dp)
                                     .clip(RoundedCornerShape(8.dp)),

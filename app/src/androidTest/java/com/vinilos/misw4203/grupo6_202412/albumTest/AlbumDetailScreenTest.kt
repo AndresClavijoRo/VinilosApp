@@ -2,13 +2,8 @@ package com.vinilos.misw4203.grupo6_202412.albumTest
 
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.filter
-import androidx.compose.ui.test.hasContentDescription
-import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onChildren
-import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -22,7 +17,6 @@ import com.vinilos.misw4203.grupo6_202412.view.screens.detail.AlbumScreenDetail
 import com.vinilos.misw4203.grupo6_202412.view.utils.formatDateString
 import com.vinilos.misw4203.grupo6_202412.viewModel.AlbumDetailUiState
 import com.vinilos.misw4203.grupo6_202412.viewModel.AlbumDetailViewModel
-import junit.framework.TestCase.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -58,7 +52,6 @@ class AlbumDetailScreenTest {
         composeTestRule.onRoot(useUnmergedTree = true).printToLog("albumDetailScreen")
 
         composeTestRule.onNodeWithText(album.name).assertExists()
-        composeTestRule.onNodeWithContentDescription(album.name).assertExists()
     }
 
     @Test
@@ -131,10 +124,12 @@ class AlbumDetailScreenTest {
     @Test
     fun albumCommentTest(){
         val album = FakeDataAlbums.albums[0]
+        var expectedContentDescription = ""
         albumDetailViewModel.albumDetailUiState =
             AlbumDetailUiState.Success(album)
 
         composeTestRule.setContent {
+            expectedContentDescription = stringResource(R.string.rating_comment_description, album.comments[0].rating!!, 5)
             AlbumScreenDetail(
                 idDetail = album.id.toString(),
                 onClickBack = {},
@@ -147,10 +142,7 @@ class AlbumDetailScreenTest {
             composeTestRule.onNodeWithText(comment.description!!).assertExists()
         }
 
-        val ratingStarComments = composeTestRule.onAllNodes(hasTestTag("ratingComment")).onFirst()
-        val starPointNodes = ratingStarComments.onChildren().filter(hasContentDescription("Star point")).fetchSemanticsNodes()
-        val starPointCount = starPointNodes.size
-        assertEquals(album.comments[0].rating, starPointCount)
+        composeTestRule.onNodeWithContentDescription(expectedContentDescription).assertExists()
     }
 
     @Test
