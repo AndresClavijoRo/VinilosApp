@@ -1,5 +1,6 @@
 package com.vinilos.misw4203.grupo6_202412
 
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -54,12 +55,14 @@ class CreateAlbumFormScreenTest {
 
     @Test
     fun avoidCreateAlbumWithEmptyFields(){
+        var btnSaveText = ""
         composeTestRule.setContent {
+            btnSaveText = stringResource(R.string.btn_save)
             CreateAlbumFormScreen(
                 back = { },
                 viewModel = createAlbumViewModel)
         }
-        composeTestRule.onNodeWithText("Save").performClick()
+        composeTestRule.onNodeWithText(btnSaveText).performClick()
         composeTestRule.onNodeWithText("El cover no debe estar vacio").assertExists()
     }
 
@@ -68,15 +71,17 @@ class CreateAlbumFormScreenTest {
         inputNewAlbumDummy()
         val dto = AlbumDto(0, createAlbumViewModel.name.value)
         val json = gson.toJson(dto)
+        var btnSaveText = ""
         server.enqueue(MockResponse().setBody(json))
 
         composeTestRule.setContent {
+            btnSaveText = stringResource(R.string.btn_save)
             CreateAlbumFormScreen(
                 back = { },
                 viewModel = createAlbumViewModel)
         }
 
-        composeTestRule.onNodeWithText("Save").performClick()
+        composeTestRule.onNodeWithText(btnSaveText).performClick()
         composeTestRule.waitUntil { createAlbumViewModel.isNewAlbumSaved.value }
         assert(createAlbumViewModel.isNewAlbumSaved.value)
     }

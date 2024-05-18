@@ -29,7 +29,7 @@ fun PerformerChip(performer: ArtistDto) {
         leadingIcon = {
             ImageAsync(
                 url = performer.image ?: "",
-                contentDescription = performer.name ?: "",
+                contentDescription = "",
                 modifier = Modifier
                     .width(18.0.dp)
                     .size(AssistChipDefaults.IconSize)

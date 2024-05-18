@@ -58,7 +58,8 @@ fun PerformerScreen(
                 if(!performerViewModel.isLoading){
                     Text(
                         text = stringResource(R.string.performerTitle),
-                        style = MaterialTheme.typography.displaySmall,
+                        style = MaterialTheme.typography.headlineMedium,
+                        modifier = Modifier.padding(8.dp)
                     )
                 }
                 LazyColumn( modifier = Modifier.testTag("artistTag")) {
@@ -73,7 +74,7 @@ fun PerformerScreen(
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     ImageAsync(
                                         "${artist.image}",
-                                        "${artist.image}",
+                                        "",
                                         Modifier.size(90.dp).clip(MaterialTheme.shapes.medium),
                                         ContentScale.Crop
                                     )

@@ -44,7 +44,6 @@ class ListCollectorTest {
             collector.email?.let { composeTestRule.onNodeWithText(it).assertExists() }
 
         }
-
     }
 
     @Test
@@ -52,7 +51,7 @@ class ListCollectorTest {
         val collectors = FakeDataCollectors.collectors
         this.initWithCollectors(collectors)
         // Shows Collectors title
-        composeTestRule.onNodeWithText("Coleccionistas").assertExists()
+        composeTestRule.onNodeWithText("Lista de Coleccionistas").assertExists()
         // Check if the collectors are displayed
         this.assertCollectorsDisplayed(collectors)
     }

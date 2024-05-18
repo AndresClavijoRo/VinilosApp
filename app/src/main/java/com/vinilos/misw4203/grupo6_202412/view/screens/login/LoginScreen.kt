@@ -59,7 +59,7 @@ fun LoginLogo() {
     ) {
         Icon(
             painter = painterResource(id = R.drawable.outline_media_output_24),
-            contentDescription = "Media Output",
+            contentDescription = null,
             Modifier.size(150.dp),
             tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
         )
@@ -101,7 +101,7 @@ fun LoginTopBar() {
         ),
         title = {
             Text(
-                text = stringResource(R.string.app_name),
+                text = stringResource(R.string.login_bar_title),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )

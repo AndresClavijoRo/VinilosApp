@@ -39,8 +39,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.focus.onFocusEvent
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.vinilos.misw4203.grupo6_202412.R
 import com.vinilos.misw4203.grupo6_202412.viewModel.CreateAlbumViewModel
 import com.vinilos.misw4203.grupo6_202412.viewModel.Genre
 import com.vinilos.misw4203.grupo6_202412.viewModel.RecordLabel
@@ -392,7 +394,7 @@ fun TopBar(back: () -> Unit, save: () -> Unit) {
         },
         actions = {
             TextButton(onClick = save) {
-                Text(text = "Save")
+                Text(text = stringResource(R.string.btn_save))
             }
         }
     )

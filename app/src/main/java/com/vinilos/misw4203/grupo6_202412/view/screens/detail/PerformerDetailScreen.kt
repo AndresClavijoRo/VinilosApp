@@ -84,7 +84,7 @@ fun PerformerDetail(performerDetail: ArtistDto?){
 
         ImageAsync(
             "${performerDetail?.image}",
-            "${performerDetail?.id}",
+            stringResource(R.string.imagen_de_artista, performerDetail?.name ?: ""),
             Modifier
                 .align(Alignment.CenterHorizontally)
                 .aspectRatio(1f)
@@ -141,7 +141,7 @@ fun AlbumsPerformer(albums: ArrayList<AlbumDto>){
                             ) {
                                 ImageAsync(
                                     "${album.cover}",
-                                    "${album.recordLabel}",
+                                    "",
                                     Modifier
                                         .size(100.dp)
                                         .clip(RoundedCornerShape(8.dp)),

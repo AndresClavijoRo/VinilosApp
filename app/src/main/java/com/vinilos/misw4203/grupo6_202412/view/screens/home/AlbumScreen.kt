@@ -108,7 +108,7 @@ fun AlbumGridScreen(
     Column {
         Text(
             text = stringResource(R.string.albumTitle),
-            style = MaterialTheme.typography.displaySmall,
+            style = MaterialTheme.typography.headlineMedium,
             modifier = Modifier.padding(8.dp)
         )
         if (albums.isEmpty()) {
@@ -152,7 +152,7 @@ fun AlbumCard(
         Column {
             ImageAsync(
                 url = album.cover ?: "",
-                contentDescription = album.name,
+                contentDescription = "",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxWidth()
