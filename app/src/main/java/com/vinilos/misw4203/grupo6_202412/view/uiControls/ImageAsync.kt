@@ -6,10 +6,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import coil.compose.AsyncImage
+import coil.request.CachePolicy
+import coil.request.ErrorResult
 import coil.request.ImageRequest
+import coil.request.SuccessResult
 import com.vinilos.misw4203.grupo6_202412.R
+import kotlinx.coroutines.Dispatchers
+
 
 @Composable
 fun ImageAsync(
@@ -18,17 +22,26 @@ fun ImageAsync(
     modifier: Modifier = Modifier,
     contentScale: ContentScale = ContentScale.Fit,
 ) {
+
+    val imageRequest = ImageRequest.Builder(LocalContext.current)
+        .data(url)
+        .dispatcher(Dispatchers.IO)
+        .memoryCacheKey(url)
+        .diskCacheKey(url)
+        .placeholder(R.drawable.loading_img)
+        .error(R.drawable.loading_img)
+        .fallback(R.drawable.loading_img)
+        .diskCachePolicy(CachePolicy.ENABLED)
+        .memoryCachePolicy(CachePolicy.ENABLED)
+        .crossfade(true)
+        .size(300)
+        .build()
+
     AsyncImage(
-        model = ImageRequest.Builder(context = LocalContext.current)
-            .data(url)
-            .crossfade(true)
-            .size(300)
-            .build(),
+        model = imageRequest,
         contentDescription = contentDescription,
-        error = painterResource(R.drawable.ic_broken_image),
-        placeholder = painterResource(R.drawable.loading_img),
-        contentScale = contentScale,
         modifier = modifier.fillMaxSize(),
-        filterQuality = FilterQuality.Low
+        contentScale = contentScale,
+        filterQuality = FilterQuality.Low,
     )
 }

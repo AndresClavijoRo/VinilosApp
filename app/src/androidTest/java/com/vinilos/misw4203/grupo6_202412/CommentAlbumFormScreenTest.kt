@@ -156,6 +156,7 @@ class CommentAlbumFormScreenTest {
         }
         val collectorNode = composeTestRule.onNodeWithText(labelCollector)
         collectorNode.performTextInput(collector.name!!.substring(0, collector.name!!.length-3))
+        Thread.sleep(1000)
         composeTestRule.onNodeWithText(collector.name!!).performClick()
 
 
