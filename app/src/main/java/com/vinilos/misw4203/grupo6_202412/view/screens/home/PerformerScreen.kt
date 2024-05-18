@@ -24,7 +24,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.vinilos.misw4203.grupo6_202412.view.uiControls.ImageAsync
 import com.vinilos.misw4203.grupo6_202412.viewModel.PerformerViewModel
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
@@ -38,13 +38,13 @@ import com.vinilos.misw4203.grupo6_202412.models.dto.ArtistDto
 fun PerformerScreen(
     onClick: (performerId:String) -> Unit,
     performerViewModel: PerformerViewModel = viewModel(factory = PerformerViewModel.Factory)) {
-    var performers = performerViewModel.performersState.value
+    val performers = performerViewModel.performersState.value
 
     val pullRefreshState = rememberPullRefreshState(
         refreshing = performerViewModel.isLoading,
         onRefresh = performerViewModel::getAllPerformers
     )
-    Scaffold() {
+    Scaffold {
         Box(modifier = Modifier
             .fillMaxSize()
             .padding(it)
@@ -63,7 +63,7 @@ fun PerformerScreen(
                     )
                 }
                 LazyColumn( modifier = Modifier.testTag("artistTag")) {
-                    items(performers) { artist: ArtistDto ->
+                    itemsIndexed(performers) { _, artist: ArtistDto ->
                         ListItem(
                             modifier = Modifier
                                 .fillMaxWidth()

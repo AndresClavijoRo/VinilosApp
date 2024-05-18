@@ -4,7 +4,6 @@ import com.vinilos.misw4203.grupo6_202412.models.dto.ArtistDto
 import com.vinilos.misw4203.grupo6_202412.models.dto.CollectorAlbumDto
 import com.vinilos.misw4203.grupo6_202412.models.dto.CollectorDto
 import com.vinilos.misw4203.grupo6_202412.models.dto.CommentDto
-import com.vinilos.misw4203.grupo6_202412.models.dto.FavoritePerformerDto
 
 object FakeDataCollectors {
     val collectors = listOf(

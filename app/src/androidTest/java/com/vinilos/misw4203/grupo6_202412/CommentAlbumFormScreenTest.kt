@@ -19,7 +19,6 @@ import com.vinilos.misw4203.grupo6_202412.models.service.VinilosService
 import com.vinilos.misw4203.grupo6_202412.view.screens.CommentAlbumForm
 import com.vinilos.misw4203.grupo6_202412.viewModel.AlbumCommentViewModel
 import com.vinilos.misw4203.grupo6_202412.viewModel.CollectorViewModel
-import okhttp3.internal.wait
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.Before
@@ -169,6 +168,7 @@ class CommentAlbumFormScreenTest {
             albumCommentViewModel.collector.value!!
         )
         val json = gson.toJson(dto)
+
         val jsonCollector = gson.toJson(collectorViewModel.collectorsState.value)
         server.enqueue(MockResponse().setBody(jsonCollector))
         server.enqueue(MockResponse().setBody(json))

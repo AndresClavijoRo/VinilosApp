@@ -11,17 +11,18 @@ import com.vinilos.misw4203.grupo6_202412.VinilosApplication
 import com.vinilos.misw4203.grupo6_202412.models.dto.ArtistDto
 import com.vinilos.misw4203.grupo6_202412.models.repository.VinilosRepository
 import kotlinx.coroutines.launch
-import androidx.compose.runtime.State
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class PerformerViewModel(private val performerRepository: VinilosRepository,
-                         private val dispatcherIO: CoroutineDispatcher = Dispatchers.IO): ViewModel() {
-    val _performersState = mutableStateOf<List<ArtistDto>>(emptyList())
-    val performersState: State<List<ArtistDto>> = _performersState
-    var isLoading: Boolean = true;
-    var isError: Boolean = false;
+class PerformerViewModel(
+    private val performerRepository: VinilosRepository,
+    private val dispatcherIO: CoroutineDispatcher = Dispatchers.IO
+) : ViewModel() {
+    private val _performersState = mutableStateOf<List<ArtistDto>>(emptyList())
+    val performersState = _performersState
+    var isLoading: Boolean = true
+    var isError: Boolean = false
 
     init {
         getAllPerformers()
@@ -33,7 +34,7 @@ class PerformerViewModel(private val performerRepository: VinilosRepository,
                     performerRepository.getPerformers(
                         onResponse = {
                                 performersList ->  _performersState.value = performersList
-                            isLoading = false;
+                            isLoading = false
                         },
                         onFailure = {
                             Log.i("Error","Error consumiendo servicio ")
@@ -49,9 +50,9 @@ class PerformerViewModel(private val performerRepository: VinilosRepository,
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val application = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as VinilosApplication)
-                val vinilosRepository = application.vinilosRepository
-                PerformerViewModel(performerRepository = vinilosRepository)
+                val application =
+                    (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as VinilosApplication)
+                PerformerViewModel(performerRepository = application.vinilosRepository)
             }
         }
     }

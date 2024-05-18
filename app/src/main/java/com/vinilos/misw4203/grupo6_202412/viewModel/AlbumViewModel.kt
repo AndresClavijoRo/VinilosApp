@@ -61,8 +61,7 @@ open class AlbumViewModel(
             initializer {
                 val application =
                     (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as VinilosApplication)
-                val vinilosRepository = application.vinilosRepository
-                AlbumViewModel(albumRepository = vinilosRepository)
+                AlbumViewModel(albumRepository = application.vinilosRepository)
             }
         }
     }

@@ -8,19 +8,19 @@ sealed class BottomScreens(
     val titleResourceId: Int,
     val iconResourceId: Int
 ) {
-    object Albums : BottomScreens(
+    data object Albums : BottomScreens(
         route = GraphHome.ALBUMS,
         titleResourceId = R.string.albums,
         iconResourceId = R.drawable.outline_media_output_24
     )
 
-    object Artists : BottomScreens(
+    data object Artists : BottomScreens(
         route = GraphHome.PERFORMERS,
         titleResourceId = R.string.performers,
         iconResourceId = R.drawable.outline_artist_24
     )
 
-    object Collectors : BottomScreens(
+    data object Collectors : BottomScreens(
         route = GraphHome.COLLECTORS,
         titleResourceId = R.string.collectors,
         iconResourceId = R.drawable.outline_spatial_audio_24

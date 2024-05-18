@@ -8,11 +8,11 @@ import retrofit2.http.Path
 
 interface ICollectorEndpoint {
     @GET("collectors")
-    fun getCollectorsList(): Call<ArrayList<CollectorDto>>;
+    fun getCollectorsList(): Call<ArrayList<CollectorDto>>
 
     @GET("collectors/{id}")
-    fun getCollectorById(@Path("id") id: Int): Call<CollectorDto>;
+    fun getCollectorById(@Path("id") id: Int): Call<CollectorDto>
 
     @GET("collectors/{id}/albums")
-    fun getCollectorAlbumsById(@Path("id") id: Int): Call<ArrayList<CollectorAlbumDetailDto>>;
+    fun getCollectorAlbumsById(@Path("id") id: Int): Call<ArrayList<CollectorAlbumDetailDto>>
 }

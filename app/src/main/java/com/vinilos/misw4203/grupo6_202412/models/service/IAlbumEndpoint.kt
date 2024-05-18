@@ -12,14 +12,14 @@ import retrofit2.http.Path
 
 interface IAlbumEndpoint {
     @GET("albums")
-    fun getAlbumList(): Call<ArrayList<AlbumDto>>;
+    fun getAlbumList(): Call<ArrayList<AlbumDto>>
 
     @GET("albums/{id}")
     fun getAlbumById(@Path("id") id: Int): Call<AlbumDto>
 
     @POST("albums")
-    fun createAlbum(@Body request: AlbumRequest): Call<AlbumDto>;
+    fun createAlbum(@Body request: AlbumRequest): Call<AlbumDto>
 
     @POST("albums/{id}/comments")
-    fun createAlbumComment(@Path("id") id: Int, @Body request: AlbumCommentRequest): Call<CommentDto>;
+    fun createAlbumComment(@Path("id") id: Int, @Body request: AlbumCommentRequest): Call<CommentDto>
 }

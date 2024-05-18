@@ -17,8 +17,8 @@ import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mockito
 
-val COLLECTOR_ID=1
-class CollectorDetailTest() {
+const val COLLECTOR_ID = 1
+class CollectorDetailTest {
     @get:Rule
     val composeTestRule = createComposeRule()
     private val mockRepository = Mockito.mock(VinilosRepository::class.java)
@@ -34,13 +34,13 @@ class CollectorDetailTest() {
             )
         }
     }
-    fun initWithCollector(collector: CollectorDto,albums:List<AlbumDto> = emptyList()) {
+    private fun initWithCollector(collector: CollectorDto, albums:List<AlbumDto> = emptyList()) {
         collectorViewModel.collectorUiState = CollectorUiState.Success(collector)
         collectorViewModel.collectoralbumsUiState = CollectorAlbumsUiState.Success(ArrayList(albums))
 
     }
 
-    fun assertCollectorDisplayed(collector: CollectorDto) {
+    private fun assertCollectorDisplayed(collector: CollectorDto) {
         collector.email?.let { composeTestRule.onNodeWithText(it).assertExists() }
         collector.telephone?.let { composeTestRule.onNodeWithText(it).assertExists() }
     }
@@ -69,7 +69,7 @@ class CollectorDetailTest() {
         val albums = FakeDataAlbums.albums.subList(0,2)
         this.initWithCollector(collector,albums)
         for (album in albums) {
-            album.name?.let { composeTestRule.onNodeWithText(it).assertExists() }
+            album.name.let { composeTestRule.onNodeWithText(it).assertExists() }
         }
     }
     @Test

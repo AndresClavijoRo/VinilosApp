@@ -6,7 +6,6 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onChildren
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
-
 import com.vinilos.misw4203.grupo6_202412.R
 import com.vinilos.misw4203.grupo6_202412.models.dto.AlbumDto
 import com.vinilos.misw4203.grupo6_202412.models.dto.ArtistDto
@@ -33,8 +32,8 @@ class PerformersDetailViewTest {
 
     @Test
     fun displayPerformersDetailScreen() {
-        var performer =  ArtistDto(1,"test1","https://acortar.link/T7Mc10");
-        viewModel.performerDetailState = performer
+        val performer =  ArtistDto(1,"test1","https://acortar.link/T7Mc10")
+        viewModel.performerDetailState.value = performer
         composeTestRule.setContent {
             PerformerDetailScreen(performerId = performer.id.toString(), onClick = { }, viewModel)
         }
@@ -43,12 +42,12 @@ class PerformersDetailViewTest {
 
     @Test
     fun detailIfAlbumsIsNotEmpty() {
-        var albums = arrayListOf(
-            AlbumDto(1,"Album1","https://acortar.link/T7Mc10",),
+        val albums = arrayListOf(
+            AlbumDto(1,"Album1","https://acortar.link/T7Mc10"),
             AlbumDto(2,"Album2","https://acortar.link/T7Mc10"))
-        var performer =  ArtistDto(1,"test1","https://acortar.link/T7Mc10");
+        val performer =  ArtistDto(1,"test1","https://acortar.link/T7Mc10")
         performer.albums = albums
-        viewModel.performerDetailState = performer
+        viewModel.performerDetailState.value = performer
         composeTestRule.setContent {
             PerformerDetailScreen(performerId = performer.id.toString(), onClick = { }, viewModel)
         }
@@ -59,11 +58,11 @@ class PerformersDetailViewTest {
 
     @Test
     fun detailIfAlbumsIstEmpty() {
-        var performer =  ArtistDto(1,"DetailEmpty","https://acortar.link/T7Mc10");
+        val performer =  ArtistDto(1,"DetailEmpty","https://acortar.link/T7Mc10")
         performer.albums = arrayListOf()
 
         lateinit var notFoundMessage: String
-        viewModel.performerDetailState = performer
+        viewModel.performerDetailState.value = performer
         composeTestRule.setContent {
             notFoundMessage = stringResource(R.string.no_albums_found)
             PerformerDetailScreen(performerId = performer.id.toString(), onClick = { }, viewModel)
@@ -74,23 +73,26 @@ class PerformersDetailViewTest {
 
     @Test
     fun noBirthDatePresent() {
-        var performer =  ArtistDto(1,"DetailEmpty","https://acortar.link/T7Mc10",
-            description = "This is the description test");
+        val performer =  ArtistDto(1,"DetailEmpty","https://acortar.link/T7Mc10",
+            description = "This is the description test")
         performer.albums = arrayListOf()
-        viewModel.performerDetailState = performer
+        viewModel.performerDetailState.value = performer
         composeTestRule.setContent {
             PerformerDetailScreen(performerId = performer.id.toString(), onClick = { }, viewModel)
         }
 
-        composeTestRule.onNodeWithTag("birthDateTag").assertTextContains("No Data",true, true)
+        composeTestRule.onNodeWithTag("birthDateTag").assertTextContains("No Data",
+            substring = true,
+            ignoreCase = true
+        )
 
     }
 
     @Test
     fun detailIfHasDescription() {
-        var performer =  ArtistDto(1,"DetailEmpty","https://acortar.link/T7Mc10");
+        val performer =  ArtistDto(1,"DetailEmpty","https://acortar.link/T7Mc10")
         performer.albums = arrayListOf()
-        viewModel.performerDetailState = performer
+        viewModel.performerDetailState.value = performer
         composeTestRule.setContent {
             PerformerDetailScreen(performerId = performer.id.toString(), onClick = { }, viewModel)
         }

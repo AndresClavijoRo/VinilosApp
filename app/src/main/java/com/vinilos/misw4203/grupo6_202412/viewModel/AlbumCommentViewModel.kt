@@ -98,8 +98,7 @@ class AlbumCommentViewModel(
             initializer {
                 val application =
                     (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as VinilosApplication)
-                val vinilosRepository = application.vinilosRepository
-                AlbumCommentViewModel(albumCommentRepository = vinilosRepository)
+                AlbumCommentViewModel(albumCommentRepository = application.vinilosRepository)
             }
         }
     }

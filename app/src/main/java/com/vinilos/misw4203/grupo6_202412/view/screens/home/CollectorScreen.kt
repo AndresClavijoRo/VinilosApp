@@ -14,7 +14,6 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -33,7 +32,6 @@ import com.vinilos.misw4203.grupo6_202412.models.dto.CollectorDto
 import com.vinilos.misw4203.grupo6_202412.view.uiControls.ErrorScreen
 import com.vinilos.misw4203.grupo6_202412.view.uiControls.ImageAsync
 import com.vinilos.misw4203.grupo6_202412.viewModel.CollectorViewModel
-import com.vinilos.misw4203.grupo6_202412.viewModel.PerformerViewModel
 
 @Composable
 fun CollectorList(onCollectorClick: (String) -> Unit, collectorList: List<CollectorDto>) {
@@ -94,18 +92,18 @@ fun CollectorListItem(
 }
 
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun CollectorScreen(
     onClick: (collectorId: String) -> Unit,
-    collectorViewModel: CollectorViewModel = viewModel(factory = CollectorViewModel.Factory),
     modifier: Modifier = Modifier,
+    collectorViewModel: CollectorViewModel = viewModel(factory = CollectorViewModel.Factory),
 ) {
     val collectors = collectorViewModel.collectorsState.value
     val isLoading = collectorViewModel.isLoading.value
     val errorText = collectorViewModel.errorText.value
     val pullRefreshState =
-        rememberPullRefreshState(isLoading == true, collectorViewModel::getAllCollectors)
+        rememberPullRefreshState(isLoading, collectorViewModel::getAllCollectors)
 
     Scaffold(
 
