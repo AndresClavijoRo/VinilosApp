@@ -30,7 +30,7 @@ sealed class CollectorAlbumsUiState {
         CollectorAlbumsUiState()
 }
 
-val ERROR_MESSAGE = "Error consumiendo servicio "
+const val ERROR_MESSAGE = "Error consumiendo servicio "
 
 class CollectorDetailViewModel(
     private val vinilosRepository: VinilosRepository,
@@ -92,10 +92,8 @@ class CollectorDetailViewModel(
                 initializer {
                     val application =
                         (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as VinilosApplication)
-                    val vinilosRepository = application.vinilosRepository
                     CollectorDetailViewModel(
-                        vinilosRepository = vinilosRepository,
-                        collectorId = idDetail
+                        vinilosRepository = application.vinilosRepository, collectorId = idDetail
                     )
                 }
             }

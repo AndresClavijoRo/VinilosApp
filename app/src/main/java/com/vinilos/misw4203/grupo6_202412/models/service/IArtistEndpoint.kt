@@ -8,8 +8,8 @@ import retrofit2.http.Path
 interface IArtistEndpoint {
 
     @GET("musicians")
-    fun getArtistList(): Call<ArrayList<ArtistDto>>;
+    fun getArtistList(): Call<ArrayList<ArtistDto>>
 
     @GET("musicians/{musicianId}")
-    fun getPerformerById(@Path("musicianId") musicianId: Int): Call<ArtistDto>;
+    fun getPerformerById(@Path("musicianId") musicianId: Int): Call<ArtistDto>
 }

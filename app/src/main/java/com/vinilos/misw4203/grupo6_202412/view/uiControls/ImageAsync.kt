@@ -8,9 +8,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import coil.compose.AsyncImage
 import coil.request.CachePolicy
-import coil.request.ErrorResult
 import coil.request.ImageRequest
-import coil.request.SuccessResult
 import com.vinilos.misw4203.grupo6_202412.R
 import kotlinx.coroutines.Dispatchers
 

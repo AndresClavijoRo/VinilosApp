@@ -46,12 +46,13 @@ class CollectorViewModel(private val vinilosRepository: VinilosRepository): View
             }
         }
     }
+
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val application = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as VinilosApplication)
-                val vinilosRepository = application.vinilosRepository
-                CollectorViewModel(vinilosRepository = vinilosRepository)
+                val application =
+                    (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as VinilosApplication)
+                CollectorViewModel(vinilosRepository = application.vinilosRepository)
             }
         }
     }
