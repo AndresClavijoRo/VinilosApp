@@ -44,6 +44,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
@@ -51,8 +54,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.vinilos.misw4203.grupo6_202412.R
 import com.vinilos.misw4203.grupo6_202412.models.dto.CollectorDto
-import com.vinilos.misw4203.grupo6_202412.ui.theme.StarDisable
-import com.vinilos.misw4203.grupo6_202412.ui.theme.StarEnable
 import com.vinilos.misw4203.grupo6_202412.viewModel.AlbumCommentViewModel
 import com.vinilos.misw4203.grupo6_202412.viewModel.CollectorViewModel
 
@@ -197,13 +198,31 @@ fun StarRatingSelect(
     maxStars: Int = 5,
     rating: MutableState<Int>,
 ) {
+    val ratingValue = stringResource(R.string.rating_select_description, rating.value, maxStars)
+
+    Text(
+        text = stringResource(R.string.rating_selector),
+        style = MaterialTheme.typography.bodyLarge,
+        modifier = Modifier.padding(8.dp)
+    )
     Row(
-        modifier = Modifier.selectableGroup().testTag("StarRatingSelect"), verticalAlignment = Alignment.CenterVertically
+        modifier =
+        Modifier
+            .selectableGroup()
+            .testTag("StarRatingSelect")
+            .semantics(mergeDescendants = true) {
+                contentDescription = ratingValue
+            },
+        verticalAlignment = Alignment.CenterVertically
     ) {
         for (i in 1..maxStars) {
             val isSelected = i <= rating.value
             val icon = Icons.Rounded.Star
-            val iconTintColor = if (isSelected) StarEnable else StarDisable
+            val iconTintColor = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+
+            val starSelected = stringResource(R.string.star_selected, i)
+            val starNotSelected =  stringResource(R.string.star_not_selected, i)
+
             Icon(
                 imageVector = icon,
                 contentDescription = null,
@@ -215,6 +234,13 @@ fun StarRatingSelect(
                     .width(50.dp)
                     .height(50.dp)
                     .testTag("ratingComment")
+                    .semantics {
+                        stateDescription = if (isSelected) {
+                            starSelected
+                        } else {
+                            starNotSelected
+                        }
+                    }
             )
         }
     }
@@ -227,7 +253,8 @@ fun CommentAlbumInput(
     comment: MutableState<String>,
     isInvalidComment: MutableState<Boolean>
 ) {
-    OutlinedTextField(value = comment.value,
+    OutlinedTextField(
+        value = comment.value,
         onValueChange = {
             comment.value = it
             checkIsValid()
@@ -275,7 +302,7 @@ fun TopBarComment(
 
         } else {
             TextButton(onClick = save) {
-                Text(text = "Save")
+                Text(text = stringResource(R.string.btn_save))
             }
         }
     })

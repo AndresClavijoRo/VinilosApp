@@ -83,7 +83,7 @@ fun CollectorListItem(
         leadingContent = {
             ImageAsync(
                 "https://ui-avatars.com/api/?name=${collector.name}&size=256&background=random&rounded=true&color=fff",
-                collector.name ?: "Default name",
+                "",
                 Modifier
                     .size(50.dp)
                     .clip(MaterialTheme.shapes.medium),
@@ -132,7 +132,7 @@ fun CollectorScreen(
                 ) {
                     Text(
                         text = stringResource(R.string.collectorTitle),
-                        style = MaterialTheme.typography.displaySmall,
+                        style = MaterialTheme.typography.headlineMedium,
                     )
                     CollectorList(onClick, collectors)
                 }

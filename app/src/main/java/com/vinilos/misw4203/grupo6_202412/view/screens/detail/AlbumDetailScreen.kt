@@ -40,7 +40,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -49,6 +48,8 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -58,8 +59,6 @@ import com.vinilos.misw4203.grupo6_202412.R
 import com.vinilos.misw4203.grupo6_202412.models.dto.AlbumDto
 import com.vinilos.misw4203.grupo6_202412.models.dto.CommentDto
 import com.vinilos.misw4203.grupo6_202412.models.dto.TraksDto
-import com.vinilos.misw4203.grupo6_202412.ui.theme.StarDisable
-import com.vinilos.misw4203.grupo6_202412.ui.theme.StarEnable
 import com.vinilos.misw4203.grupo6_202412.view.uiControls.ErrorScreen
 import com.vinilos.misw4203.grupo6_202412.view.uiControls.ExpandableText
 import com.vinilos.misw4203.grupo6_202412.view.uiControls.ImageAsync
@@ -103,12 +102,14 @@ fun AlbumScreenDetail(
                     onClickCommentAlbum,
                     albumDetailUiState.album
                 )
+
                 is AlbumDetailUiState.Error -> {
-                        ErrorScreen(
-                            modifier = modifier.fillMaxSize(),
-                            onClickRefresh = { albumDetailViewModel.getAllAlbumById(idDetail.toInt()) },
-                        )
+                    ErrorScreen(
+                        modifier = modifier.fillMaxSize(),
+                        onClickRefresh = { albumDetailViewModel.getAllAlbumById(idDetail.toInt()) },
+                    )
                 }
+
                 is AlbumDetailUiState.Loading -> Unit
             }
 
@@ -185,12 +186,12 @@ fun AlbumCover(
     ) {
         ImageAsync(
             url = albumDto.cover ?: "",
-            contentDescription = albumDto.name,
+            contentDescription = stringResource(id = R.string.imagen_album_cover, albumDto.name),
             modifier = Modifier
                 .width(140.dp)
                 .size(140.dp)
                 .clip(RoundedCornerShape(20.dp)),
-             contentScale = ContentScale.Crop
+            contentScale = ContentScale.Crop
         )
         Column(
             verticalArrangement = Arrangement.Center
@@ -261,13 +262,12 @@ fun AlbumInfo(albumDto: AlbumDto) {
 }
 
 
-
-
-
-
 @Composable
 fun Tracks(tracks: List<TraksDto>) {
-    Text(text = stringResource(id = R.string.tracksTitle), style = MaterialTheme.typography.titleMedium)
+    Text(
+        text = stringResource(id = R.string.tracksTitle),
+        style = MaterialTheme.typography.titleMedium
+    )
 
     Row(
         modifier = Modifier
@@ -354,13 +354,22 @@ fun CommentChip(comment: CommentDto) {
 
 @Composable
 fun RatingComment(rating: Int) {
-    Row(modifier = Modifier.testTag("ratingComment") )  {
+    val textRating = stringResource(R.string.rating_comment_description, rating, 5)
+    Row(modifier = Modifier
+        .testTag("ratingComment")
+        .semantics(mergeDescendants = true) {
+            contentDescription = textRating
+        }) {
         for (i in 1..5) {
+            val isStarEnabled = i <= rating
+            val iconTintColor = if (isStarEnabled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
             Icon(
                 imageVector = Icons.Rounded.Star,
-                contentDescription =  if (i > rating) "" else stringResource(R.string.estrella_comment_ok),
-                modifier = Modifier.size(30.dp),
-                tint = if (i > rating) StarDisable else StarEnable
+                contentDescription = "",
+                modifier = Modifier
+                    .size(30.dp)
+                    .testTag(if(isStarEnabled) "Star point" else ""),
+                tint = iconTintColor
             )
         }
     }

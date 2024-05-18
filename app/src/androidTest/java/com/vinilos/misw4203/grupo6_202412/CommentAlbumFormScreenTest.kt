@@ -77,9 +77,11 @@ class CommentAlbumFormScreenTest {
     fun avoidCreateCommentWithEmptyFields(){
         var textoValidatorComment = ""
         var textoValidatorCollector = ""
+        var btnSaveText = ""
         composeTestRule.setContent {
             textoValidatorComment = stringResource(R.string.inputCommentValidator)
             textoValidatorCollector = stringResource(R.string.selectionValidator)
+            btnSaveText = stringResource(R.string.btn_save)
 
             CommentAlbumForm(
                 idDetail = "1",
@@ -88,7 +90,7 @@ class CommentAlbumFormScreenTest {
                 commentViewModel = albumCommentViewModel
             )
         }
-        composeTestRule.onNodeWithText("Save").performClick()
+        composeTestRule.onNodeWithText(btnSaveText).performClick()
         composeTestRule.onNodeWithText(textoValidatorComment).assertExists()
         composeTestRule.onNodeWithText(textoValidatorCollector).assertExists()
     }
@@ -139,10 +141,11 @@ class CommentAlbumFormScreenTest {
         var labelComment = ""
         var labelCollector = ""
         val collector = collectorViewModel.collectorsState.value.random()
-
+        var btnSaveText = ""
         composeTestRule.setContent {
             labelComment = stringResource(R.string.comment)
             labelCollector = stringResource(R.string.collector)
+            btnSaveText = stringResource(R.string.btn_save)
 
             CommentAlbumForm(
                 idDetail = "1",
@@ -170,7 +173,7 @@ class CommentAlbumFormScreenTest {
         )
         val json = gson.toJson(dto)
         server.enqueue(MockResponse().setBody(json))
-        composeTestRule.onNodeWithText("Save").performClick()
+        composeTestRule.onNodeWithText(btnSaveText).performClick()
         albumCommentViewModel.isCommentSaved.value = true
         composeTestRule.waitUntil { albumCommentViewModel.isCommentSaved.value }
         assert(albumCommentViewModel.isCommentSaved.value)
@@ -181,10 +184,12 @@ class CommentAlbumFormScreenTest {
        inputNewCommentDummy()
        val dto = CommentDto(0)
        val json = gson.toJson(dto)
+       var btnSaveText = ""
 
        server.enqueue(MockResponse().setBody(json))
 
        composeTestRule.setContent {
+              btnSaveText = stringResource(R.string.btn_save)
            CommentAlbumForm(
                idDetail = "1",
                onClickBack = { },
@@ -192,12 +197,11 @@ class CommentAlbumFormScreenTest {
                commentViewModel = albumCommentViewModel
            )
        }
-       composeTestRule.onNodeWithText("Save").performClick()
+       composeTestRule.onNodeWithText(btnSaveText).performClick()
 
       albumCommentViewModel.isCommentSaved.value = true
        composeTestRule.waitUntil (timeoutMillis = 5000){albumCommentViewModel.isCommentSaved.value }
        assert(albumCommentViewModel.isCommentSaved.value)
-
     }
 
     private fun inputNewCommentDummy() {
