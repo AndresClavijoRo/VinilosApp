@@ -19,6 +19,7 @@ import com.vinilos.misw4203.grupo6_202412.models.service.VinilosService
 import com.vinilos.misw4203.grupo6_202412.view.screens.CommentAlbumForm
 import com.vinilos.misw4203.grupo6_202412.viewModel.AlbumCommentViewModel
 import com.vinilos.misw4203.grupo6_202412.viewModel.CollectorViewModel
+import okhttp3.internal.wait
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.Before
@@ -33,20 +34,16 @@ class CommentAlbumFormScreenTest {
     private val server: MockWebServer = MockWebServer()
     private lateinit var vinilosServiceAdapter: VinilosService
     private lateinit var mockRepository: VinilosRepository
-    private lateinit var mockRepositoryCollector: VinilosRepository
     private lateinit var albumCommentViewModel: AlbumCommentViewModel
     private lateinit var collectorViewModel: CollectorViewModel
 
     @Before
     fun setUp() {
-
         vinilosServiceAdapter = VinilosService(server.url("/").toString())
         mockRepository = VinilosRepository(vinilosServiceAdapter)
-        mockRepositoryCollector = VinilosRepository(vinilosServiceAdapter)
         albumCommentViewModel = AlbumCommentViewModel( albumCommentRepository = mockRepository)
-        collectorViewModel = CollectorViewModel( vinilosRepository = mockRepositoryCollector)
-        val collectors = FakeDataCollectors.collectors
-        collectorViewModel.collectorsState.value = collectors
+        collectorViewModel = CollectorViewModel( vinilosRepository = mockRepository)
+        collectorViewModel.collectorsState.value = FakeDataCollectors.collectors
         Thread.sleep(3000)
     }
 
@@ -156,8 +153,8 @@ class CommentAlbumFormScreenTest {
         }
         val collectorNode = composeTestRule.onNodeWithText(labelCollector)
         collectorNode.performTextInput(collector.name!!.substring(0, collector.name!!.length-3))
+        Thread.sleep(500)
         composeTestRule.onNodeWithText(collector.name!!).performClick()
-
 
         val ratingStarComments = composeTestRule.onAllNodes(hasTestTag("ratingComment"))
         val ramdomRatingNumber = (0..4).random()
@@ -172,43 +169,12 @@ class CommentAlbumFormScreenTest {
             albumCommentViewModel.collector.value!!
         )
         val json = gson.toJson(dto)
+        val jsonCollector = gson.toJson(collectorViewModel.collectorsState.value)
+        server.enqueue(MockResponse().setBody(jsonCollector))
         server.enqueue(MockResponse().setBody(json))
         composeTestRule.onNodeWithText(btnSaveText).performClick()
-        albumCommentViewModel.isCommentSaved.value = true
         composeTestRule.waitUntil { albumCommentViewModel.isCommentSaved.value }
         assert(albumCommentViewModel.isCommentSaved.value)
     }
-
-   @Test
-    fun saveComment(){
-       inputNewCommentDummy()
-       val dto = CommentDto(0)
-       val json = gson.toJson(dto)
-       var btnSaveText = ""
-
-       server.enqueue(MockResponse().setBody(json))
-
-       composeTestRule.setContent {
-              btnSaveText = stringResource(R.string.btn_save)
-           CommentAlbumForm(
-               idDetail = "1",
-               onClickBack = { },
-               collectorViewModel = collectorViewModel,
-               commentViewModel = albumCommentViewModel
-           )
-       }
-       composeTestRule.onNodeWithText(btnSaveText).performClick()
-
-      albumCommentViewModel.isCommentSaved.value = true
-       composeTestRule.waitUntil (timeoutMillis = 5000){albumCommentViewModel.isCommentSaved.value }
-       assert(albumCommentViewModel.isCommentSaved.value)
-    }
-
-    private fun inputNewCommentDummy() {
-        albumCommentViewModel.comment.value = "Twisted Sister"
-        albumCommentViewModel.rating.intValue = 4
-        albumCommentViewModel.collector.value = collectorViewModel.collectorsState.value[0]
-    }
-
 }
 
