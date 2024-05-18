@@ -1,35 +1,49 @@
 <resources>
     <string name="app_name">VinilosApp</string>
+    <string name="login_bar_title">Inicio de sesión</string>
     <string name="btn_user">Usuario Invitado</string>
     <string name="btn_user_collector">Coleccionista</string>
 
-    <string name="albums">Albumes</string>
+    <string name="albums">Álbumes</string>
     <string name="performers">Artistas</string>
     <string name="collectors">Coleccionistas</string>
 
-    <string name="albumTitle">Álbumes</string>
-    <string name="performerTitle">Artistas</string>
-    <string name="collectorTitle">Coleccionistas</string>
+    <string name="albumTitle">Lista de Álbumes</string>
+    <string name="performerTitle">Lista de Artistas</string>
+    <string name="collectorTitle">Lista de Coleccionistas</string>
     <string name="tracksTitle">"Canciones"</string>
     <string name="tracks">" canciones"</string>
     <string name="comments">"Comentarios"</string>
-    <string name="cargando">Loading</string>
     <string name="error_al_cargar">Error Al cargar</string>
     <string name="no_data">Se realizo la consulta, pero no se encontraron datos.</string>
     <string name="retry">Recargar</string>
-    <string name="show_more">... Mostrar mas</string>
+    <string name="show_more">… Mostrar mas</string>
     <string name="show_less">" Mostrar Menos"</string>
     <string name="genre">"Genero "</string>
     <string name="publish">Publicado</string>
     <string name="back">Volver</string>
     <string name="btn_album_comment">Comentar álbum</string>
-    <string name="estrella_comment_ok">Star point</string>
-    <string name="collectorPhone">Teléfono</string>
-    <string name="collectorEmail">Email</string>
+    <string name="estrella_comment_ok">Estrella activa</string>
+    <string name="estrella_comment_disabled">Estrella inactiva</string>
+    <string name="rating_comment_description">%1$d de %2$d estrellas</string>
+    <string name="collectorPhone">Teléfono: </string>
+    <string name="collectorEmail">Email: </string>
     <string name="colonSeparator">": "</string>
     <string name="collectorNoAlbums">"El coleccionista no tiene albumes favoritos."</string>
     <string name="errorLoadingAlbums">Problema cargando los albumes</string>
     <string name="collectorNoFavoriteArtists">El Coleccionista no tiene artistas favoritos.</string>
+    <string name="collector">Coleccionista</string>
+    <string name="selectionValidator">Debe seleccionar un elemento de la lista</string>
+    <string name="comment">Comentario</string>
     <string name="noCollectors">No hay coleccionistas</string>
-
+    <string name="no_albums_found">No Albums Found</string>
+    <string name="inputCommentValidator">Ingrese un comentario</string>
+    <string name="commentLengthValidator">El comentario no puede superar los 300 caracteres</string>
+    <string name="imagen_album_cover">Cover Album %1$s</string>
+    <string name="imagen_de_artista">Imagen de artista %1$s</string>
+    <string name="star_selected">Estrella %1$d seleccionada</string>
+    <string name="star_not_selected">Estrella %1$d no seleccionada</string>
+    <string name="rating_select_description">%1$d de %2$d estrellas seleccionadas</string>
+    <string name="btn_save">Guardar</string>
+    <string name="rating_selector">Selección de rating</string>
 </resources>

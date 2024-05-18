@@ -35,7 +35,9 @@ class AlbumScreenTest {
     @Test
     fun albumScreenSuccesTest() {
         albumViewModel.albumUiState = AlbumUiState.Success(FakeDataAlbums.albums)
+        var titleAlbumList = ""
         composeTestRule.setContent {
+            titleAlbumList = stringResource(R.string.albumTitle)
             AlbumScreen(
                 onClickAlbumsDetail = { },
                 onClickCreateAlbum = { },
@@ -43,7 +45,7 @@ class AlbumScreenTest {
             )
         }
         composeTestRule.onRoot(useUnmergedTree = true).printToLog("AlbumScreenTest")
-        composeTestRule.onNodeWithText("Álbumes").assertExists()
+        composeTestRule.onNodeWithText(titleAlbumList).assertExists()
         composeTestRule.onNodeWithText(FakeDataAlbums.albums[0].name).assertExists()
     }
 

@@ -33,8 +33,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.vinilos.misw4203.grupo6_202412.R
 import com.vinilos.misw4203.grupo6_202412.models.dto.AlbumDto
 import com.vinilos.misw4203.grupo6_202412.view.uiControls.ImageAsync
 import com.vinilos.misw4203.grupo6_202412.models.dto.ArtistDto
@@ -60,8 +62,10 @@ fun PerformerDetailScreen(
         ) {
             Text(
                 text = "${performerDetail?.name}",
-                modifier = Modifier.padding(bottom = 20.dp, start = 8.dp, top = 30.dp).fillMaxWidth().
-                testTag("PerformerDetailTitle"),
+                modifier = Modifier
+                    .padding(bottom = 20.dp, start = 8.dp, top = 30.dp)
+                    .fillMaxWidth()
+                    .testTag("PerformerDetailTitle"),
                 style = MaterialTheme.typography.titleLarge
             )
             PerformerDetail(performerDetail)
@@ -80,22 +84,27 @@ fun PerformerDetail(performerDetail: ArtistDto?){
 
         ImageAsync(
             "${performerDetail?.image}",
-            "${performerDetail?.id}",
+            stringResource(R.string.imagen_de_artista, performerDetail?.name ?: ""),
             Modifier
                 .align(Alignment.CenterHorizontally)
-                .aspectRatio(1f).padding(PaddingValues(horizontal = 40.dp, vertical = 10.dp))
+                .aspectRatio(1f)
+                .padding(PaddingValues(horizontal = 40.dp, vertical = 10.dp))
                 .clip(RoundedCornerShape(15.dp)),
             ContentScale.Crop
         )
         Text(
             text = "Fecha Nacimiento  $formattedDate",
             style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(bottom = 10.dp, top = 10.dp).testTag("birthDateTag"),
+            modifier = Modifier
+                .padding(bottom = 10.dp, top = 10.dp)
+                .testTag("birthDateTag"),
         )
         Text(
             text = "${performerDetail?.description}",
             style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(bottom = 10.dp).testTag("descriptionTag")
+            modifier = Modifier
+                .padding(bottom = 10.dp)
+                .testTag("descriptionTag")
         )
         Text(
             text = "Albums",
@@ -132,9 +141,9 @@ fun AlbumsPerformer(albums: ArrayList<AlbumDto>){
                             ) {
                                 ImageAsync(
                                     "${album.cover}",
-                                    "${album.recordLabel}",
-                                    Modifier.
-                                    size(100.dp)
+                                    "",
+                                    Modifier
+                                        .size(100.dp)
                                         .clip(RoundedCornerShape(8.dp)),
                                     ContentScale.Crop
                                 )
@@ -156,7 +165,7 @@ fun NoDataFound(){
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "No Albums Found",
+            text = stringResource(R.string.no_albums_found),
             style = MaterialTheme.typography.headlineSmall,
         )
     }
