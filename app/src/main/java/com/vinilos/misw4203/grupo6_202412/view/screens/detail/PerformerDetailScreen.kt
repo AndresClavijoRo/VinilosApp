@@ -2,7 +2,6 @@
 package com.vinilos.misw4203.grupo6_202412.view.screens.detail
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -12,11 +11,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -48,7 +46,8 @@ import java.time.format.DateTimeFormatter
 fun PerformerDetailScreen(
     performerId: String,
     onClick: () -> Unit,
-    performerDetailViewModel: PerformerDetailViewModel = viewModel(factory = PerformerDetailViewModel.Factory)) {
+    performerDetailViewModel: PerformerDetailViewModel = viewModel(factory = PerformerDetailViewModel.Factory)
+) {
 
     performerDetailViewModel.getPerformerById(performerId.toInt())
     val performerDetail = performerDetailViewModel.performerDetailState
@@ -61,14 +60,14 @@ fun PerformerDetailScreen(
                 .padding(it)
         ) {
             Text(
-                text = "${performerDetail?.name}",
+                text = "${performerDetail.value?.name}",
                 modifier = Modifier
                     .padding(bottom = 20.dp, start = 8.dp, top = 30.dp)
                     .fillMaxWidth()
                     .testTag("PerformerDetailTitle"),
                 style = MaterialTheme.typography.titleLarge
             )
-            PerformerDetail(performerDetail)
+            PerformerDetail(performerDetail.value)
         }
     }
 }
@@ -128,14 +127,14 @@ private fun parseCustomDate(birthDate: String?): String{
 
 @Composable
 fun AlbumsPerformer(albums: ArrayList<AlbumDto>){
-    Column() {
+    Column {
         if(albums.isEmpty()){
             NoDataFound()
         } else {
             LazyColumn( modifier = Modifier.testTag("albumChildTag")) {
-                items(albums) { album ->
+                itemsIndexed(albums) { _, album ->
                     ListItem(
-                        headlineContent = {  Text("${album.name}")},
+                        headlineContent = {  Text(album.name)},
                         leadingContent = {
                             Row( modifier = Modifier
                             ) {

@@ -11,15 +11,16 @@ import com.vinilos.misw4203.grupo6_202412.VinilosApplication
 import com.vinilos.misw4203.grupo6_202412.models.dto.ArtistDto
 import com.vinilos.misw4203.grupo6_202412.models.repository.VinilosRepository
 import kotlinx.coroutines.launch
-import androidx.compose.runtime.State
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class PerformerViewModel(private val performerRepository: VinilosRepository,
-                         private val dispatcherIO: CoroutineDispatcher = Dispatchers.IO): ViewModel() {
-    val _performersState = mutableStateOf<List<ArtistDto>>(emptyList())
-    val performersState: State<List<ArtistDto>> = _performersState
+class PerformerViewModel(
+    private val performerRepository: VinilosRepository,
+    private val dispatcherIO: CoroutineDispatcher = Dispatchers.IO
+) : ViewModel() {
+    private val _performersState = mutableStateOf<List<ArtistDto>>(emptyList())
+    val performersState = _performersState
     var isLoading: Boolean = true
     var isError: Boolean = false
 

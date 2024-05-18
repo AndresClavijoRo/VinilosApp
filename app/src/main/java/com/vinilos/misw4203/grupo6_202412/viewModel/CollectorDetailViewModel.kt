@@ -17,14 +17,14 @@ import kotlinx.coroutines.launch
 
 
 sealed class CollectorUiState {
-    object Loading : CollectorUiState()
+    data object Loading : CollectorUiState()
     data class Error(val message: String) : CollectorUiState()
     data class Success(val collector: CollectorDto) :
         CollectorUiState()
 }
 
 sealed class CollectorAlbumsUiState {
-    object Loading : CollectorAlbumsUiState()
+    data object Loading : CollectorAlbumsUiState()
     data class Error(val message: String) : CollectorAlbumsUiState()
     data class Success(val collectorAlbums: ArrayList<AlbumDto>) :
         CollectorAlbumsUiState()
