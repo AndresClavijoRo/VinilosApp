@@ -125,6 +125,16 @@ open class VinilosService(private val baseUrl: String) {
             )
     }
 
+    fun addFavoriteArtist(
+        collectorId: Int,
+        artistId: Int,
+        onResponse: (resp: CollectorDto) -> Unit,
+        onFailure: (resp: String) -> Unit
+    ) {
+        getCollectorEndpoint.addFavoriteArtist(collectorId, artistId)
+            .enqueue(responseCallback<CollectorDto>(onResponse, onFailure))
+    }
+
 
     private fun <T> responseCallback(
         onResponse: (resp: T) -> Unit,
