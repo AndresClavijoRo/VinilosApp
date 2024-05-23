@@ -106,18 +106,16 @@ class CreateAlbumViewModel(
             return
         }
 
-        viewModelScope.launch {
-            withContext(dispatcherIO) {
-                try {
-                    albumRepository.createAlbums(buildRequest())
-                    isNewAlbumSaved.value = true
-                } catch (e: Exception) {
-                    Log.i("Error", "Error consumiendo servicio " + e.message)
-                    isNewAlbumSaved.value = false
-                }
-                withContext(dispatcherMain) {
-                    onComplete()
-                }
+        viewModelScope.launch(dispatcherIO) {
+            try {
+                albumRepository.createAlbums(buildRequest())
+                isNewAlbumSaved.value = true
+            } catch (e: Exception) {
+                Log.i("Error", "Error consumiendo servicio " + e.message)
+                isNewAlbumSaved.value = false
+            }
+            withContext(dispatcherMain) {
+                onComplete()
             }
         }
     }

@@ -8,15 +8,20 @@ import com.vinilos.misw4203.grupo6_202412.models.dto.ArtistDto
 import com.vinilos.misw4203.grupo6_202412.models.dto.CollectorAlbumDetailDto
 import com.vinilos.misw4203.grupo6_202412.models.dto.CollectorDto
 import com.vinilos.misw4203.grupo6_202412.models.dto.CommentDto
-import com.vinilos.misw4203.grupo6_202412.models.service.VinilosService
+import com.vinilos.misw4203.grupo6_202412.models.network.CacheManager
+import com.vinilos.misw4203.grupo6_202412.models.network.VinilosServiceAdapter
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-open class VinilosRepository(private val webService:VinilosService) {
+open class VinilosRepository(
+    private val webService: VinilosServiceAdapter,
+    private val cache: CacheManager
+) {
     companion object Factory {
-        fun create(webService:VinilosService): VinilosRepository {
-            return VinilosRepository(webService)
+        fun create(webService: VinilosServiceAdapter, cache: CacheManager): VinilosRepository {
+            return VinilosRepository(webService, cache)
         }
     }
 
@@ -24,8 +29,16 @@ open class VinilosRepository(private val webService:VinilosService) {
         webService.getAlbums(onResponse, onFailure)
     }
 
-    fun getAlbumById(id:Int, onResponse:(resp:AlbumDto)->Unit, onFailure:(resp:String)->Unit){
-        webService.getAlbumById(id, onResponse, onFailure)
+    suspend fun getAlbumById(id: Int): AlbumDto = suspendCancellableCoroutine { cont ->
+        cache.getAlbum(id)?.let {
+            cont.resume(it)
+            return@suspendCancellableCoroutine
+        }
+
+        webService.getAlbumById(id, {
+            cache.addAlbum(id, it)
+            cont.resume(it)
+        }, { cont.resumeWithException(Exception(it)) })
     }
 
     suspend fun createAlbums(request: AlbumRequest): AlbumDto = suspendCoroutine { cont ->

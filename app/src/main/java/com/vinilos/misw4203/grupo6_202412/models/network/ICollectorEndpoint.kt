@@ -1,4 +1,4 @@
-package com.vinilos.misw4203.grupo6_202412.models.service
+package com.vinilos.misw4203.grupo6_202412.models.network
 
 import com.vinilos.misw4203.grupo6_202412.models.dto.CollectorAlbumDetailDto
 import com.vinilos.misw4203.grupo6_202412.models.dto.CollectorDto
