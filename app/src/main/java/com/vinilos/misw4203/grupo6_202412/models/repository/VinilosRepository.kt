@@ -25,8 +25,16 @@ open class VinilosRepository(
         }
     }
 
-    fun getAlbums(onResponse:(resp:ArrayList<AlbumDto>)->Unit, onFailure:(resp:String)->Unit){
-        webService.getAlbums(onResponse, onFailure)
+    suspend fun getAlbums(): List<AlbumDto> = suspendCancellableCoroutine { cont ->
+        cache.getAlbums().takeIf { it.isNotEmpty() }?.let {
+            cont.resume(it)
+            return@suspendCancellableCoroutine
+        }
+
+        webService.getAlbums({
+            cache.addAlbums(it)
+            cont.resume(it)
+        }, { cont.resumeWithException(Exception(it)) })
     }
 
     suspend fun getAlbumById(id: Int): AlbumDto = suspendCancellableCoroutine { cont ->
@@ -42,22 +50,40 @@ open class VinilosRepository(
     }
 
     suspend fun createAlbums(request: AlbumRequest): AlbumDto = suspendCoroutine { cont ->
+        cache.clearAlbumsCache()
         webService.createAlbums(request,
             { cont.resume(it) },
             { cont.resumeWithException(Exception(it)) })
     }
 
-    fun getPerformers(onResponse:(resp:ArrayList<ArtistDto>)->Unit, onFailure:(resp:String)->Unit){
-        webService.getPerformers(onResponse, onFailure)
+    suspend fun getPerformers(): List<ArtistDto> = suspendCancellableCoroutine { cont ->
+        cache.getPerformers().takeIf { it.isNotEmpty() }?.let {
+            cont.resume(it)
+            return@suspendCancellableCoroutine
+        }
+
+        webService.getPerformers({
+            cache.addPerformers(it)
+            cont.resume(it)
+        }, { cont.resumeWithException(Exception(it)) })
     }
 
     fun getPerformerById(onResponse:(resp:ArtistDto)->Unit, onFailure:(resp:String)->Unit, musicianId: Int){
         webService.getPerformerById(onResponse, onFailure, musicianId)
     }
 
-    fun getCollectors(onResponse:(resp:ArrayList<CollectorDto>)->Unit, onFailure:(resp:String)->Unit){
-        webService.getCollectors(onResponse, onFailure)
+    suspend fun getCollectors(): List<CollectorDto> = suspendCancellableCoroutine { cont ->
+        cache.getCollectors().takeIf { it.isNotEmpty() }?.let {
+            cont.resume(it)
+            return@suspendCancellableCoroutine
+        }
+
+        webService.getCollectors({
+            cache.addCollectors(it)
+            cont.resume(it)
+        }, { cont.resumeWithException(Exception(it)) })
     }
+
     fun getCollectorbyId(id:Int, onResponse:(resp:CollectorDto)->Unit, onFailure:(resp:String)->Unit) {
         return webService.getCollectorById(id, onResponse, onFailure)
     }
