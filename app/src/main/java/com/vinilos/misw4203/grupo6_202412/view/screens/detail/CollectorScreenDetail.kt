@@ -92,7 +92,7 @@ fun CollectorScreenDetail(
 
     LaunchedEffect(true) {
         collectorScreenModel.showToastMessage.collect { show ->
-            if(show) {
+            if (show) {
                 Toast.makeText(context, "Artista agregado como favorito", Toast.LENGTH_SHORT).show()
             }
         }
@@ -260,11 +260,13 @@ fun FavoriteArtis(artists: ArrayList<ArtistDto>) {
         )
     }
 }
+
 private fun filtrarOpciones(
     options: List<ArtistDto>, textStateCollector: String
 ) = options.filter { collector ->
     collector.name!!.trim().contains(textStateCollector.trim(), ignoreCase = true)
 }.take(5)
+
 @Composable
 fun ArtistSelectField(
     options: List<ArtistDto>,
@@ -286,12 +288,12 @@ fun ArtistSelectField(
             value = textStateMusician.value,
             onValueChange = { newValue ->
                 textStateMusician.value = newValue
-                filteredOptions = if( textStateMusician.value.text.isNotEmpty()){
+                filteredOptions = if (textStateMusician.value.text.isNotEmpty()) {
                     filtrarOpciones(options, textStateMusician.value.text)
-                } else{
+                } else {
                     options
                 }
-                if(filteredOptions.isNotEmpty()){
+                if (filteredOptions.isNotEmpty()) {
                     setExpanded(true)
                 }
             },
@@ -306,7 +308,10 @@ fun ArtistSelectField(
                 if (musicianToAdd.value == null) {
                     val firstMusician = filteredOptions.firstOrNull()
                     musicianToAdd.value = firstMusician
-                    textStateMusician.value = TextFieldValue(text = firstMusician?.name!!, TextRange(firstMusician.name!!.length, firstMusician.name!!.length))
+                    textStateMusician.value = TextFieldValue(
+                        text = firstMusician?.name!!,
+                        TextRange(firstMusician.name!!.length, firstMusician.name!!.length)
+                    )
                     filteredOptions = filtrarOpciones(options, textStateMusician.value.text)
                     setExpanded(false)
                 }
@@ -323,7 +328,10 @@ fun ArtistSelectField(
                         Text(option.name!!, style = MaterialTheme.typography.bodyLarge)
                     },
                     onClick = {
-                        textStateMusician.value = TextFieldValue(text = option.name!!, TextRange(option.name!!.length, option.name!!.length))
+                        textStateMusician.value = TextFieldValue(
+                            text = option.name!!,
+                            TextRange(option.name!!.length, option.name!!.length)
+                        )
                         musicianToAdd.value = option
                         filteredOptions = filtrarOpciones(options, textStateMusician.value.text)
                         setExpanded(false)
@@ -334,6 +342,7 @@ fun ArtistSelectField(
         }
     }
 }
+
 @Composable
 fun AddFavoriteArtistsFiled(
     toggleShowFavoriteArtist: () -> Unit,
@@ -342,14 +351,17 @@ fun AddFavoriteArtistsFiled(
     addFavoriteArtists: () -> Unit
 ) {
     val hasMusicianSelected = musicianToAdd.value != null
-    Row (
+    Row(
         modifier = Modifier
             .padding(8.dp)
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        ArtistSelectField(options=options,musicianToAdd)
-        IconButton(onClick = toggleShowFavoriteArtist) {
+        ArtistSelectField(options = options, musicianToAdd)
+        IconButton(
+            onClick = toggleShowFavoriteArtist,
+            modifier = Modifier.testTag("closeFavoriteArtist")
+        ) {
             Icon(
                 imageVector = Icons.Rounded.RemoveCircleOutline,
                 contentDescription = stringResource(R.string.cancelAddFavoriteArtist),
@@ -357,14 +369,16 @@ fun AddFavoriteArtistsFiled(
             )
         }
         if (hasMusicianSelected) {
-        IconButton(onClick = addFavoriteArtists,
-        ) {
-            Icon(
-                imageVector = Icons.Rounded.AddCircleOutline,
-                contentDescription =  stringResource(R.string.confirmAddFavoriteArtist) ,
-                tint = MaterialTheme.colorScheme.primary
-            )
-        }}
+            IconButton(
+                onClick = addFavoriteArtists, modifier = Modifier.testTag("saveFavoriteArtist")
+            ) {
+                Icon(
+                    imageVector = Icons.Rounded.AddCircleOutline,
+                    contentDescription = stringResource(R.string.confirmAddFavoriteArtist),
+                    tint = MaterialTheme.colorScheme.primary
+                )
+            }
+        }
     }
 }
 
@@ -383,15 +397,16 @@ fun AddFavoriteArtist(
             val pendingArtists = artistsListUiState.artists.filter { artist ->
                 !collector.favoritePerformers.any { it.id == artist.id }
             }
-            if (pendingArtists.isEmpty()){
+            if (pendingArtists.isEmpty()) {
                 return
             }
             if (showAddFavoriteArtists.value) {
-                AddFavoriteArtistsFiled(toggleShowFavoriteArtist=toggleShowFavoriteArtist,
+                AddFavoriteArtistsFiled(
+                    toggleShowFavoriteArtist = toggleShowFavoriteArtist,
                     options = pendingArtists,
                     musicianToAdd = musicianToAdd,
                     addFavoriteArtists = addFavoriteArtists
-                    )
+                )
             } else {
                 Button(
                     onClick = toggleShowFavoriteArtist,
