@@ -12,7 +12,6 @@ import com.google.gson.GsonBuilder
 import com.vinilos.misw4203.grupo6_202412.fake_data.FakeDataAlbums
 import com.vinilos.misw4203.grupo6_202412.fake_data.FakeDataCollectors
 import com.vinilos.misw4203.grupo6_202412.models.dto.ArtistDto
-import com.vinilos.misw4203.grupo6_202412.models.dto.CollectorDto
 import com.vinilos.misw4203.grupo6_202412.models.repository.VinilosRepository
 import com.vinilos.misw4203.grupo6_202412.models.service.VinilosService
 import com.vinilos.misw4203.grupo6_202412.view.screens.detail.CollectorScreenDetail
@@ -27,8 +26,7 @@ import okhttp3.mockwebserver.RecordedRequest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.Mockito
-import java.io.IOException
+
 
 
 private val COLLECTOR = FakeDataCollectors.collectors[0]
