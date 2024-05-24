@@ -97,4 +97,9 @@ open class VinilosRepository(
             { cont.resume(it) },
             { cont.resumeWithException(Exception(it)) })
     }
+
+    fun addFavoriteArtist(collectorId: Int, artistId: Int, onResponse:(resp:CollectorDto)->Unit, onFailure:(resp:String)->Unit) {
+        return webService.addFavoriteArtist(collectorId, artistId, onResponse, onFailure)
+    }
+
 }

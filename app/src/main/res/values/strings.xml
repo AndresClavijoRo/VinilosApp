@@ -43,4 +43,8 @@
     <string name="rating_select_description">%1$d de %2$d estrellas seleccionadas</string>
     <string name="btn_save">Guardar</string>
     <string name="rating_selector">Selección de rating</string>
+    <string name="addFavoriteArtist">Agregar artista favorito</string>
+    <string name="muscian">Artista</string>
+    <string name="cancelAddFavoriteArtist">Cerrar formulario</string>
+    <string name="confirmAddFavoriteArtist">Confirmar agregar artista como favorito</string>
 </resources>
