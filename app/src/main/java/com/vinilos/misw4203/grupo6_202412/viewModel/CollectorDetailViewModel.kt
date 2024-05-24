@@ -14,9 +14,12 @@ import com.vinilos.misw4203.grupo6_202412.models.dto.AlbumDto
 import com.vinilos.misw4203.grupo6_202412.models.dto.ArtistDto
 import com.vinilos.misw4203.grupo6_202412.models.dto.CollectorDto
 import com.vinilos.misw4203.grupo6_202412.models.repository.VinilosRepository
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 sealed class CollectorUiState {
@@ -40,12 +43,16 @@ sealed class  ArtistsListUiState {
         ArtistsListUiState()
 }
 
-const val ERROR_MESSAGE = "Error consumiendo servicio "
+
 
 class CollectorDetailViewModel(
     private val vinilosRepository: VinilosRepository,
-    private val collectorId: Int
+    private val collectorId: Int,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val dispatcherMain: CoroutineDispatcher = Dispatchers.Main
 ) : ViewModel() {
+
+    private val ERROR_MESSAGE = "Error consumiendo servicio "
     private val _showToast = MutableSharedFlow<Boolean>()
     val showToastMessage = _showToast.asSharedFlow()
 
@@ -104,16 +111,20 @@ class CollectorDetailViewModel(
 
     private fun getArtists() {
         artistsListUiState = ArtistsListUiState.Loading
-        try {
-            vinilosRepository.getPerformers({ artists ->
-                artistsListUiState = ArtistsListUiState.Success(artists)
-            }, {
-                artistsListUiState = ArtistsListUiState.Error(it)
-            })
-        } catch (e: Exception) {
-            val error = ERROR_MESSAGE + e.message
-            Log.i("Error", error)
-            artistsListUiState = ArtistsListUiState.Error(error)
+
+        viewModelScope.launch {
+            withContext(dispatcher) {
+                try {
+                    val performerList = vinilosRepository.getPerformers()
+                    withContext(dispatcherMain) {
+                        artistsListUiState = ArtistsListUiState.Success(ArrayList(performerList))
+                    }
+                } catch (e: Exception) {
+                    val error = ERROR_MESSAGE + e.message
+                    Log.i("Error", error)
+                    artistsListUiState = ArtistsListUiState.Error(error)
+                }
+            }
         }
     }
 

@@ -1,4 +1,4 @@
-package com.vinilos.misw4203.grupo6_202412.models.service
+package com.vinilos.misw4203.grupo6_202412.models.network
 
 import com.vinilos.misw4203.grupo6_202412.models.dto.AlbumCommentRequest
 import com.vinilos.misw4203.grupo6_202412.models.dto.AlbumDto
@@ -13,13 +13,13 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-open class VinilosService(private val baseUrl: String) {
+open class VinilosServiceAdapter(private val baseUrl: String) {
 
     companion object Factory {
-        private var INSTANCE: VinilosService? = null
-        fun getInstance(baseUrl: String): VinilosService =
+        private var INSTANCE: VinilosServiceAdapter? = null
+        fun getInstance(baseUrl: String): VinilosServiceAdapter =
             INSTANCE ?: synchronized(this) {
-                INSTANCE ?: VinilosService(baseUrl).also { INSTANCE = it }
+                INSTANCE ?: VinilosServiceAdapter(baseUrl).also { INSTANCE = it }
             }
     }
 

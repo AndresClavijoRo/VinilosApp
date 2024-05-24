@@ -26,7 +26,8 @@ sealed interface AlbumUiState {
 
 open class AlbumViewModel(
     private val albumRepository: VinilosRepository,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val dispatcherMain: CoroutineDispatcher = Dispatchers.Main
 ) : ViewModel() {
 
     var albumUiState: AlbumUiState by mutableStateOf(AlbumUiState.Loading)
@@ -40,14 +41,9 @@ open class AlbumViewModel(
         viewModelScope.launch {
             withContext(dispatcher) {
                 try {
-                    albumRepository.getAlbums(
-                        onResponse = { albumList ->
-                            albumUiState = AlbumUiState.Success(albumList)
-                        },
-                        onFailure = {
-                            Log.i("Error", "Error consumiendo servicio ")
-                            albumUiState = AlbumUiState.Error
-                        })
+                    val albums = albumRepository.getAlbums()
+                    albumUiState =
+                        withContext(dispatcherMain) { AlbumUiState.Success(albums) }
                 } catch (e: Exception) {
                     Log.i("Error", "Error consumiendo servicio " + e.message)
                     albumUiState = AlbumUiState.Error

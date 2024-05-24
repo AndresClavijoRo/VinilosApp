@@ -62,7 +62,7 @@ fun CreateAlbumFormScreen(
             back,
             save = {
                 viewModel.saveAlbum {
-                    if(viewModel.isNewAlbumSaved.value) back()
+                    if (viewModel.isNewAlbumSaved.value) back()
                 }
             }
         )
@@ -71,49 +71,47 @@ fun CreateAlbumFormScreen(
             modifier = Modifier
                 .padding(it)
                 .fillMaxWidth()
-                .verticalScroll(rememberScrollState()),
+                .verticalScroll(rememberScrollState())
+                .padding(20.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            Column(modifier = Modifier.padding(20.dp)) {
+            AlbumName(
+                { viewModel.showAlbumNameSupportText() },
+                { viewModel.isInvalidAlbumName() },
+                viewModel.name,
+                viewModel.isInvalidName
+            )
 
-                AlbumName(
-                    { viewModel.showAlbumNameSupportText() },
-                    { viewModel.isInvalidAlbumName() },
-                    viewModel.name,
-                    viewModel.isInvalidName
-                )
+            AlbumCoverUrl(
+                { viewModel.showAlbumCoverSupportText() },
+                { viewModel.isInvalidAlbumCover() },
+                viewModel.cover,
+                viewModel.isInvalidCover
+            )
 
-                AlbumCoverUrl(
-                    { viewModel.showAlbumCoverSupportText() },
-                    { viewModel.isInvalidAlbumCover() },
-                    viewModel.cover,
-                    viewModel.isInvalidCover
-                )
+            AlbumReleaseDatePicker(viewModel.releaseDate)
 
-                AlbumReleaseDatePicker(viewModel.releaseDate)
+            AlbumGenre(
+                { viewModel.showAlbumDropdownSupportText() },
+                { viewModel.isInvalidAlbumGenre() },
+                viewModel.genre,
+                viewModel.isInvalidGenre
+            )
 
-                AlbumGenre(
-                    { viewModel.showAlbumDropdownSupportText() },
-                    { viewModel.isInvalidAlbumGenre() },
-                    viewModel.genre,
-                    viewModel.isInvalidGenre
-                )
+            AlbumRecordLabel(
+                { viewModel.showAlbumDropdownSupportText() },
+                { viewModel.isInvalidAlbumRecordLabel() },
+                viewModel.recordLabel,
+                viewModel.isInvalidRecordLabel
+            )
 
-                AlbumRecordLabel(
-                    { viewModel.showAlbumDropdownSupportText() },
-                    { viewModel.isInvalidAlbumRecordLabel() },
-                    viewModel.recordLabel,
-                    viewModel.isInvalidRecordLabel
-                )
-
-                AlbumDescription(
-                    { viewModel.showAlbumDescriptionSupportText() },
-                    { viewModel.isInvalidAlbumDescription() },
-                    viewModel.description,
-                    viewModel.isInvalidDescription
-                )
-            }
+            AlbumDescription(
+                { viewModel.showAlbumDescriptionSupportText() },
+                { viewModel.isInvalidAlbumDescription() },
+                viewModel.description,
+                viewModel.isInvalidDescription
+            )
         }
     }
 }
