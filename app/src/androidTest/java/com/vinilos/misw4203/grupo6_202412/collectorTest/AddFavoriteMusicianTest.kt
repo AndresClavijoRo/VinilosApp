@@ -12,8 +12,9 @@ import com.google.gson.GsonBuilder
 import com.vinilos.misw4203.grupo6_202412.fake_data.FakeDataAlbums
 import com.vinilos.misw4203.grupo6_202412.fake_data.FakeDataCollectors
 import com.vinilos.misw4203.grupo6_202412.models.dto.ArtistDto
+import com.vinilos.misw4203.grupo6_202412.models.network.CacheManager
+import com.vinilos.misw4203.grupo6_202412.models.network.VinilosServiceAdapter
 import com.vinilos.misw4203.grupo6_202412.models.repository.VinilosRepository
-import com.vinilos.misw4203.grupo6_202412.models.service.VinilosService
 import com.vinilos.misw4203.grupo6_202412.view.screens.detail.CollectorScreenDetail
 import com.vinilos.misw4203.grupo6_202412.viewModel.ArtistsListUiState
 import com.vinilos.misw4203.grupo6_202412.viewModel.CollectorAlbumsUiState
@@ -39,7 +40,7 @@ class AddFavoriteMusicianTest {
 
     private val gson: Gson = GsonBuilder().create()
     private val server: MockWebServer = MockWebServer()
-    private lateinit var vinilosServiceAdapter: VinilosService
+    private lateinit var vinilosServiceAdapter: VinilosServiceAdapter
     private lateinit var mockRepository: VinilosRepository
     private lateinit var collectorViewModel: CollectorDetailViewModel
 
@@ -68,8 +69,8 @@ class AddFavoriteMusicianTest {
     @Before
     fun initTestRule() {
         server.dispatcher = dispatcher
-        vinilosServiceAdapter = VinilosService(server.url("/").toString())
-        mockRepository = VinilosRepository(vinilosServiceAdapter)
+        vinilosServiceAdapter = VinilosServiceAdapter(server.url("/").toString())
+        mockRepository = VinilosRepository(vinilosServiceAdapter, CacheManager.getInstance())
         collectorViewModel = CollectorDetailViewModel(
             vinilosRepository = mockRepository,
             collectorId = COLLECTOR.id!!
