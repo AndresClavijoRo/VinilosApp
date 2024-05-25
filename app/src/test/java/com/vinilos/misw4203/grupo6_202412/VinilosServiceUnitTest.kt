@@ -6,7 +6,7 @@ import com.vinilos.misw4203.grupo6_202412.models.dto.AlbumDto
 import com.vinilos.misw4203.grupo6_202412.models.dto.AlbumRequest
 import com.vinilos.misw4203.grupo6_202412.models.dto.ArtistDto
 import com.vinilos.misw4203.grupo6_202412.models.dto.CollectorDto
-import com.vinilos.misw4203.grupo6_202412.models.service.VinilosService
+import com.vinilos.misw4203.grupo6_202412.models.network.VinilosServiceAdapter
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -28,11 +28,11 @@ class VinilosServiceUnitTest {
 
     private val gson: Gson = GsonBuilder().create()
     private val server: MockWebServer = MockWebServer()
-    private lateinit var vinilosServiceAdapter: VinilosService
+    private lateinit var vinilosServiceAdapter: VinilosServiceAdapter
 
     @Before
     fun setUp() {
-        vinilosServiceAdapter = VinilosService(server.url("/").toString())
+        vinilosServiceAdapter = VinilosServiceAdapter(server.url("/").toString())
     }
 
     @After

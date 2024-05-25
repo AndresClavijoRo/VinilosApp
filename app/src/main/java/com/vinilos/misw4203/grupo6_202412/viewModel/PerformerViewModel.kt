@@ -17,7 +17,8 @@ import kotlinx.coroutines.withContext
 
 class PerformerViewModel(
     private val performerRepository: VinilosRepository,
-    private val dispatcherIO: CoroutineDispatcher = Dispatchers.IO
+    private val dispatcherIO: CoroutineDispatcher = Dispatchers.IO,
+    private val dispatcherMain: CoroutineDispatcher = Dispatchers.Main
 ) : ViewModel() {
     private val _performersState = mutableStateOf<List<ArtistDto>>(emptyList())
     val performersState = _performersState
@@ -31,16 +32,14 @@ class PerformerViewModel(
         viewModelScope.launch {
             withContext(dispatcherIO) {
                 try {
-                    performerRepository.getPerformers(
-                        onResponse = {
-                                performersList ->  _performersState.value = performersList
-                            isLoading = false
-                        },
-                        onFailure = {
-                            Log.i("Error","Error consumiendo servicio ")
-                        })
+                    val performers = performerRepository.getPerformers()
+                    withContext(dispatcherMain) {
+                        _performersState.value = performers
+                    }
+                    isLoading = false
                 } catch (e: Exception) {
                     isError = true
+                    isLoading = false
                     Log.i("Error","Error consumiendo servicio " + e.message)
                 }
             }

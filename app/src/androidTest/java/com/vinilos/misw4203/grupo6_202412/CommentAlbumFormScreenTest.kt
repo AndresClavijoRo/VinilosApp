@@ -13,9 +13,9 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.vinilos.misw4203.grupo6_202412.fake_data.FakeDataCollectors
 import com.vinilos.misw4203.grupo6_202412.models.dto.AlbumCommentRequest
-import com.vinilos.misw4203.grupo6_202412.models.dto.CommentDto
+import com.vinilos.misw4203.grupo6_202412.models.network.CacheManager
 import com.vinilos.misw4203.grupo6_202412.models.repository.VinilosRepository
-import com.vinilos.misw4203.grupo6_202412.models.service.VinilosService
+import com.vinilos.misw4203.grupo6_202412.models.network.VinilosServiceAdapter
 import com.vinilos.misw4203.grupo6_202412.view.screens.CommentAlbumForm
 import com.vinilos.misw4203.grupo6_202412.viewModel.AlbumCommentViewModel
 import com.vinilos.misw4203.grupo6_202412.viewModel.CollectorViewModel
@@ -31,15 +31,15 @@ class CommentAlbumFormScreenTest {
 
     private val gson: Gson = GsonBuilder().create()
     private val server: MockWebServer = MockWebServer()
-    private lateinit var vinilosServiceAdapter: VinilosService
+    private lateinit var vinilosServiceAdapter: VinilosServiceAdapter
     private lateinit var mockRepository: VinilosRepository
     private lateinit var albumCommentViewModel: AlbumCommentViewModel
     private lateinit var collectorViewModel: CollectorViewModel
 
     @Before
     fun setUp() {
-        vinilosServiceAdapter = VinilosService(server.url("/").toString())
-        mockRepository = VinilosRepository(vinilosServiceAdapter)
+        vinilosServiceAdapter = VinilosServiceAdapter(server.url("/").toString())
+        mockRepository = VinilosRepository(vinilosServiceAdapter, CacheManager.getInstance())
         albumCommentViewModel = AlbumCommentViewModel( albumCommentRepository = mockRepository)
         collectorViewModel = CollectorViewModel( vinilosRepository = mockRepository)
         collectorViewModel.collectorsState.value = FakeDataCollectors.collectors

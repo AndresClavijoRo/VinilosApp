@@ -7,8 +7,9 @@ import androidx.compose.ui.test.performClick
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.vinilos.misw4203.grupo6_202412.models.dto.AlbumDto
+import com.vinilos.misw4203.grupo6_202412.models.network.CacheManager
 import com.vinilos.misw4203.grupo6_202412.models.repository.VinilosRepository
-import com.vinilos.misw4203.grupo6_202412.models.service.VinilosService
+import com.vinilos.misw4203.grupo6_202412.models.network.VinilosServiceAdapter
 import com.vinilos.misw4203.grupo6_202412.view.screens.CreateAlbumFormScreen
 import com.vinilos.misw4203.grupo6_202412.viewModel.CreateAlbumViewModel
 import com.vinilos.misw4203.grupo6_202412.viewModel.Genre
@@ -26,14 +27,14 @@ class CreateAlbumFormScreenTest {
 
     private val gson: Gson = GsonBuilder().create()
     private val server: MockWebServer = MockWebServer()
-    private lateinit var vinilosServiceAdapter: VinilosService
+    private lateinit var vinilosServiceAdapter: VinilosServiceAdapter
     private lateinit var mockRepository: VinilosRepository
     private lateinit var createAlbumViewModel: CreateAlbumViewModel
 
     @Before
     fun setUp() {
-        vinilosServiceAdapter = VinilosService(server.url("/").toString())
-        mockRepository = VinilosRepository(vinilosServiceAdapter)
+        vinilosServiceAdapter = VinilosServiceAdapter(server.url("/").toString())
+        mockRepository = VinilosRepository(vinilosServiceAdapter, CacheManager.getInstance())
         createAlbumViewModel = CreateAlbumViewModel(albumRepository = mockRepository)
         Thread.sleep(2000)
     }
