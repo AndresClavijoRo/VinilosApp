@@ -15,6 +15,8 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
+
+
 class PerformerDetailViewModel(private val performerRepository: VinilosRepository,
                                private val dispatcherIO: CoroutineDispatcher =
                                    Dispatchers.IO): ViewModel() {
